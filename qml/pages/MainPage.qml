@@ -32,6 +32,7 @@ import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
 import "../js/helper.js" as Helper
+import "../js/favorites.js" as Favorites
 import "../components"
 
 Page {
@@ -177,7 +178,7 @@ Page {
 
     SilicaFlickable {
         anchors.fill: parent
-        contentHeight: content_column.height
+        contentHeight: parent.height
 
         PushUpMenu {
             MenuItem { text: qsTr("Manage favorites"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
@@ -187,6 +188,21 @@ Page {
 
         PullDownMenu {
             MenuItem { text: qsTr("Exception info"); onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
+            MenuItem {
+                enabled: endpointsValid
+                text: qsTr("Add as favorite route");
+                onClicked: {
+                    var fromNameToAdd = fromName ? fromName : currentName
+                    var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
+                    var res = Favorites.addFavoriteRoute(fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
+                    if (res === "OK") {
+                        infoBanner.displayError( qsTr("Route added to favorites") )
+                    }
+                    else {
+                        infoBanner.displayError( qsTr("Maximum amount of routes is 4!") )
+                    }
+                }
+            }
             MenuItem {
                 enabled: endpointsValid
                 text: qsTr("Route search");
@@ -284,6 +300,111 @@ Page {
                     timeButton.updateTime()
                     dateButton.updateDate()
                 }
+            }
+
+        }
+
+        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 30 }
+
+        SilicaListView {
+            id: favoriteRouteList
+            anchors.top: favorites_spacing.bottom
+            anchors.bottom: parent.bottom
+            spacing: 5
+            width: parent.width
+            model: favoriteRoutesModel
+            delegate: favoriteRouteManageDelegate
+            property Item contextMenu
+
+            Component.onCompleted: {
+                Favorites.initialize()
+                Favorites.getFavoriteRoutes(favoriteRoutesModel)
+            }
+
+            header:
+                Item {
+                id: headeritem
+                width: parent.width
+                anchors.margins: UIConstants.DEFAULT_MARGIN
+                height: favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN
+                Text {
+                    id: favoriteRouteHeader
+                    color: Theme.primaryColor
+                    font.pixelSize: UIConstants.FONT_XXLARGE * appWindow.scalingFactor
+                    text: qsTr("Favorite routes")
+                }
+            }
+
+            ViewPlaceholder {
+                enabled: favoriteRouteList.count == 0
+                verticalOffset: -250
+                text: qsTr("No saved favorite routes")
+            }
+
+            Component {
+                id: contextMenuComponent
+
+                ContextMenu {
+                    id: menu
+                    property Item currentItem
+                    MenuItem {
+                        text: qsTr("Remove")
+                        onClicked: menu.currentItem.remove()
+                    }
+                }
+            }
+        }
+
+        ListModel {
+            id: favoriteRoutesModel
+        }
+
+        Component {
+            id: favoriteRouteManageDelegate
+
+            BackgroundItem {
+                id: rootItem
+                width: ListView.view.width
+                height: menuOpen ? Theme.itemSizeSmall + favoriteRouteList.contextMenu.height : Theme.itemSizeSmall
+
+                property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
+
+                function remove() {
+                    remorse.execute(rootItem, "Deleting", function() {
+                        Favorites.deleteFavoriteRoute(modelRouteIndex, favoriteRoutesModel)
+                    })
+                }
+
+                onClicked:{
+                    var parameters = {}
+                    setRouteParameters(parameters)
+                    parameters.from_name = modelFromName
+                    parameters.from = modelFromCoord
+                    parameters.to_name = modelToName
+                    parameters.to = modelToCoord
+                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                }
+
+                onPressAndHold: {
+                    if (!favoriteRouteList.contextMenu) {
+                        favoriteRouteList.contextMenu = contextMenuComponent.createObject(favoriteRouteList)
+                    }
+
+                    favoriteRouteList.contextMenu.currentItem = rootItem
+                    favoriteRouteList.contextMenu.show(rootItem)
+                }
+
+                Label {
+                    id: label
+                    height: Theme.itemSizeSmall
+                    text: modelFromName + " - " + modelToName + " "
+                    width: parent.width
+                    color: Theme.primaryColor
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                RemorseItem { id: remorse }
             }
         }
     }
