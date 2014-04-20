@@ -81,6 +81,7 @@ Page {
         model: routeModel
         footer: footer
         delegate: ResultDelegate {}
+        spacing: 10
         interactive: !busyIndicator.running
         header: Column {
             width: parent.width
@@ -120,6 +121,7 @@ Page {
                     color: Theme.secondaryColor
                 }
             }
+            Spacing{id: headerSpacing; height: 10}
         }
 
         ViewPlaceholder {

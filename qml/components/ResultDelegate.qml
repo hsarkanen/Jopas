@@ -36,6 +36,7 @@ Component {
         id: delegate_item
         width: parent.width
         height: Theme.itemSizeLarge
+        highlighted: true
 
         onClicked: {
             pageStack.push(Qt.resolvedUrl("../pages/RoutePage.qml"), { route_index: index,
