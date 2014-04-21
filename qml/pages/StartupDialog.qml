@@ -36,7 +36,7 @@ Dialog {
         anchors.fill: parent
 
         DialogHeader {
-            acceptText: qsTr("Close")
+            acceptText: defaultAcceptText
         }
 
         ComboBox {
@@ -48,18 +48,19 @@ Dialog {
             }
         }
 
+        Label {
+            x: Theme.paddingLarge
+            width: parent.width - Theme.paddingLarge * 2
+            text: qsTr("Allow this application to use the phone location services to enhance the routing experience?\n\nThe setting can be later changed from the application preferences.")
+            wrapMode: Text.WordWrap
+        }
+
         TextSwitch {
             id: gpsSwitch
             width: parent.width
             text: qsTr("Use location services")
         }
 
-        Label {
-            x: Theme.paddingLarge
-            width: parent.width - Theme.paddingLarge * 2
-            text: qsTr("allow this application to use the phone location services to enhance the routing experience?\n\nThe setting can be later changed from the application preferences.")
-            wrapMode: Text.WordWrap
-        }
     }
 
     onAccepted: {
