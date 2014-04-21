@@ -265,19 +265,19 @@ Page {
                 label: qsTr("Walking speed")
                 menu: ContextMenu {
                     MenuItem {
-                        text: qsTr("Walking")
+                        text: qsTr("Walking 70 m/min")
                         onClicked: Storage.setSetting('walking_speed','70')
                     }
                     MenuItem {
-                        text: qsTr("Fast Walking")
+                        text: qsTr("Fast Walking 100 m/min")
                         onClicked: Storage.setSetting('walking_speed','100')
                     }
                     MenuItem {
-                        text: qsTr("Very Fast Walking")
+                        text: qsTr("Very Fast Walking 120 m/min")
                         onClicked: Storage.setSetting('walking_speed','120')
                     }
                     MenuItem {
-                        text: qsTr("Running")
+                        text: qsTr("Running 150 m/min")
                         onClicked: Storage.setSetting('walking_speed','150')
                     }
                 }
