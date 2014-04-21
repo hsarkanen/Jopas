@@ -47,7 +47,7 @@ Dialog {
         SilicaListView {
             width: parent.width
             // TODO:
-            height: 600
+            height: Screen.height - header.height
             id: view
 
             VerticalScrollDecorator {}
