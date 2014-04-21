@@ -98,8 +98,9 @@ function translate_typecode(type, code, api_type) {
 
 function convTime(hslTime){
     var time = hslTime;
+    // In HSL timeFormat months are 01-12 and in Javascript Date 0-11 so needed to decrease by one
     return new Date(time.slice(0,4),
-                    parseInt(time.slice(4,6), 10),
+                    parseInt((time.slice(4,6)-1), 10),
                     parseInt(time.slice(6,8), 10),
                     time.slice(8,10),
                     time.slice(10,12),
