@@ -30,27 +30,27 @@ import QtQuick 2.1
 import Sailfish.Silica 1.0
 import "../components"
 
-Dialog {
+Page {
     anchors.fill: parent
 
     Column {
         width: parent.width
 
-        DialogHeader {
-            title: qsTr("Close")
-            acceptText: title
+        PageHeader {
+             title: "About Jopas"
         }
+
+        Spacing {height: 20}
 
         Label {
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
-            text: "Jopas v@VERSION@ (@GIT_SHA@)"
+            text: "v@VERSION@ (@GIT_SHA@)"
         }
 
-        Spacing {}
-        Spacing {}
+        Spacing {height: 30}
 
         Label {
             width: parent.width
