@@ -38,6 +38,8 @@ Page {
     property string header
     property string duration
     property string walking
+    property string start_time
+    property string finish_time
 
     Component.onCompleted: {
         var route = Reittiopas.get_route_instance()
@@ -97,6 +99,15 @@ Page {
         }
 
         PullDownMenu {
+            MenuItem {
+                text: qsTr("Copy details to Clipboard")
+                onClicked: {
+                    var departure = qsTr("dep")
+                    var arrival = qsTr("arr")
+                    Clipboard.text = departure + " " + start_time + "\n" + from_name + "\n\n" + arrival + " " + finish_time + "\n" + to_name
+                    infoBanner.displayError( qsTr("Route details copied to Clipboard") )
+                }
+            }
             MenuItem {
                 text: qsTr("Map")
                 onClicked: { pageStack.push(Qt.resolvedUrl("RouteMapPage.qml")) }
