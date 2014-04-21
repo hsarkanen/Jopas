@@ -41,15 +41,24 @@ Page {
 
         Component.onCompleted: {
             Storage.initialize()
-            currentApi.set_value(Storage.getSetting("api"))
-            gpsSwitch.set_value(Storage.getSetting("gps"))
-            tramSwitch.set_value(Storage.getSetting("tram_disabled"))
-            busSwitch.set_value(Storage.getSetting("bus_disabled"))
-            metroSwitch.set_value(Storage.getSetting("metro_disabled"))
-            trainSwitch.set_value(Storage.getSetting("train_disabled"))
-            optimizeRoute.set_value(Storage.getSetting("optimize"))
-            walkingSpeed.set_value(Storage.getSetting("walking_speed"))
-            changeMargin.set_value(Storage.getSetting("change_margin"))
+            var setting = Storage.getSetting("api")
+            currentApi.set_value(setting == "Unknown"?"helsinki" : setting)
+            setting = Storage.getSetting("gps")
+            gpsSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("tram_disabled")
+            tramSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("bus_disabled")
+            busSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("metro_disabled")
+            metroSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("train_disabled")
+            trainSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("optimize")
+            optimizeRoute.set_value(setting == "Unknown"?"default" : setting)
+            setting = Storage.getSetting("walking_speed")
+            walkingSpeed.set_value(setting == "Unknown"?"70" : setting)
+            setting = Storage.getSetting("change_margin")
+            changeMargin.set_value(setting == "Unknown"?"3" : Math.floor(setting))
         }
 
         Grid {
