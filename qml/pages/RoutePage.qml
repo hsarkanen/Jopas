@@ -40,12 +40,21 @@ Page {
     property string walking
     property string start_time
     property string finish_time
+    property string departure_string: qsTr("Departure:")
+    property string arrival_string: qsTr("Arrival:")
 
     Component.onCompleted: {
         var route = Reittiopas.get_route_instance()
         route.dump_legs(route_index, routeModel)
         from_name = route.from_name
         to_name = route.to_name
+
+        appWindow.coverLine1 = departure_string
+        appWindow.coverLine2 = start_time.slice(11,16)
+        appWindow.coverLine3 = from_name
+        appWindow.coverLine4 = arrival_string
+        appWindow.coverLine5 = finish_time.slice(11,16)
+        appWindow.coverLine6 = to_name
     }
 
     ListModel {
@@ -102,9 +111,7 @@ Page {
             MenuItem {
                 text: qsTr("Copy details to Clipboard")
                 onClicked: {
-                    var departure = qsTr("dep")
-                    var arrival = qsTr("arr")
-                    Clipboard.text = departure + " " + start_time + "\n" + from_name + "\n\n" + arrival + " " + finish_time + "\n" + to_name
+                    Clipboard.text = departure_string + " " + Qt.formatDateTime(start_time,"dd.MM hh:mm") + "\n" + from_name + "\n\n" + arrival_string + " " + Qt.formatDateTime(finish_time,"dd.MM hh:mm") + "\n" + to_name
                     infoBanner.displayError( qsTr("Route details copied to Clipboard") )
                 }
             }

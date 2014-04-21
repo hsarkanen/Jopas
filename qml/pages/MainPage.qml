@@ -70,13 +70,25 @@ Page {
 
     onStatusChanged: {
         if (status == PageStatus.Activating) {
+            appWindow.coverLine1 = ''
+            appWindow.coverLine2 = ''
+            appWindow.coverLine3 = 'Jopas'
+            appWindow.coverLine6 = ''
+
             currentApi = Storage.getSetting("api")
+
+            appWindow.coverLine4 = currentApi.charAt(0).toUpperCase() + currentApi.slice(1)
 
             var allowGps = Storage.getSetting("gps")
             if(allowGps == "true") {
                 appWindow.gpsEnabled = true
+                appWindow.coverLine5 = qsTr('GPS Enabled')
+            }
+            else {
+                appWindow.coverLine5 = qsTr('GPS Disabled')
             }
 
+            // Refresh favorite routes if api has been changed in SettingsPage
             favoriteRoutesModel.clear()
             Favorites.getFavoriteRoutes(currentApi, favoriteRoutesModel)
         }

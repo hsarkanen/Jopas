@@ -93,21 +93,31 @@ Page {
                 menu: ContextMenu {
                     MenuItem {
                         text: "Helsinki"
-                        onClicked: Storage.setSetting("api","helsinki")
+                        onClicked: {
+                            Storage.setSetting("api","helsinki")
+                            appWindow.coverLine4 = text
+                        }
                     }
                     MenuItem {
                        text: "Tampere"
-                        onClicked: Storage.setSetting("api","tampere")
+                        onClicked: {
+                            Storage.setSetting("api","tampere")
+                            appWindow.coverLine4 = text
+                        }
                     }
                 }
             }
             TextSwitch {
                 id: gpsSwitch
                 function updateDescription() {
-                    if (gpsSwitch.checked)
+                    if (gpsSwitch.checked) {
                         gpsSwitch.description = "GPS is in use"
-                    else
+                        appWindow.coverLine5 = qsTr('GPS Enabled')
+                    }
+                    else {
                         gpsSwitch.description = "GPS will not be used"
+                        appWindow.coverLine5 = qsTr('GPS Disabled')
+                    }
                 }
 
                 function set_value(value) {

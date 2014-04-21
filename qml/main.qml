@@ -34,12 +34,16 @@ import "components"
 
 ApplicationWindow {
     id: appWindow
-    cover: CoverBackground {
-        CoverPlaceholder {
-            text: "Jopas"
-            // icon.source: "Jopas.png"
-        }
-    }
+
+    // Pages sets the cover data to these properties and cover is instantiated every time based on these
+    property string coverLine1: ''
+    property string coverLine2: ''
+    property string coverLine3: ''
+    property string coverLine4: ''
+    property string coverLine5: ''
+    property string coverLine6: ''
+
+    cover: Qt.resolvedUrl("pages/CoverPage.qml")
 
 
     InfoBanner {
