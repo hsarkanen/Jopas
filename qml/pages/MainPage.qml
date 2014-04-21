@@ -71,6 +71,12 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Activating) {
             currentApi = Storage.getSetting("api")
+
+            var allowGps = Storage.getSetting("gps")
+            if(allowGps == "true") {
+                appWindow.gpsEnabled = true
+            }
+
             favoriteRoutesModel.clear()
             Favorites.getFavoriteRoutes(currentApi, favoriteRoutesModel)
         }
@@ -109,11 +115,6 @@ Page {
     }
 
     Component.onCompleted: {
-        var allowGps = Storage.getSetting("gps")
-        if(allowGps == "true") {
-            appWindow.gpsEnabled = true
-        }
-
         timeButton.updateTime()
         dateButton.updateDate()
     }
