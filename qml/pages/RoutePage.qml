@@ -65,6 +65,9 @@ Page {
         model: routeModel
         delegate: delegate
         interactive: !busyIndicator.visible
+
+        VerticalScrollDecorator {}
+
         header: Column {
             width: parent.width
             PageHeader {

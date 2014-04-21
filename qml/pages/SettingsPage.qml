@@ -39,6 +39,8 @@ Page {
         anchors.fill: parent
         contentHeight: content_column.height
 
+        VerticalScrollDecorator {}
+
         Component.onCompleted: {
             Storage.initialize()
             var setting = Storage.getSetting("api")

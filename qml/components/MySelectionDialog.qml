@@ -49,6 +49,8 @@ Dialog {
             // TODO:
             height: 600
             id: view
+
+            VerticalScrollDecorator {}
         }
 
     }

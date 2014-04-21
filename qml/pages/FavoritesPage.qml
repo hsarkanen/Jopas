@@ -52,6 +52,8 @@ Page {
         model: favoritesModel
         delegate: favoritesManageDelegate
 
+        VerticalScrollDecorator {}
+
         header: PageHeader {
             title: qsTr("Manage favorites")
         }

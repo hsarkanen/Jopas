@@ -54,6 +54,8 @@ Page {
         model: exceptionModel
         delegate: ExceptionDelegate {}
 
+        VerticalScrollDecorator {}
+
         header: PageHeader {
             title: qsTr("Traffic exception info")
         }
