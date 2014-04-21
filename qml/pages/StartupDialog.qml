@@ -49,6 +49,7 @@ Dialog {
         }
 
         TextSwitch {
+            id: gpsSwitch
             width: parent.width
             text: qsTr("Use location services")
         }
@@ -63,11 +64,6 @@ Dialog {
 
     onAccepted: {
         Storage.setSetting('api', region.currentIndex == 0 ? "helsinki" : "tampere")
-        Storage.setSetting('gps', 'true')
-    }
-
-    onRejected: {
-        Storage.setSetting('api', region.currentIndex == 0 ? "helsinki" : "tampere")
-        Storage.setSetting('gps', 'false')
+        Storage.setSetting('gps', gpsSwitch.checked ? 'true' : 'false')
     }
 }
