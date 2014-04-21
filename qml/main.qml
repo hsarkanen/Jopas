@@ -29,6 +29,7 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 import "js/storage.js" as Storage
+import "js/favorites.js" as Favorites
 import "components"
 
 ApplicationWindow {
@@ -49,6 +50,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         Storage.initialize()
+        Favorites.initialize()
 
         var allowGps = Storage.getSetting("gps")
         var apiValue = Storage.getSetting("api")

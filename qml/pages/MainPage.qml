@@ -42,6 +42,8 @@ Page {
 
     onMyTimeChanged: console.debug("Time changed: " + myTime)
 
+    property variant currentApi: ''
+
     /* Current location acquired with GPS */
     property variant currentCoord: ''
     property variant currentName: ''
@@ -66,7 +68,13 @@ Page {
         }
     }
 
-
+    onStatusChanged: {
+        if (status == PageStatus.Activating) {
+            currentApi = Storage.getSetting("api")
+            favoriteRoutesModel.clear()
+            Favorites.getFavoriteRoutes(currentApi, favoriteRoutesModel)
+        }
+    }
 
     function newRoute(name, coord) {
         /* clear all other pages from the stack */
@@ -194,7 +202,7 @@ Page {
                 onClicked: {
                     var fromNameToAdd = fromName ? fromName : currentName
                     var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
-                    var res = Favorites.addFavoriteRoute(fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
+                    var res = Favorites.addFavoriteRoute(currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
                     if (res === "OK") {
                         infoBanner.displayError( qsTr("Route added to favorites") )
                     }
@@ -316,11 +324,6 @@ Page {
             delegate: favoriteRouteManageDelegate
             property Item contextMenu
 
-            Component.onCompleted: {
-                Favorites.initialize()
-                Favorites.getFavoriteRoutes(favoriteRoutesModel)
-            }
-
             header:
                 Item {
                 id: headeritem
@@ -371,7 +374,7 @@ Page {
 
                 function remove() {
                     remorse.execute(rootItem, "Deleting", function() {
-                        Favorites.deleteFavoriteRoute(modelRouteIndex, favoriteRoutesModel)
+                        Favorites.deleteFavoriteRoute(modelRouteIndex, currentApi, favoriteRoutesModel)
                     })
                 }
 
