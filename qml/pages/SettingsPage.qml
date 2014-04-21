@@ -63,6 +63,11 @@ Page {
             changeMargin.set_value(setting == "Unknown"?"3" : Math.floor(setting))
         }
 
+        PullDownMenu {
+            MenuItem { text: qsTr("About"); onClicked: pageStack.push(Qt.resolvedUrl("AboutDialog.qml")) }
+            MenuItem { text: qsTr("Manage favorites"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
+        }
+
         Grid {
             columns: 1
             id: content_column
