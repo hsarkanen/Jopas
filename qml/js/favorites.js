@@ -45,7 +45,7 @@ function initialize() {
             // If the table exists, this is skipped
             tx.executeSql('CREATE TABLE IF NOT EXISTS favorites(coord TEXT UNIQUE, name TEXT);');
             // Favourite routes, fixed amount of 4 per City, in different table
-            tx.executeSql('CREATE TABLE IF NOT EXISTS favoriteRoutes(routeIndex INTEGER PRIMARY KEY AUTOINCREMENT, api TEXT NOT NULL, fromCoord TEXT NOT NULL, fromName TEXT NOT NULL, toCoord TEXT NOT NULL, toName TEXT NOT NULL);');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS favoriteRoutes(routeIndex INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL, api TEXT NOT NULL, fromCoord TEXT NOT NULL, fromName TEXT NOT NULL, toCoord TEXT NOT NULL, toName TEXT NOT NULL);');
           });
 }
 
@@ -72,28 +72,43 @@ function addFavorite(name, coord) {
 }
 
 // This function is used to write a setting into the database
-function addFavoriteRoute(api, fromCoord, fromName, toCoord, toName, updatemodel) {
+function addFavoriteRoute(type, api, fromCoord, fromName, toCoord, toName, updatemodel) {
     var db = getDatabase();
     var res = "";
+    var rs = {};
     db.transaction(function(tx) {
-                       var rs = tx.executeSql('SELECT routeIndex FROM favoriteRoutes WHERE api = ?', api);
-                       // Check that there is still place for favoriteRoute (limited up to 4 per City)
-                       if (rs.rows.length >= 4) {
-                           res = "Error"
-                       }
-                       else {
-                           rs = tx.executeSql('INSERT INTO favoriteRoutes (api, fromCoord,fromName,toCoord,toName) VALUES (?,?,?,?,?);', [api,fromCoord,fromName,toCoord,toName]);
-                           if (rs.rowsAffected === 1) {
-                               updatemodel.clear()
-                               getFavoriteRoutes(api,updatemodel)
-                               res = "OK";
-                           } else {
-                               res = "Error";
-                           }
-                       }
-                   });
-  // The function returns “OK” if it was successful, or “Error” if it wasn't
-  return res;
+        if (type == 'cover') {
+            // Replace the possibly existing cover favorite for this api
+            rs = tx.executeSql('DELETE FROM favoriteRoutes WHERE type = ? AND api = ?;', [type,api]);
+            rs = tx.executeSql('INSERT INTO favoriteRoutes (type,api, fromCoord,fromName,toCoord,toName) VALUES (?,?,?,?,?,?);', [type,api,fromCoord,fromName,toCoord,toName]);
+            if (rs.rowsAffected === 1) {
+                res = "OK";
+            }
+            else {
+                res = "Error";
+            }
+        }
+        else {
+            rs = tx.executeSql('SELECT routeIndex FROM favoriteRoutes WHERE type = ? AND api = ?', [type,api]);
+            // Check that there is still place for favoriteRoute (limited up to 4 per City)
+            if (rs.rows.length >= 4) {
+                res = "Error"
+            }
+            else {
+                rs = tx.executeSql('INSERT INTO favoriteRoutes (type,api,fromCoord,fromName,toCoord,toName) VALUES (?,?,?,?,?,?);', [type,api,fromCoord,fromName,toCoord,toName]);
+                if (rs.rowsAffected === 1) {
+                    updatemodel.clear()
+                    getFavoriteRoutes('normal',api,updatemodel)
+                    res = "OK";
+                } else {
+                    res = "Error";
+                }
+            }
+        }
+    }
+    );
+    // The function returns “OK” if it was successful, or “Error” if it wasn't
+    return res;
 }
 
 // This function is used to write a setting into the database
@@ -152,7 +167,7 @@ function deleteFavoriteRoute(routeIndex, api, updatemodel) {
               if (rs.rowsAffected == 1) {
                 res = "OK";
                   updatemodel.clear()
-                  getFavoriteRoutes(api,updatemodel)
+                  getFavoriteRoutes('normal',api,updatemodel)
               } else {
                 res = "Error";
               }
@@ -186,26 +201,42 @@ function getFavorites(model) {
 }
 
 // This function is used to retrieve a setting from the database
-function getFavoriteRoutes(api, model) {
-   var db = getDatabase();
-   var res="";
-   db.transaction(function(tx) {
-     var rs = tx.executeSql('SELECT routeIndex,fromCoord,fromName,toCoord,toName FROM favoriteRoutes WHERE api = ?', api);
-     if (rs.rows.length > 0) {
-         for(var i = 0; i < rs.rows.length; i++) {
-             var output = {}
-             output.modelRouteIndex = rs.rows.item(i).routeIndex;
-             output.modelFromCoord = rs.rows.item(i).fromCoord;
-             output.modelFromName = rs.rows.item(i).fromName;
-             output.modelToCoord = rs.rows.item(i).toCoord;
-             output.modelToName = rs.rows.item(i).toName;
-             output.modelType = "favoriteRoute"
-             model.append(output)
-         }
-     } else {
-         res = "Unknown";
-     }
-  })
+function getFavoriteRoutes(type, api, model) {
+    var db = getDatabase();
+    var res = "";
+    var rs = {};
+    db.transaction(function(tx) {
+        if (type == 'cover') {
+            rs = tx.executeSql('SELECT fromCoord,fromName,toCoord,toName FROM favoriteRoutes WHERE type = ? AND api = ?', [type,api]);
+            if (rs.rows.length == 1) {
+                model.modelFromCoord = rs.rows.item(0).fromCoord;
+                model.modelFromName = rs.rows.item(0).fromName;
+                model.modelToCoord = rs.rows.item(0).toCoord;
+                model.modelToName = rs.rows.item(0).toName;
+                model.modelType = "favoriteRoute"
+            }
+            else {
+                res = "Unknown";
+            }
+        }
+        else {
+            rs = tx.executeSql('SELECT routeIndex,fromCoord,fromName,toCoord,toName FROM favoriteRoutes WHERE type = ? AND api = ?', [type,api]);
+            if (rs.rows.length > 0) {
+                for(var i = 0; i < rs.rows.length; i++) {
+                    var output = {}
+                    output.modelRouteIndex = rs.rows.item(i).routeIndex;
+                    output.modelFromCoord = rs.rows.item(i).fromCoord;
+                    output.modelFromName = rs.rows.item(i).fromName;
+                    output.modelToCoord = rs.rows.item(i).toCoord;
+                    output.modelToName = rs.rows.item(i).toName;
+                    output.modelType = "favoriteRoute"
+                    model.append(output)
+                }
+            } else {
+                res = "Unknown";
+            }
+        }
+    })
   // The function returns “Unknown” if the setting was not found in the database
   // For more advanced projects, this should probably be handled through error codes
   return res

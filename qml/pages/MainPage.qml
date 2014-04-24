@@ -90,7 +90,7 @@ Page {
 
             // Refresh favorite routes if api has been changed in SettingsPage
             favoriteRoutesModel.clear()
-            Favorites.getFavoriteRoutes(currentApi, favoriteRoutesModel)
+            Favorites.getFavoriteRoutes('normal', currentApi, favoriteRoutesModel)
         }
     }
 
@@ -210,7 +210,7 @@ Page {
                 onClicked: {
                     var fromNameToAdd = fromName ? fromName : currentName
                     var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
-                    var res = Favorites.addFavoriteRoute(currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
+                    var res = Favorites.addFavoriteRoute('normal', currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
                     if (res === "OK") {
                         infoBanner.displayError( qsTr("Route added to favorites") )
                     }
@@ -359,6 +359,11 @@ Page {
                     id: menu
                     property Item currentItem
                     MenuItem {
+                        text: qsTr("Add to Cover")
+                        onClicked: menu.currentItem.addToCover()
+                    }
+
+                    MenuItem {
                         text: qsTr("Remove")
                         onClicked: menu.currentItem.remove()
                     }
@@ -379,6 +384,11 @@ Page {
                 height: menuOpen ? Theme.itemSizeSmall + favoriteRouteList.contextMenu.height : Theme.itemSizeSmall
 
                 property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
+
+                function addToCover() {
+                    Favorites.addFavoriteRoute('cover', currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
+                    infoBanner.displayError( qsTr("Route added to cover action.") )
+                }
 
                 function remove() {
                     remorse.execute(rootItem, "Deleting", function() {
