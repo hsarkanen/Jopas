@@ -29,10 +29,11 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 
-TextField {
+SearchField {
     property alias regExpValidator : regExpValidator
     validator: regExpValidator
     inputMethodHints: Qt.ImhNoPredictiveText
+    font.pixelSize: Theme.fontSizeMedium
 // TODO:
 //    platformStyle: TextFieldStyle {
 //        paddingLeft: 45
