@@ -76,8 +76,8 @@ CoverBackground {
         var coverRoutesItem = []
         var res = Favorites.getFavoriteRoutes('cover', Storage.getSetting("api"), coverRoutesItem)
         if (res == "Unknown") {
-            pageStack.push(Qt.resolvedUrl("MainPage.qml"))
-            infoBanner.displayError( qsTr("Please save a route and add it to cover action.") )
+            var page = pageStack.push(Qt.resolvedUrl("MainPage.qml"))
+            page.displayPopupMessage( qsTr("Please save a route and add it to cover action by long-press.") )
         }
         else {
             var parameters = {}

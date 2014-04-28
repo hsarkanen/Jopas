@@ -42,8 +42,8 @@ DockedPanel {
         width: parent.width
 
         height: infoLabel.height + 2*Theme.paddingSmall
-        color: 'black';
-        opacity: 0.65;
+        color: 'black'
+        opacity: 0.8
 
         Label {
             id: infoLabel
@@ -74,7 +74,7 @@ DockedPanel {
 
     Timer {
         id: autoClose
-        interval: 15000
+        interval: 5000
         running: false
         onTriggered: {
             root.hide()

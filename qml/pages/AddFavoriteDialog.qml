@@ -105,4 +105,14 @@ Dialog {
             }
         }
     }
+
+    // Added InfoBanner here as a workaround to display it correctly above all other UI elements, fixing the z-order from the one in main.qml isn't trivial
+    InfoBanner {
+        id: infoBanner
+        z: 1
+    }
+
+    function displayPopupMessage(message) {
+        infoBanner.displayError(message)
+    }
 }

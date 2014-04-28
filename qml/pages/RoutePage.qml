@@ -112,7 +112,7 @@ Page {
                 text: qsTr("Copy details to Clipboard")
                 onClicked: {
                     Clipboard.text = departure_string + " " + Qt.formatDateTime(start_time,"dd.MM hh:mm") + "\n" + from_name + "\n\n" + arrival_string + " " + Qt.formatDateTime(finish_time,"dd.MM hh:mm") + "\n" + to_name
-                    infoBanner.displayError( qsTr("Route details copied to Clipboard") )
+                    displayPopupMessage( qsTr("Route details copied to Clipboard") )
                 }
             }
             MenuItem {
@@ -128,5 +128,14 @@ Page {
         running: true
         size: BusyIndicatorSize.Large
         anchors.centerIn: parent
+    }
+
+    // Added InfoBanner here as a workaround to display it correctly above all other UI elements, fixing the z-order from the one in main.qml isn't trivial
+    InfoBanner {
+        id: infoBanner
+        z: 1
+    }
+    function displayPopupMessage(message) {
+        infoBanner.displayError(message)
     }
 }

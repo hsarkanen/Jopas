@@ -119,7 +119,7 @@ Page {
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
         }
         else if(appWindow.gpsEnabled == false) {
-            infoBanner.displayError( qsTr("Positioning service disabled from application settings") )
+            displayPopupMessage( qsTr("Positioning service disabled from application settings") )
         }
         else {
             state = "waiting_route"
@@ -212,10 +212,10 @@ Page {
                     var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
                     var res = Favorites.addFavoriteRoute('normal', currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
                     if (res === "OK") {
-                        infoBanner.displayError( qsTr("Route added to favorites") )
+                        displayPopupMessage( qsTr("Route added to favorites") )
                     }
                     else {
-                        infoBanner.displayError( qsTr("Maximum amount of routes is 4!") )
+                        displayPopupMessage( qsTr("Maximum amount of routes is 4!") )
                     }
                 }
             }
@@ -387,7 +387,7 @@ Page {
 
                 function addToCover() {
                     Favorites.addFavoriteRoute('cover', currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
-                    infoBanner.displayError( qsTr("Route added to cover action.") )
+                    displayPopupMessage( qsTr("Route added to cover action.") )
                 }
 
                 function remove() {
@@ -428,5 +428,14 @@ Page {
                 RemorseItem { id: remorse }
             }
         }
+    }
+
+    // Added InfoBanner here as a workaround to display it correctly above all other UI elements, fixing the z-order from the one in main.qml isn't trivial
+    InfoBanner {
+        id: infoBanner
+        z: 1
+    }
+    function displayPopupMessage(message) {
+        infoBanner.displayError(message)
     }
 }

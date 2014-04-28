@@ -216,7 +216,7 @@ Column {
                                    suggestionModel.get(0).housenumber,
                                    suggestionModel.get(0).coord)
                 } else if (suggestionModel.count == 0) {
-                    infoBanner.displayError( qsTr("No results") )
+                    displayPopupMessage( qsTr("No results") )
                 } else {
                     /* just update the first result to main page */
                     locationDone(suggestionModel.get(0).name.split(',', 1).toString(),suggestionModel.get(0).coord)
@@ -226,7 +226,7 @@ Column {
                 suggestionModel.source = ""
                 locationDone("", 0, "")
                 locationError()
-                infoBanner.displayError( qsTr("Could not find location") )
+                displayPopupMessage( qsTr("Could not find location") )
             }
         }
     }
@@ -275,7 +275,7 @@ Column {
                 }
                 else {
                     favoriteQuery.selectedIndex = -1
-                    infoBanner.displayError( qsTr("Positioning service disabled from application settings") )
+                    displayPopupMessage( qsTr("Positioning service disabled from application settings") )
                 }
             } else {
                 updateLocation(favoritesModel.get(selectedIndex).modelData,
@@ -430,9 +430,9 @@ Column {
                         favoritesModel.clear()
                         Favorites.getFavorites(favoritesModel)
                         favoriteQuery.selectedIndex = favoritesModel.count
-                        infoBanner.displayError( qsTr("Location added to favorites") )
+                        displayPopupMessage( qsTr("Location added to favorites") )
                     } else {
-                        infoBanner.displayError(qsTr("Location already in the favorites"))
+                        displayPopupMessage(qsTr("Location already in the favorites"))
                     }
 
                 }
