@@ -10,9 +10,10 @@
 * Original author: Jukka Nousiainen <nousiaisenjukka@gmail.com>
 * Other contributors:
 *   Jonni Rainisto <jonni.rainisto@gmail.com>
-*   Mohammed Sameer <msameer@foolab.org>r
+*   Mohammed Sameer <msameer@foolab.org>
 *   Clovis Scotti <scotti@ieee.org>
 *   Benoit HERVIER <khertan@khertan.net>
+*   Heikki Sarkanen <heikki.sarkanen@gmail.com>
 *
 * All assets contained within this project are copyrighted by their
 * respectful authors.
@@ -63,7 +64,8 @@ Page {
                   "Mohammed Sameer\n" +
                   "Clovis Scotti\n" +
                   "Benoit HERVIER\n" +
-                  "Morpok\n\n" +
+                  "Morpok\n" +
+                  "Heikki Sarkanen\n\n" +
                   qsTr("This application is free sofware licenced under the GNU Public License v3\n")  +
                   qsTr("Some  parts of the code release under MIT License")
         }

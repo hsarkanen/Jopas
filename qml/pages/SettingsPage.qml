@@ -10,11 +10,12 @@
 * Original author: Jukka Nousiainen <nousiaisenjukka@gmail.com>
 * Other contributors:
 *   Jonni Rainisto <jonni.rainisto@gmail.com>
-*   Mohammed Samee <msameer@foolab.org>r
+*   Mohammed Sameer <msameer@foolab.org>
 *   Clovis Scotti <scotti@ieee.org>
 *   Benoit HERVIER <khertan@khertan.net>
+*   Heikki Sarkanen <heikki.sarkanen@gmail.com>
 *
-* All assets contained within this project are copyrighted by their 
+* All assets contained within this project are copyrighted by their
 * respectful authors.
 *
 * This program is free software: you can redistribute it and/or modify
