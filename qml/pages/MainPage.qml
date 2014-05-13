@@ -1,19 +1,21 @@
 /**********************************************************************
 *
-* This file is part of the Jopas, forked from Meegopas.
+* This file is part of the JollaOpas, forked from Jopas originally
+* forked from Meegopas.
 * More information:
 *
+*   https://github.com/hsarkanen/JollaOpas
 *   https://github.com/rasjani/Jopas
 *   https://github.com/junousia/Meegopas
 *
-* Author: Jani Mikkonen <jani.mikkonen@gmail.com>
+* Author: Heikki Sarkanen <heikki.sarkanen@gmail.com>
 * Original author: Jukka Nousiainen <nousiaisenjukka@gmail.com>
 * Other contributors:
+*   Jani Mikkonen <jani.mikkonen@gmail.com>
 *   Jonni Rainisto <jonni.rainisto@gmail.com>
 *   Mohammed Sameer <msameer@foolab.org>
 *   Clovis Scotti <scotti@ieee.org>
 *   Benoit HERVIER <khertan@khertan.net>
-*   Heikki Sarkanen <heikki.sarkanen@gmail.com>
 *
 * All assets contained within this project are copyrighted by their
 * respectful authors.
@@ -73,7 +75,7 @@ Page {
         if (status == PageStatus.Activating) {
             appWindow.coverLine1 = ''
             appWindow.coverLine2 = ''
-            appWindow.coverLine3 = 'Jopas'
+            appWindow.coverLine3 = 'JollaOpas'
             appWindow.coverLine6 = ''
 
             currentApi = Storage.getSetting("api")

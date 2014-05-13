@@ -1,4 +1,4 @@
-TARGET=harbour-jopas
+TARGET=harbour-jollaopas
 include(version.pri)
 include(common.pri)
 QT            += qml quick 
@@ -16,12 +16,12 @@ OTHER_FILES += \
     qml/components/*.qml \
     qml/pages/AboutDialog.qml.in \
     qml/main.qml \
-    harbour-jopas.desktop \
-    rpm/harbour-jopas.yaml \
-    rpm/harbour-jopas.spec
+    harbour-jollaopas.desktop \
+    rpm/harbour-jollaopas.yaml \
+    rpm/harbour-jollaopas.spec
 
 RESOURCES += \
-    jopas.qrc
+    jollaopas.qrc
 
 SOURCES += src/main.cpp
 
@@ -33,5 +33,5 @@ include(version.pri)
 include(common.pri)
 configure($${PWD}/qml/pages/AboutDialog.qml.in)
 
-icon.files = harbour-jopas.png
-desktop.files = harbour-jopas.desktop
+icon.files = harbour-jollaopas.png
+desktop.files = harbour-jollaopas.desktop

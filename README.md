@@ -1,7 +1,8 @@
-Jolla Opas
+JollaOpas
 
-Fork of Meegopas originally written by Jukka Nousiainen
+Fork of Jopas originally forked from Meegopas written by Jukka Nousiainen
 
 Credits for initial port to Sailfish:
- - Jonni Rainisto 
- - Mohammed Sameer  
+ - Jani Mikkonen
+ - Jonni Rainisto
+ - Mohammed Sameer

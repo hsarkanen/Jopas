@@ -2,7 +2,7 @@
 *.pro.user
 Makefile
 .gitignore
-harbour-jopas.spec
+harbour-jollaopas.spec
 AboutDialog.qml
-rpm/harbour-jopas.yaml
-rpm/harbour-jopas.spec
+rpm/harbour-jollaopas.yaml
+rpm/harbour-jollaopas.spec

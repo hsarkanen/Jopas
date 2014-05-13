@@ -1,9 +1,9 @@
-Name: harbour-jopas
+Name: harbour-jollaopas
 Summary: Journey planner for Helsinki and Tampere area
 Version: 0.3.0
 Release: 1
 Group: Qt/Qt
-URL: http://rasjani.github.io/Jopas/
+URL: http://hsarkanen.github.io/JollaOpas/
 License: "GPLv3"
 Sources:
 - '%{name}-%{version}.tar.bz2'
