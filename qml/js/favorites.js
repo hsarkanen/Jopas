@@ -46,7 +46,8 @@ function initialize() {
         function(tx) {
             // Create the settings table if it doesn't already exist
             // If the table exists, this is skipped
-            tx.executeSql('CREATE TABLE IF NOT EXISTS favorites(coord TEXT UNIQUE, name TEXT);');
+            // Type is just preparation for possibly different favorite types in the future
+            tx.executeSql('CREATE TABLE IF NOT EXISTS favorites(coord TEXT UNIQUE, type TEXT NOT NULL, api TEXT NOT NULL, name TEXT NOT NULL);');
             // Favourite routes, fixed amount of 4 per City, in different table
             tx.executeSql('CREATE TABLE IF NOT EXISTS favoriteRoutes(routeIndex INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL, api TEXT NOT NULL, fromCoord TEXT NOT NULL, fromName TEXT NOT NULL, toCoord TEXT NOT NULL, toName TEXT NOT NULL);');
           });
@@ -62,7 +63,7 @@ function addFavorite(name, coord) {
                            res = "Not exist"
                        }
                        else {
-                           rs = tx.executeSql('INSERT INTO favorites VALUES (?,?);', [coord,name]);
+                           rs = tx.executeSql('INSERT INTO favorites (coord,type,api,name) VALUES (?,?,?,?);', [coord,'normal',appWindow.currentApi,name]);
                            if (rs.rowsAffected > 0) {
                                res = "OK";
                            } else {
@@ -185,7 +186,7 @@ function getFavorites(model) {
    var db = getDatabase();
    var res="";
    db.transaction(function(tx) {
-     var rs = tx.executeSql('SELECT coord,name FROM favorites');
+     var rs = tx.executeSql('SELECT coord,name FROM favorites WHERE api = ?', appWindow.currentApi);
      if (rs.rows.length > 0) {
          for(var i = 0; i < rs.rows.length; i++) {
              var output = {}
