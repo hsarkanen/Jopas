@@ -98,6 +98,7 @@ Page {
                         text: "Helsinki"
                         onClicked: {
                             Storage.setSetting("api","helsinki")
+                            appWindow.currentApi = "helsinki"
                             appWindow.coverLine4 = text
                         }
                     }
@@ -105,6 +106,7 @@ Page {
                        text: "Tampere"
                         onClicked: {
                             Storage.setSetting("api","tampere")
+                            appWindow.currentApi = "tampere"
                             appWindow.coverLine4 = text
                         }
                     }

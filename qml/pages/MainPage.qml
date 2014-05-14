@@ -45,8 +45,6 @@ Page {
 
     onMyTimeChanged: console.debug("Time changed: " + myTime)
 
-    property variant currentApi: ''
-
     /* Current location acquired with GPS */
     property variant currentCoord: ''
     property variant currentName: ''
@@ -78,9 +76,7 @@ Page {
             appWindow.coverLine3 = 'JollaOpas'
             appWindow.coverLine6 = ''
 
-            currentApi = Storage.getSetting("api")
-
-            appWindow.coverLine4 = currentApi.charAt(0).toUpperCase() + currentApi.slice(1)
+            appWindow.coverLine4 = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
 
             var allowGps = Storage.getSetting("gps")
             if(allowGps == "true") {
@@ -93,7 +89,7 @@ Page {
 
             // Refresh favorite routes if api has been changed in SettingsPage
             favoriteRoutesModel.clear()
-            Favorites.getFavoriteRoutes('normal', currentApi, favoriteRoutesModel)
+            Favorites.getFavoriteRoutes('normal', appWindow.currentApi, favoriteRoutesModel)
         }
     }
 
@@ -132,6 +128,7 @@ Page {
     Component.onCompleted: {
         timeButton.updateTime()
         dateButton.updateDate()
+        appWindow.currentApi = Storage.getSetting("api")
     }
 
     states: [
@@ -213,7 +210,7 @@ Page {
                 onClicked: {
                     var fromNameToAdd = fromName ? fromName : currentName
                     var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
-                    var res = Favorites.addFavoriteRoute('normal', currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
+                    var res = Favorites.addFavoriteRoute('normal', appWindow.currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
                     if (res === "OK") {
                         displayPopupMessage( qsTr("Route added to favorites") )
                     }
@@ -389,13 +386,13 @@ Page {
                 property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
 
                 function addToCover() {
-                    Favorites.addFavoriteRoute('cover', currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
+                    Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
                     displayPopupMessage( qsTr("Route added to cover action.") )
                 }
 
                 function remove() {
                     remorse.execute(rootItem, "Deleting", function() {
-                        Favorites.deleteFavoriteRoute(modelRouteIndex, currentApi, favoriteRoutesModel)
+                        Favorites.deleteFavoriteRoute(modelRouteIndex, appWindow.currentApi, favoriteRoutesModel)
                     })
                 }
 

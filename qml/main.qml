@@ -38,14 +38,6 @@ import "components"
 ApplicationWindow {
     id: appWindow
 
-    // Pages sets the cover data to these properties and cover is instantiated every time based on these
-    property string coverLine1: ''
-    property string coverLine2: ''
-    property string coverLine3: ''
-    property string coverLine4: ''
-    property string coverLine5: ''
-    property string coverLine6: ''
-
     cover: Qt.resolvedUrl("pages/CoverPage.qml")
 
 
@@ -84,6 +76,16 @@ ApplicationWindow {
     property bool mapVisible : false
     property string colorscheme : "default"
     property bool gpsEnabled : false
+
+    // Pages sets the cover data to these properties and cover is instantiated every time based on these
+    // Sharing JavaScript array with Cover seems not to work
+    property string coverLine1: ''
+    property string coverLine2: ''
+    property string coverLine3: ''
+    property string coverLine4: ''
+    property string coverLine5: ''
+    property string coverLine6: ''
+    property string currentApi: ''
 
     onFollowModeChanged: {
         if(followMode)

@@ -36,14 +36,6 @@ import "../js/storage.js" as Storage
 import "../js/favorites.js" as Favorites
 
 CoverBackground {
-
-    property string coverLine1: appWindow.coverLine1
-    property string coverLine2: appWindow.coverLine2
-    property string coverLine3: appWindow.coverLine3
-    property string coverLine4: appWindow.coverLine4
-    property string coverLine5: appWindow.coverLine5
-    property string coverLine6: appWindow.coverLine6
-
     Label {
         id: label
         anchors.left: parent.left
@@ -51,7 +43,7 @@ CoverBackground {
         anchors.topMargin: UIConstants.DEFAULT_MARGIN / 2
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
-        text: coverLine1 + "\n" + coverLine2 + "\n" + coverLine3 + "\n" + coverLine4 + "\n" + coverLine5 + "\n" + coverLine6
+        text: appWindow.coverLine1 + "\n" + appWindow.coverLine2 + "\n" + appWindow.coverLine3 + "\n" + appWindow.coverLine4 + "\n" + appWindow.coverLine5 + "\n" + appWindow.coverLine6
         wrapMode: Text.WordWrap
     }
 
