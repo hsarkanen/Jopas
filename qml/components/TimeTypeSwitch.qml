@@ -32,7 +32,35 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 
-TextSwitch {
-    width: Screen.width/2 // TOODO: we break without that :/
-    text: checked ? qsTr("arrival") : qsTr("departure")
+Row {
+    property bool departure: true
+    Spacing { width: 40 } // Workaround to make switch look more horizontally centralized
+    TextSwitch {
+        id: departureSwitch
+        width: Screen.width/2
+        text: qsTr("Departure")
+        checked: true
+        automaticCheck: false
+        onClicked: {
+            if ( !checked ) {
+                checked = true
+                arrivalSwitch.checked = false
+                departure = true
+            }
+        }
+    }
+    TextSwitch {
+        id: arrivalSwitch
+        width: Screen.width/2
+        text: qsTr("Arrival")
+        checked: false
+        automaticCheck: false
+        onClicked: {
+            if ( !checked ) {
+                checked = true
+                departureSwitch.checked = false
+                departure = false
+            }
+        }
+    }
 }

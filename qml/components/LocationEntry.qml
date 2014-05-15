@@ -314,7 +314,7 @@ Column {
         }
         Text {
             id: label
-            font.pixelSize: UIConstants.FONT_XXLARGE * appWindow.scalingFactor
+            font.pixelSize: 36
             color: Theme.theme[appWindow.colorscheme].COLOR_FOREGROUND
             lineHeightMode: Text.FixedHeight
             lineHeight: font.pixelSize * 1.1

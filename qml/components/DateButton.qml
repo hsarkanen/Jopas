@@ -36,7 +36,6 @@ BackgroundItem {
     id: dateContainer
     width: dateButton.width
     height: dateButton.height
-    anchors.horizontalCenter: parent.horizontalCenter
     property date storedDate
     signal dateChanged(variant newDate)
 
@@ -56,8 +55,9 @@ BackgroundItem {
     Label {
         id: dateButton
         font.pixelSize: Theme.fontSizeLarge
+        anchors.right: parent.right
         color: Theme.secondaryColor
-        text: Qt.formatDate(storedDate, "dd. MMMM yyyy")
+        text: Qt.formatDate(storedDate, "ddd, dd.MM.")
     }
 }
 

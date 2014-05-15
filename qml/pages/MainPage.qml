@@ -90,6 +90,8 @@ Page {
             // Refresh favorite routes if api has been changed in SettingsPage
             favoriteRoutesModel.clear()
             Favorites.getFavoriteRoutes('normal', appWindow.currentApi, favoriteRoutesModel)
+            // Prevent the keyboard to popup instantly when swithcing back to mainPage
+            mainPage.forceActiveFocus()
         }
     }
 
@@ -153,7 +155,7 @@ Page {
         parameters.to = toCoord
 
         parameters.time = mainPage.myTime
-        parameters.timetype = timeTypeSwitch.checked? "arrival" : "departure"
+        parameters.timetype = timeTypeSwitch.departure ? "departure" : "arrival"
         parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
         parameters.optimize = optimize == "Unknown"?"default":optimize
         parameters.change_margin = change_margin == "Unknown"?"3":Math.floor(change_margin)
@@ -219,21 +221,13 @@ Page {
                     }
                 }
             }
-            MenuItem {
-                enabled: endpointsValid
-                text: qsTr("Route search");
-                onClicked: {
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-                }
-            }
         }
 
         Column {
             id: content_column
     //         spacing: appWindow.inPortrait? UIConstants.DEFAULT_MARGIN : UIConstants.DEFAULT_MARGIN / 2
-            width: parent.width
+            width: parent.width - Theme.paddingLarge
+            anchors.horizontalCenter: parent.horizontalCenter
 
             Item {
                 width: parent.width
@@ -257,10 +251,10 @@ Page {
                     }
                 }
 
-                Spacing { id: location_spacing; anchors.top: from.bottom; height: 20 }
+                Spacing { id: location_spacing; anchors.top: from.bottom; height: 30 }
 
                 SwitchLocation {
-                    anchors.topMargin: UIConstants.DEFAULT_MARGIN/2
+                    anchors.bottom: to.top
                     from: from
                     to: to
                 }
@@ -276,10 +270,24 @@ Page {
                 }
             }
 
-            Spacing { height: appWindow.inPortrait? 20 : 0 }
+            TimeTypeSwitch {
+                id: timeTypeSwitch
+            }
 
             Row {
+                height: 60
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                DateButton {
+                    id: dateButton
+                    onDateChanged: {
+                        mainPage.myTime = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(),
+                                                   myTime.getHours()? myTime.getHours() : 0,
+                                                   myTime.getMinutes()? myTime.getMinutes() : 0)
+                    }
+                }
+
+                Spacing { width: 20 }
 
                 TimeButton {
                     id: timeButton
@@ -291,40 +299,51 @@ Page {
                     }
                 }
 
-                TimeTypeSwitch {
-                    id: timeTypeSwitch
-                    anchors.verticalCenter: timeButton.verticalCenter
-                }
-            }
+                Spacing { width: 20 }
 
-            DateButton {
-                id: dateButton
-                onDateChanged: {
-                    mainPage.myTime = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(),
-                                               myTime.getHours()? myTime.getHours() : 0,
-                                               myTime.getMinutes()? myTime.getMinutes() : 0)
+                Button {
+                    text: qsTr("Now")
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 100
+                    onClicked: {
+                        timeButton.updateTime()
+                        dateButton.updateDate()
+                    }
                 }
             }
 
             Button {
-                id: timeDateNow
-                text: qsTr("Now")
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: 150
-                height: 40
+                enabled: endpointsValid
+                text: qsTr("Search")
                 onClicked: {
-                    timeButton.updateTime()
-                    dateButton.updateDate()
+                    var parameters = {}
+                    setRouteParameters(parameters)
+                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
                 }
             }
-
         }
 
-        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 30 }
+        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 5 }
+
+
+        Item {
+            id: headeritem
+            width: parent.width - Theme.paddingLarge
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: favorites_spacing.bottom
+            height: favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN
+            Text {
+                id: favoriteRouteHeader
+                color: Theme.primaryColor
+                font.pixelSize: 36
+                text: qsTr("Favorite routes")
+            }
+        }
 
         SilicaListView {
             id: favoriteRouteList
-            anchors.top: favorites_spacing.bottom
+            anchors.top: headeritem.bottom
             anchors.bottom: parent.bottom
             spacing: 5
             width: parent.width
@@ -332,23 +351,9 @@ Page {
             delegate: favoriteRouteManageDelegate
             property Item contextMenu
 
-            header:
-                Item {
-                id: headeritem
-                width: parent.width
-                anchors.margins: UIConstants.DEFAULT_MARGIN
-                height: favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN
-                Text {
-                    id: favoriteRouteHeader
-                    color: Theme.primaryColor
-                    font.pixelSize: UIConstants.FONT_XXLARGE * appWindow.scalingFactor
-                    text: qsTr("Favorite routes")
-                }
-            }
-
             ViewPlaceholder {
                 enabled: favoriteRouteList.count == 0
-                verticalOffset: -250
+                verticalOffset: -300
                 text: qsTr("No saved favorite routes")
             }
 
