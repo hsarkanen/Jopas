@@ -91,7 +91,7 @@ Dialog {
             Image {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/images/clear.png"
+                source: "image://theme/icon-m-clear"
                 visible: (editTextField.activeFocus)
 
                 MouseArea {

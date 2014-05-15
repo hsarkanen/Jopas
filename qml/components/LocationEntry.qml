@@ -377,20 +377,6 @@ Column {
                 width: 20
                 opacity: 0.6
             }
-            Image {
-                id: clearLocation
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/images/clear.png"
-                visible: ((textfield.activeFocus) && !busyIndicator.running)
-                MouseArea {
-                    id: locationInputMouseArea
-                    anchors.fill: parent
-                    onClicked: {
-                        clear()
-                    }
-                }
-            }
 
             BusyIndicator {
                 id: busyIndicator
