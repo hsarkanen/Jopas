@@ -1,3 +1,9 @@
+## 0.3.3 (16th of May, 2014)
+
+Bugfixes:
+
+  - Fixes to UI text elements and Finnish translations
+
 ## 0.3.2 (16th of May, 2014)
 
 Features:
