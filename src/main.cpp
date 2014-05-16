@@ -35,6 +35,10 @@
 int main(int argc, char *argv[])
 {
      QGuiApplication *app = SailfishApp::application(argc, argv);
+     QString locale = QLocale::system().name();
+     QTranslator translator;
+     translator.load(locale,SailfishApp::pathTo(QString("localization")).toLocalFile());
+     app->installTranslator(&translator);
      QQuickView *view = SailfishApp::createView();
      view->setSource(SailfishApp::pathTo("qml/main.qml"));
      view->showFullScreen();

@@ -20,6 +20,23 @@ OTHER_FILES += \
     rpm/harbour-jollaopas.yaml \
     rpm/harbour-jollaopas.spec
 
+
+localization.files = localization
+localization.path = /usr/share/$${TARGET}
+
+INSTALLS += localization
+
+lupdate_only{
+SOURCES += \
+    qml/pages/*.qml \
+    qml/components/*.qml \
+    qml/pages/AboutDialog.qml.in \
+    qml/main.qml
+
+TRANSLATIONS += \
+    localization/fi.ts
+}
+
 RESOURCES += \
     jollaopas.qrc
 
