@@ -1,3 +1,16 @@
+## 0.3.1 (16th of May, 2014)
+
+Bugfixes:
+
+  - Separate favorites between Helsinki and Tampere - FIXED
+
+Features:
+
+  - Rebranded Jopas to JollaOpas
+  - Added Search-button to Search page
+  - Updated About dialog
+  - Smaller improvements and bugfixes
+
 ## 0.3.0 (28th of April, 2014)
 
 Bugfixes:
