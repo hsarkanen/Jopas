@@ -55,7 +55,7 @@ Dialog {
         anchors.fill: parent
 
         DialogHeader {
-            acceptText: qsTr("Add favorite")
+            acceptText: qsTr("Add favorite place")
         }
 
         LocationEntry {
@@ -74,7 +74,7 @@ Dialog {
         Spacing {}
 
         Label {
-            text: qsTr("Enter name for the favorite")
+            text: qsTr("Enter name for the favorite place")
             font.pixelSize: Theme.fontSizeMedium
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Qt.AlignCenter

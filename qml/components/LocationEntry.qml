@@ -419,9 +419,9 @@ Column {
                         favoritesModel.clear()
                         Favorites.getFavorites(favoritesModel)
                         favoriteQuery.selectedIndex = favoritesModel.count
-                        displayPopupMessage( qsTr("Location added to favorites") )
+                        displayPopupMessage( qsTr("Location added to favorite places") )
                     } else {
-                        displayPopupMessage(qsTr("Location already in the favorites"))
+                        displayPopupMessage(qsTr("Location already in the favorite places"))
                     }
 
                 }

@@ -54,7 +54,7 @@ Dialog {
         Label {
             x: Theme.paddingLarge
             width: parent.width - Theme.paddingLarge * 2
-            text: qsTr("Allow this application to use the phone location services to enhance the routing experience?") + "\n\n" + qsTr("The setting can be later changed from the application preferences.")
+            text: qsTr("Allow this application to use the phone location services to enhance the routing experience?") + "\n\n" + qsTr("Choices can be later changed from the application settings.")
             wrapMode: Text.WordWrap
         }
 

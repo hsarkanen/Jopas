@@ -58,16 +58,16 @@ Page {
         VerticalScrollDecorator {}
 
         header: PageHeader {
-            title: qsTr("Manage favorites")
+            title: qsTr("Manage favorite places")
         }
 
         PullDownMenu {
-            MenuItem { text: qsTr("Add favorite"); onClicked: pageStack.push(Qt.resolvedUrl("AddFavoriteDialog.qml"), {favoritesModel: favoritesModel}) }
+            MenuItem { text: qsTr("Add favorite place"); onClicked: pageStack.push(Qt.resolvedUrl("AddFavoriteDialog.qml"), {favoritesModel: favoritesModel}) }
         }
 
         ViewPlaceholder {
             enabled: list.count == 0
-            text: qsTr("No saved favorites")
+            text: qsTr("No saved favorite places")
         }
 
         Component {

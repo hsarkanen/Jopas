@@ -54,7 +54,7 @@ Dialog {
         anchors.fill: parent
 
         DialogHeader {
-            acceptText: qsTr("Edit favorite")
+            acceptText: qsTr("Edit favorite place")
         }
 
         Label {

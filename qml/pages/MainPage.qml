@@ -206,7 +206,7 @@ Page {
         PullDownMenu {
             MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
             MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
-            MenuItem { text: qsTr("Manage favorites"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
+            MenuItem { text: qsTr("Manage favorite places"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
             MenuItem {
                 enabled: endpointsValid
                 text: qsTr("Add as favorite route");
@@ -215,10 +215,10 @@ Page {
                     var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
                     var res = Favorites.addFavoriteRoute('normal', appWindow.currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
                     if (res === "OK") {
-                        displayPopupMessage( qsTr("Route added to favorites") )
+                        displayPopupMessage( qsTr("Favorite route added") )
                     }
                     else {
-                        displayPopupMessage( qsTr("Maximum amount of routes is 4!") )
+                        displayPopupMessage( qsTr("Maximum amount of favorite routes is 4!") )
                     }
                 }
             }
@@ -393,7 +393,7 @@ Page {
 
                 function addToCover() {
                     Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
-                    displayPopupMessage( qsTr("Route added to cover action.") )
+                    displayPopupMessage( qsTr("Favorite route added to cover action.") )
                 }
 
                 function remove() {

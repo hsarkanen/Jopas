@@ -44,7 +44,7 @@ Dialog {
 
         DialogHeader {
             id: header
-            acceptText: qsTr("Add favorite")
+            acceptText: qsTr("Add favorite place")
         }
 
         SilicaListView {
