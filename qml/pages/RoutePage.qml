@@ -43,8 +43,8 @@ Page {
     property string walking
     property string start_time
     property string finish_time
-    property string departure_string: qsTr("Departure:")
-    property string arrival_string: qsTr("Arrival:")
+    property string departure_string: qsTr("Departure") + ":"
+    property string arrival_string: qsTr("Arrival") + ":"
 
     Component.onCompleted: {
         var route = Reittiopas.get_route_instance()

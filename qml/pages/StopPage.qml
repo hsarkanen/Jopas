@@ -118,7 +118,7 @@ Page {
         highlightFollowsCurrentItem: true
         currentIndex: -1
         header: PageHeader {
-            title: leg_code ? qsTr("Stops for line ") + leg_code : qsTr("Walking route")
+            title: leg_code ? qsTr("Stops for line") + " " + leg_code : qsTr("Walking route")
         }
     }
 

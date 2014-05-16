@@ -115,12 +115,12 @@ Page {
                 id: gpsSwitch
                 function updateDescription() {
                     if (gpsSwitch.checked) {
-                        gpsSwitch.description = "GPS is in use"
-                        appWindow.coverLine5 = qsTr('GPS Enabled')
+                        gpsSwitch.description = qsTr("GPS enabled")
+                        appWindow.coverLine5 = qsTr('GPS enabled')
                     }
                     else {
-                        gpsSwitch.description = "GPS will not be used"
-                        appWindow.coverLine5 = qsTr('GPS Disabled')
+                        gpsSwitch.description = qsTr("GPS disabled")
+                        appWindow.coverLine5 = qsTr('GPS disabled')
                     }
                 }
 
@@ -129,7 +129,7 @@ Page {
                     gpsSwitch.checked = val
                     gpsSwitch.updateDescription()
                 }
-                text: "Toggle GPS Usage"
+                text: qsTr("Toggle GPS Usage")
                 description: ""
                 onCheckedChanged: {
                     var val = (checked?"true":"false")
@@ -146,9 +146,9 @@ Page {
                 id: busSwitch
                 function updateDescription() {
                     if (busSwitch.checked)
-                        busSwitch.description = "Route results will contain Buses"
+                        busSwitch.description = qsTr("Route results will contain Buses")
                     else
-                        busSwitch.description = "Route results will not contain Buses"
+                        busSwitch.description = qsTr("Route results will not contain Buses")
                 }
 
                 function set_value(value) {
@@ -156,7 +156,7 @@ Page {
                     busSwitch.checked = val
                     busSwitch.updateDescription()
                 }
-                text: "Bus"
+                text: qsTr("Bus")
                 description: ""
                 onCheckedChanged: {
                     Storage.setSetting("bus_disabled", (!checked).toString())
@@ -167,9 +167,9 @@ Page {
                 id: tramSwitch
                 function updateDescription() {
                     if (tramSwitch.checked)
-                        tramSwitch.description = "Route results will contain Trams"
+                        tramSwitch.description = qsTr("Route results will contain Trams")
                     else
-                        tramSwitch.description = "Route results will not contain Trams"
+                        tramSwitch.description = qsTr("Route results will not contain Trams")
                 }
 
                 function set_value(value) {
@@ -177,7 +177,7 @@ Page {
                     tramSwitch.checked = val
                     tramSwitch.updateDescription()
                 }
-                text: "Tram"
+                text: qsTr("Tram")
                 description: ""
                 onCheckedChanged: {
                     Storage.setSetting("tram_disabled", (!checked).toString())
@@ -188,9 +188,9 @@ Page {
                 id: metroSwitch
                 function updateDescription() {
                     if (metroSwitch.checked)
-                        metroSwitch.description = "Route results will contain Metro"
+                        metroSwitch.description = qsTr("Route results will contain Metro")
                     else
-                        metroSwitch.description = "Route results will not contain Metro"
+                        metroSwitch.description = qsTr("Route results will not contain Metro")
                 }
 
                 function set_value(value) {
@@ -198,7 +198,7 @@ Page {
                     metroSwitch.checked = val
                     metroSwitch.updateDescription()
                 }
-                text: "Metro"
+                text: qsTr("Metro")
                 description: ""
                 onCheckedChanged: {
                     Storage.setSetting("metro_disabled", (!checked).toString())
@@ -209,9 +209,9 @@ Page {
                 id: trainSwitch
                 function updateDescription() {
                     if (trainSwitch.checked)
-                        trainSwitch.description = "Route results will contain Trains"
+                        trainSwitch.description = qsTr("Route results will contain Trains")
                     else
-                        trainSwitch.description = "Route results will not contain Trains"
+                        trainSwitch.description = qsTr("Route results will not contain Trains")
                 }
 
                 function set_value(value) {
@@ -219,7 +219,7 @@ Page {
                     trainSwitch.checked = val
                     trainSwitch.updateDescription()
                 }
-                text: "Train"
+                text: qsTr("Train")
                 description: ""
                 onCheckedChanged: {
                     Storage.setSetting("train_disabled", (!checked).toString())
@@ -234,7 +234,7 @@ Page {
                     changeMargin.updateLabel()
                 }
                 function updateLabel() {
-                    changeMargin.label = "Change Margin (" + changeMargin.value + " minutes)"
+                    changeMargin.label = qsTr("Change Margin") + " (" + changeMargin.value + " " + qsTr("minutes") + ")"
                 }
                 width: parent.width
                 minimumValue: 0

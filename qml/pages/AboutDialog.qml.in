@@ -40,7 +40,7 @@ Page {
         width: parent.width
 
         PageHeader {
-             title: "About JollaOpas"
+             title: qsTr("About JollaOpas")
         }
 
         Spacing {height: 20}
@@ -57,7 +57,7 @@ Page {
 
         Button {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Changelog"
+            text: qsTr("Changelog")
             onClicked: {
                 Qt.openUrlExternally("https://github.com/hsarkanen/JollaOpas/blob/v@VERSION@/Changelog.md")
             }
@@ -65,7 +65,7 @@ Page {
 
         Button {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Sources on Github"
+            text: qsTr("Sources on Github")
             onClicked: {
                 Qt.openUrlExternally("https://github.com/hsarkanen/JollaOpas")
             }
@@ -79,8 +79,8 @@ Page {
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
             text: "(c) Heikki Sarkanen" +"\n" + "<heikki.sarkanen@gmail.com>\n2014\n" +
-                  qsTr("Original Author:") + "\nJukka Nousiainen\n" +
-                  qsTr("Additional Credits:") + "\n" +
+                  qsTr("Original Author") + ":\nJukka Nousiainen\n" +
+                  qsTr("Additional Credits") + ":\n" +
                   "Jani Mikkonen, " +
                   "Mohammed Sameer\n" +
                   "Clovis Scotti, " +
@@ -96,8 +96,8 @@ Page {
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
             text:
-                qsTr("This application is free sofware licenced under the GNU Public License v3\n")  +
-                qsTr("Some  parts of the code release under MIT License")
+                qsTr("This application is free sofware licenced under the GNU Public License v3.") + "\n" +
+                qsTr("Some parts of the code release under MIT License.")
         }
     }
 }

@@ -124,7 +124,7 @@ Component {
             }
 
             Label {
-                text: qsTr("Walk ") + Math.floor(walk/100)/10 + ' km'
+                text: qsTr("Walk")+ " " + Math.floor(walk/100)/10 + " km"
                 horizontalAlignment: Qt.AlignRight
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall

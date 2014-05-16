@@ -102,7 +102,7 @@ Page {
             }
 
             function remove() {
-                remorse.execute(rootItem, "Deleting", function() {
+                remorse.execute(rootItem, qsTr("Deleting"), function() {
                         Favorites.deleteFavorite(coord, favoritesModel)
                 })
 

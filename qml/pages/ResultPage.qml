@@ -112,8 +112,8 @@ Page {
             width: parent.width
             PageHeader {
                 title: search_parameters.timetype == "departure" ?
-                             qsTr("Departure ") + Qt.formatDateTime(search_parameters.time,"dd.MM hh:mm") :
-                             qsTr("Arrival ") + Qt.formatDateTime(search_parameters.time,"dd.MM hh:mm")
+                           qsTr("Departure") + " " + Qt.formatDateTime(search_parameters.time,"dd.MM hh:mm") :
+                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.time,"dd.MM hh:mm")
             }
 
             Label {

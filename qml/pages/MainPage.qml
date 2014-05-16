@@ -81,10 +81,10 @@ Page {
             var allowGps = Storage.getSetting("gps")
             if(allowGps == "true") {
                 appWindow.gpsEnabled = true
-                appWindow.coverLine5 = qsTr('GPS Enabled')
+                appWindow.coverLine5 = qsTr('GPS enabled')
             }
             else {
-                appWindow.coverLine5 = qsTr('GPS Disabled')
+                appWindow.coverLine5 = qsTr('GPS disabled')
             }
 
             // Refresh favorite routes if api has been changed in SettingsPage
@@ -397,7 +397,7 @@ Page {
                 }
 
                 function remove() {
-                    remorse.execute(rootItem, "Deleting", function() {
+                    remorse.execute(rootItem, qsTr("Deleting"), function() {
                         Favorites.deleteFavoriteRoute(modelRouteIndex, appWindow.currentApi, favoriteRoutesModel)
                     })
                 }
