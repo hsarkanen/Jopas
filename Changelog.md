@@ -1,3 +1,9 @@
+## 0.3.2 (16th of May, 2014)
+
+Features:
+
+  - Added Finnish translation
+
 ## 0.3.1 (16th of May, 2014)
 
 Bugfixes:
