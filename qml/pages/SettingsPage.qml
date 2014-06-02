@@ -54,6 +54,10 @@ Page {
             tramSwitch.set_value(setting == "Unknown"?"false" : setting)
             setting = Storage.getSetting("bus_disabled")
             busSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("uline_disabled")
+            ulineSwitch.set_value(setting == "Unknown"?"false" : setting)
+            setting = Storage.getSetting("service_disabled")
+            serviceSwitch.set_value(setting == "Unknown"?"false" : setting)
             setting = Storage.getSetting("metro_disabled")
             metroSwitch.set_value(setting == "Unknown"?"false" : setting)
             setting = Storage.getSetting("train_disabled")
@@ -161,6 +165,48 @@ Page {
                 onCheckedChanged: {
                     Storage.setSetting("bus_disabled", (!checked).toString())
                     busSwitch.updateDescription()
+                }
+            }
+            TextSwitch {
+                id: ulineSwitch
+                function updateDescription() {
+                    if (ulineSwitch.checked)
+                        ulineSwitch.description = qsTr("Route results will contain U lines")
+                    else
+                        ulineSwitch.description = qsTr("Route results will not contain U lines")
+                }
+
+                function set_value(value) {
+                    var val = !(value === "true")
+                    ulineSwitch.checked = val
+                    ulineSwitch.updateDescription()
+                }
+                text: qsTr("U line")
+                description: ""
+                onCheckedChanged: {
+                    Storage.setSetting("uline_disabled", (!checked).toString())
+                    ulineSwitch.updateDescription()
+                }
+            }
+            TextSwitch {
+                id: serviceSwitch
+                function updateDescription() {
+                    if (serviceSwitch.checked)
+                        serviceSwitch.description = qsTr("Route results will contain Service lines")
+                    else
+                        serviceSwitch.description = qsTr("Route results will not contain Service lines")
+                }
+
+                function set_value(value) {
+                    var val = !(value === "true")
+                    serviceSwitch.checked = val
+                    serviceSwitch.updateDescription()
+                }
+                text: qsTr("Service line")
+                description: ""
+                onCheckedChanged: {
+                    Storage.setSetting("service_disabled", (!checked).toString())
+                    serviceSwitch.updateDescription()
                 }
             }
             TextSwitch {

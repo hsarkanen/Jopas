@@ -102,7 +102,10 @@ CoverBackground {
                 parameters.mode_cost_25 = -1 // region night buses
                 parameters.mode_cost_36 = -1 // Kirkkonummi internal bus lines
                 parameters.mode_cost_39 = -1 // Kerava internal bus lines
+            }
+            if(Storage.getSetting("uline_disabled") === "true")
                 parameters.mode_cost_8 = -1 // U-lines
+            if(Storage.getSetting("service_disabled") === "true") {
                 parameters.mode_cost_21 = -1 // Helsinki service lines
                 parameters.mode_cost_23 = -1 // Espoo service lines
                 parameters.mode_cost_24 = -1 // Vantaa service lines
@@ -111,6 +114,7 @@ CoverBackground {
                 parameters.mode_cost_6 = -1 // metro
             if(Storage.getSetting("tram_disabled") === "true")
                 parameters.mode_cost_2 = -1 // trams
+
             pageStack.push(Qt.resolvedUrl("MainPage.qml"), {}, PageStackAction.Immediate)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
         }
