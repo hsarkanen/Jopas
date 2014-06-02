@@ -41,10 +41,6 @@ import "../components"
 Page {
     id: mainPage
 
-    property date myTime
-
-    onMyTimeChanged: console.debug("Time changed: " + myTime)
-
     /* Current location acquired with GPS */
     property variant currentCoord: ''
     property variant currentName: ''
@@ -101,8 +97,7 @@ Page {
         QmlApplicationViewer.showFullScreen()
 
         /* Update time */
-        timeButton.updateTime()
-        dateButton.updateDate()
+        timeSwitch.setTimeNow()
 
         /* Update new destination to "to" */
         to.updateLocation(name, 0, coord)
@@ -125,8 +120,7 @@ Page {
     }
 
     Component.onCompleted: {
-        timeButton.updateTime()
-        dateButton.updateDate()
+        timeSwitch.setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
     }
 
@@ -151,7 +145,7 @@ Page {
         parameters.to_name = toName
         parameters.to = toCoord
 
-        parameters.time = mainPage.myTime
+        parameters.time = timeSwitch.timeNow ? new Date() : timeSwitch.myTime
         parameters.timetype = timeTypeSwitch.departure ? "departure" : "arrival"
         parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
         parameters.optimize = optimize == "Unknown"?"default":optimize
@@ -296,42 +290,8 @@ Page {
                 id: timeTypeSwitch
             }
 
-            Row {
-                height: 60
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                DateButton {
-                    id: dateButton
-                    onDateChanged: {
-                        mainPage.myTime = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(),
-                                                   myTime.getHours()? myTime.getHours() : 0,
-                                                   myTime.getMinutes()? myTime.getMinutes() : 0)
-                    }
-                }
-
-                Spacing { width: 20 }
-
-                TimeButton {
-                    id: timeButton
-                    onTimeChanged: {
-                        mainPage.myTime = new Date(myTime.getFullYear()? myTime.getFullYear() : 0,
-                                                myTime.getMonth()? myTime.getMonth() : 0,
-                                                myTime.getDate()? myTime.getDate() : 0,
-                                                newTime.getHours(), newTime.getMinutes())
-                    }
-                }
-
-                Spacing { width: 20 }
-
-                Button {
-                    text: qsTr("Now")
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 100
-                    onClicked: {
-                        timeButton.updateTime()
-                        dateButton.updateDate()
-                    }
-                }
+            TimeSwitch {
+                id: timeSwitch
             }
 
             Button {

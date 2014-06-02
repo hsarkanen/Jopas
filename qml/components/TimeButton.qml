@@ -37,6 +37,7 @@ BackgroundItem {
     height: timeButton.height
     width: timeButton.width
     property date storedDate
+    property alias text: timeButton.text
 
     signal timeChanged(variant newTime)
 
