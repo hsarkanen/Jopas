@@ -196,11 +196,7 @@ reittiopas.prototype.api_request = function() {
 
     var query = []
     for(var p in this.parameters) {
-        if(p == "transport_types") {
-            query.push(p + "=" + this.parameters[p].join('|'))
-        } else {
-            query.push(p + "=" + this.parameters[p])
-        }
+        query.push(p + "=" + this.parameters[p])
     }
     //console.debug( API[this.api_type].URL + '?' + query.join('&'))
     _http_request.open("GET", API[this.api_type].URL + '?' + query.join('&'))

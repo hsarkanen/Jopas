@@ -90,18 +90,27 @@ CoverBackground {
             parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
             parameters.optimize = optimize == "Unknown"?"default":optimize
             parameters.change_margin = change_margin == "Unknown"?"3":Math.floor(change_margin)
-            parameters.transport_types = ["ferry"]
-            if(Storage.getSetting("train_disabled") != "true")
-                parameters.transport_types.push("train")
-            if(Storage.getSetting("bus_disabled") != "true") {
-                parameters.transport_types.push("bus")
-                parameters.transport_types.push("uline")
-                parameters.transport_types.push("service")
+
+            if(Storage.getSetting("train_disabled") === "true")
+                parameters.mode_cost_12 = -1 // commuter trains
+            if(Storage.getSetting("bus_disabled") === "true") {
+                parameters.mode_cost_1 = -1 // Helsinki internal bus lines
+                parameters.mode_cost_3 = -1 // Espoo internal bus lines
+                parameters.mode_cost_4 = -1 // Vantaa internal bus lines
+                parameters.mode_cost_5 = -1 // regional bus lines
+                parameters.mode_cost_22 = -1 // Helsinki night buses
+                parameters.mode_cost_25 = -1 // region night buses
+                parameters.mode_cost_36 = -1 // Kirkkonummi internal bus lines
+                parameters.mode_cost_39 = -1 // Kerava internal bus lines
+                parameters.mode_cost_8 = -1 // U-lines
+                parameters.mode_cost_21 = -1 // Helsinki service lines
+                parameters.mode_cost_23 = -1 // Espoo service lines
+                parameters.mode_cost_24 = -1 // Vantaa service lines
             }
-            if(Storage.getSetting("metro_disabled") != "true")
-                parameters.transport_types.push("metro")
-            if(Storage.getSetting("tram_disabled") != "true")
-                parameters.transport_types.push("tram")
+            if(Storage.getSetting("metro_disabled") === "true")
+                parameters.mode_cost_6 = -1 // metro
+            if(Storage.getSetting("tram_disabled") === "true")
+                parameters.mode_cost_2 = -1 // trams
             pageStack.push(Qt.resolvedUrl("MainPage.qml"), {}, PageStackAction.Immediate)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
         }
