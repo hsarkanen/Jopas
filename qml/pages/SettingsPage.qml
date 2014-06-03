@@ -148,6 +148,7 @@ Page {
             }
             TextSwitch {
                 id: busSwitch
+                visible: appWindow.currentApi === "helsinki"
                 function updateDescription() {
                     if (busSwitch.checked)
                         busSwitch.description = qsTr("Route results will contain Buses")
@@ -169,6 +170,7 @@ Page {
             }
             TextSwitch {
                 id: ulineSwitch
+                visible: appWindow.currentApi === "helsinki"
                 function updateDescription() {
                     if (ulineSwitch.checked)
                         ulineSwitch.description = qsTr("Route results will contain U lines")
@@ -190,6 +192,7 @@ Page {
             }
             TextSwitch {
                 id: serviceSwitch
+                visible: appWindow.currentApi === "helsinki"
                 function updateDescription() {
                     if (serviceSwitch.checked)
                         serviceSwitch.description = qsTr("Route results will contain Service lines")
@@ -211,6 +214,7 @@ Page {
             }
             TextSwitch {
                 id: tramSwitch
+                visible: appWindow.currentApi === "helsinki"
                 function updateDescription() {
                     if (tramSwitch.checked)
                         tramSwitch.description = qsTr("Route results will contain Trams")
@@ -232,6 +236,7 @@ Page {
             }
             TextSwitch {
                 id: metroSwitch
+                visible: appWindow.currentApi === "helsinki"
                 function updateDescription() {
                     if (metroSwitch.checked)
                         metroSwitch.description = qsTr("Route results will contain Metro")
@@ -253,6 +258,7 @@ Page {
             }
             TextSwitch {
                 id: trainSwitch
+                visible: appWindow.currentApi === "helsinki"
                 function updateDescription() {
                     if (trainSwitch.checked)
                         trainSwitch.description = qsTr("Route results will contain Trains")
