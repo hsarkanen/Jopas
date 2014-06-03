@@ -43,8 +43,6 @@ Page {
     property string walking
     property string start_time
     property string finish_time
-    property string departure_string: qsTr("Departure") + ":"
-    property string arrival_string: qsTr("Arrival") + ":"
     property string routeDetails: ""
 
     Component.onCompleted: {
@@ -52,13 +50,6 @@ Page {
         route.dump_legs(route_index, routeModel)
         from_name = route.from_name
         to_name = route.to_name
-
-        appWindow.coverLine1 = departure_string
-        appWindow.coverLine2 = start_time.slice(11,16)
-        appWindow.coverLine3 = from_name
-        appWindow.coverLine4 = arrival_string
-        appWindow.coverLine5 = finish_time.slice(11,16)
-        appWindow.coverLine6 = to_name
     }
 
     ListModel {
@@ -95,6 +86,16 @@ Page {
                         routeDetails += (" " + leg.code + ", " + qsTr("duration") + " " + leg.duration + " " + qsTr("min") + "\n")
                     }
                 }
+
+                var routeDetailsString = routeDetails
+                var routeDetailsArray = routeDetailsString.split("\n")
+
+                appWindow.coverLine1 = start_time.slice(11,16) + " - " + finish_time.slice(11,16)
+                appWindow.coverLine2 = routeDetailsArray[0].slice(0,14)
+                appWindow.coverLine3 = routeDetailsArray[1].slice(0,14)
+                appWindow.coverLine4 = routeDetailsArray[2].slice(0,14)
+                appWindow.coverLine5 = routeDetailsArray[3].slice(0,14)
+                appWindow.coverLine6 = routeDetailsArray[4].slice(0,14)
             }
         }
     }
