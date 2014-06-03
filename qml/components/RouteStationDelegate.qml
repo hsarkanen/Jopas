@@ -69,7 +69,7 @@ Item {
             id: station_code
             horizontalAlignment: Qt.AlignRight
             anchors.verticalCenter: parent.verticalCenter
-            text: shortCode ? "(" + shortCode + ")" : ""
+            text: typeof(shortCode) === "undefined" ? "" : "(" + shortCode + ")"
             font.pixelSize: Theme.fontSizeSmall
             color: Theme.secondaryColor
         }
