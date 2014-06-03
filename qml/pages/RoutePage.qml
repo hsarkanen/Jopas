@@ -45,6 +45,7 @@ Page {
     property string finish_time
     property string departure_string: qsTr("Departure") + ":"
     property string arrival_string: qsTr("Arrival") + ":"
+    property string routeDetails: ""
 
     Component.onCompleted: {
         var route = Reittiopas.get_route_instance()
@@ -63,6 +64,39 @@ Page {
     ListModel {
         id: routeModel
         property bool done: false
+
+        // Parse routeDetails for cover and clipboard usage,
+        // could possibly be done in reittiopas.js when parsing json data
+        onDoneChanged: {
+            if (done) {
+                for (var i = 0; i < routeModel.count; ++i) {
+                    var leg = routeModel.get(i)
+                    var type = leg.type
+                    if (type === 'station') {
+                        var shortCodeText = typeof(leg.shortCode) === "undefined" ? "" : "(" + leg.shortCode + ")"
+                        routeDetails += (Qt.formatTime(leg.time, "hh:mm") + " " + leg.name + shortCodeText + "\n")
+                    }
+                    else if (type === 'walk') {
+                        routeDetails += (qsTr("Walking") + " " + Math.floor(leg.length/100)/10 + " " + qsTr("km") + "\n")
+                    }
+                    else {
+                        if (type === 'bus')
+                            routeDetails += qsTr("Bus")
+                        else if (type === 'train')
+                            routeDetails += qsTr("Train")
+                        else if (type === 'metro')
+                            routeDetails += qsTr("Metro")
+                        else if (type === 'ferry')
+                            routeDetails += qsTr("Ferry")
+                        else if (type === 'tram')
+                            routeDetails += qsTr("Tram")
+                        else
+                            routeDetails += ""
+                        routeDetails += (" " + leg.code + ", " + qsTr("duration") + " " + leg.duration + " " + qsTr("min") + "\n")
+                    }
+                }
+            }
+        }
     }
 
     Component {
@@ -114,7 +148,7 @@ Page {
             MenuItem {
                 text: qsTr("Copy details to Clipboard")
                 onClicked: {
-                    Clipboard.text = departure_string + " " + Qt.formatDateTime(start_time,"dd.MM hh:mm") + "\n" + from_name + "\n\n" + arrival_string + " " + Qt.formatDateTime(finish_time,"dd.MM hh:mm") + "\n" + to_name
+                    Clipboard.text = routeDetails
                     displayPopupMessage( qsTr("Route details copied to Clipboard") )
                 }
             }
