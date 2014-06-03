@@ -236,6 +236,16 @@ Page {
                     }
                 }
             }
+            MenuItem {
+                visible: !searchButtonEnabled
+                enabled: endpointsValid
+                text: qsTr("Search");
+                onClicked: {
+                    var parameters = {}
+                    setRouteParameters(parameters)
+                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                }
+            }
         }
 
         Column {
@@ -328,6 +338,7 @@ Page {
             }
 
             Button {
+                visible: searchButtonEnabled
                 anchors.horizontalCenter: parent.horizontalCenter
                 enabled: endpointsValid
                 text: qsTr("Search")

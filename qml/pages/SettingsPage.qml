@@ -68,6 +68,8 @@ Page {
             walkingSpeed.set_value(setting == "Unknown"?"70" : setting)
             setting = Storage.getSetting("change_margin")
             changeMargin.set_value(setting == "Unknown"?"3" : Math.floor(setting))
+            setting = Storage.getSetting("search_button_disabled")
+            searchButtonSwitch.set_value(setting == "Unknown"?"false" : setting)
         }
 
         PullDownMenu {
@@ -353,6 +355,31 @@ Page {
                         text: qsTr("Running 150 m/min")
                         onClicked: Storage.setSetting('walking_speed','150')
                     }
+                }
+            }
+            SectionHeader {
+                text: qsTr("UI tweaks")
+            }
+            TextSwitch {
+                id: searchButtonSwitch
+                function updateDescription() {
+                    if (searchButtonSwitch.checked)
+                        searchButtonSwitch.description = qsTr("Search button is located below parameters")
+                    else
+                        searchButtonSwitch.description = qsTr("Search button is located in the PullDown menu")
+                }
+
+                function set_value(value) {
+                    var val = !(value === "true")
+                    searchButtonSwitch.checked = val
+                    searchButtonSwitch.updateDescription()
+                }
+                text: qsTr("Search button")
+                description: ""
+                onCheckedChanged: {
+                    Storage.setSetting("search_button_disabled", (!checked).toString())
+                    appWindow.searchButtonEnabled = checked
+                    searchButtonSwitch.updateDescription()
                 }
             }
         }

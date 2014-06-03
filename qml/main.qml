@@ -86,6 +86,7 @@ ApplicationWindow {
     property string coverLine5: ''
     property string coverLine6: ''
     property string currentApi: ''
+    property bool searchButtonEnabled: true
 
     onFollowModeChanged: {
         if(followMode)
