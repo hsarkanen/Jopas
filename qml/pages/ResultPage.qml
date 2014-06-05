@@ -87,7 +87,7 @@ Page {
             }
 
             Label {
-                text: qsTr("Next")
+                text: qsTr("Next") + " (+15 min)"
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -136,7 +136,7 @@ Page {
                 }
 
                 Label {
-                    text: qsTr("Previous")
+                    text: qsTr("Previous") + " (-15 min)"
                     width: parent.width
                     horizontalAlignment: Text.AlignHCenter
                     anchors.verticalCenter: parent.verticalCenter
