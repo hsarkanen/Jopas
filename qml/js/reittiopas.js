@@ -110,23 +110,9 @@ function convTime(hslTime){
                     00, 00);
 }
 
-function get_time_difference(earlierDate,laterDate)
+function get_time_difference_in_minutes(earlierDate,laterDate)
 {
-       var nTotalDiff = laterDate.getTime() - earlierDate.getTime();
-       var oDiff = new Object();
-
-       oDiff.days = Math.floor(nTotalDiff/1000/60/60/24);
-       nTotalDiff -= oDiff.days*1000*60*60*24;
-
-       oDiff.hours = Math.floor(nTotalDiff/1000/60/60);
-       nTotalDiff -= oDiff.hours*1000*60*60;
-
-       oDiff.minutes = Math.floor(nTotalDiff/1000/60);
-       nTotalDiff -= oDiff.minutes*1000*60;
-
-       oDiff.seconds = Math.floor(nTotalDiff/1000);
-
-       return oDiff;
+    return Math.floor((laterDate.getTime() - earlierDate.getTime())/1000/60);
 }
 
 
@@ -298,7 +284,7 @@ route_search.prototype.parse_json = function(routes, parent) {
                     "longitude" : locdata.coord.x,
                     "arrTime" : convTime(locdata.arrTime),
                     "depTime" : convTime(locdata.depTime),
-                    "time_diff" : locindex === 0 ? 0 : get_time_difference(convTime(locdata.depTime), convTime(locdata.arrTime)).minutes
+                    "time_diff" : get_time_difference_in_minutes(convTime(route.legs[0].locs[0].arrTime), convTime(locindex == 0 ? locdata.depTime : locdata.arrTime))
                 }
             }
             output.legs[leg].shape = legdata.shape
