@@ -30,9 +30,9 @@
 **********************************************************************/
 
 import QtQuick 2.1
+import Sailfish.Silica 1.0
 import "../js/helper.js" as Helper
 import "../js/UIConstants.js" as UIConstants
-import "../js/theme.js" as Theme
 
 Item {
     id: locationSwitch
@@ -47,7 +47,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.theme[appWindow.colorscheme].COLOR_BACKGROUND_CLICKED
+        color: Theme.secondaryHighlightColor
         z: -1
         visible: locationSwitchMouseArea.pressed
     }

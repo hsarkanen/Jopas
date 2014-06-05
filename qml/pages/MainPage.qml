@@ -239,11 +239,14 @@ Page {
             }
         }
 
+        Spacing { id: topSpacing; anchors.top: parent.top; height: Theme.paddingMedium }
+
         Column {
             id: content_column
     //         spacing: appWindow.inPortrait? UIConstants.DEFAULT_MARGIN : UIConstants.DEFAULT_MARGIN / 2
             width: parent.width - Theme.paddingLarge
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: topSpacing.bottom
 
             Item {
                 width: parent.width
@@ -318,7 +321,7 @@ Page {
             height: favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN
             Text {
                 id: favoriteRouteHeader
-                color: Theme.primaryColor
+                color: Theme.highlightColor
                 font.pixelSize: 36
                 text: qsTr("Favorite routes")
             }

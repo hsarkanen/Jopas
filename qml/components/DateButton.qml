@@ -54,9 +54,8 @@ BackgroundItem {
 
     Label {
         id: dateButton
-        font.pixelSize: Theme.fontSizeLarge
+        font.pixelSize: Theme.fontSizeMedium
         anchors.right: parent.right
-        color: Theme.secondaryColor
         text: Qt.formatDate(storedDate, "ddd, dd.MM.")
     }
 }

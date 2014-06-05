@@ -48,9 +48,8 @@ BackgroundItem {
 
     Label {
         id: timeButton
-        font.pixelSize: Theme.fontSizeLarge
+        font.pixelSize: Theme.fontSizeMedium
         anchors.left: parent.left
-        color: Theme.secondaryColor
         text: Qt.formatTime(storedDate, "hh:mm")
     }
 

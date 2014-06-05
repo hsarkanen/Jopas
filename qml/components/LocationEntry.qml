@@ -37,7 +37,6 @@ import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
 import "../js/favorites.js" as Favorites
-import "../js/theme.js" as Theme
 
 Column {
     property alias type : label.text
@@ -308,18 +307,17 @@ Column {
         Rectangle {
             height: parent.height
             width: label.width + count.width
-            color: Theme.theme[appWindow.colorscheme].COLOR_BACKGROUND_CLICKED
+            color: Theme.secondaryHighlightColor
             z: -1
             visible: labelMouseArea.pressed
         }
         Text {
             id: label
             font.pixelSize: 36
-            color: Theme.theme[appWindow.colorscheme].COLOR_FOREGROUND
+            color: Theme.highlightColor
             lineHeightMode: Text.FixedHeight
             lineHeight: font.pixelSize * 1.1
             anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingLarge
         }
         Bubble {
             id: count
@@ -403,9 +401,7 @@ Column {
             id: favoritePicker
             enabled: !disable_favorites
             visible: !disable_favorites
-            source: selected_favorite == -1?
-                        !Theme.theme[appWindow.colorscheme].BUTTONS_INVERTED?'qrc:/images/favorite-unmark.png':'qrc:/images/favorite-unmark-inverse.png' :
-                        !Theme.theme[appWindow.colorscheme].BUTTONS_INVERTED?'qrc:/images/favorite-mark.png':'qrc:/images/favorite-mark-inverse.png'
+            source: selected_favorite == -1 ? 'qrc:/images/favorite-unmark.png' : 'qrc:/images/favorite-mark.png'
             anchors.right: parent.right
             mouseArea.onClicked: {
                 favoritesModel.clear()
