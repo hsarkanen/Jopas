@@ -47,12 +47,9 @@ Page {
 
     function setCoverData() {
         var route = Reittiopas.get_route_instance()
-        appWindow.coverLine1 = search_parameters.from_name
-        appWindow.coverLine2 = route.last_result[0].start.toString().slice(16,21) + " - " + route.last_result[0].finish.toString().slice(16,21)
-        appWindow.coverLine3 = route.last_result[1].start.toString().slice(16,21) + " - " + route.last_result[1].finish.toString().slice(16,21)
-        appWindow.coverLine4 = route.last_result[2].start.toString().slice(16,21) + " - " + route.last_result[2].finish.toString().slice(16,21)
-        appWindow.coverLine5 = route.last_result[3].start.toString().slice(16,21) + " - " + route.last_result[3].finish.toString().slice(16,21)
-        appWindow.coverLine6 = route.last_result[4].start.toString().slice(16,21) + " - " + route.last_result[4].finish.toString().slice(16,21)
+        appWindow.coverAlignment = Text.AlignHCenter
+        appWindow.coverHeader = search_parameters.from_name
+        appWindow.coverContents = route.last_result[0].start.toString().slice(16,21) + " - " + route.last_result[0].finish.toString().slice(16,21) + "\n" + route.last_result[1].start.toString().slice(16,21) + " - " + route.last_result[1].finish.toString().slice(16,21) + "\n" + route.last_result[2].start.toString().slice(16,21) + " - " + route.last_result[2].finish.toString().slice(16,21) + "\n" + route.last_result[3].start.toString().slice(16,21) + " - " + route.last_result[3].finish.toString().slice(16,21) + "\n" + route.last_result[4].start.toString().slice(16,21) + " - " + route.last_result[4].finish.toString().slice(16,21)
     }
 
     ListModel {

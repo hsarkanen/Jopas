@@ -104,7 +104,7 @@ Page {
                         onClicked: {
                             Storage.setSetting("api","helsinki")
                             appWindow.currentApi = "helsinki"
-                            appWindow.coverLine4 = text
+                            appWindow.coverContents = text + "\n" + gpsSwitch.description
                         }
                     }
                     MenuItem {
@@ -112,7 +112,7 @@ Page {
                         onClicked: {
                             Storage.setSetting("api","tampere")
                             appWindow.currentApi = "tampere"
-                            appWindow.coverLine4 = text
+                            appWindow.coverContents = text + "\n" + gpsSwitch.description
                         }
                     }
                 }
@@ -122,11 +122,11 @@ Page {
                 function updateDescription() {
                     if (gpsSwitch.checked) {
                         gpsSwitch.description = qsTr("GPS enabled")
-                        appWindow.coverLine5 = qsTr('GPS enabled')
+                        appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1) + "\n" + gpsSwitch.description
                     }
                     else {
                         gpsSwitch.description = qsTr("GPS disabled")
-                        appWindow.coverLine5 = qsTr('GPS disabled')
+                        appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1) + "\n" + gpsSwitch.description
                     }
                 }
 

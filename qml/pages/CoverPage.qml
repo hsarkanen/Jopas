@@ -37,14 +37,31 @@ import "../js/favorites.js" as Favorites
 
 CoverBackground {
     Label {
-        id: label
-        anchors.left: parent.left
+        id: coverHeader
         anchors.top: parent.top
-        anchors.topMargin: UIConstants.DEFAULT_MARGIN / 2
-        width: parent.width
+        anchors.left: parent.left
+        anchors.margins: Theme.paddingSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        maximumLineCount: 2
         horizontalAlignment: Text.AlignHCenter
-        text: appWindow.coverLine1 + "\n" + appWindow.coverLine2 + "\n" + appWindow.coverLine3 + "\n" + appWindow.coverLine4 + "\n" + appWindow.coverLine5 + "\n" + appWindow.coverLine6
-        wrapMode: Text.WordWrap
+        color: Theme.highlightColor
+        text: appWindow.coverHeader
+        wrapMode: Text.Wrap
+    }
+
+    Label {
+        id: label
+        anchors.top: coverHeader.bottom
+        anchors.left: parent.left
+        anchors.margins: Theme.paddingSmall
+        anchors.horizontalCenter: parent.horizontalCenter
+        maximumLineCount: 6
+        horizontalAlignment: appWindow.coverAlignment
+        font.pixelSize: Theme.fontSizeSmall
+        text: appWindow.coverContents
+        elide: Text.ElideRight
+        wrapMode: Text.NoWrap
+        clip: true
     }
 
     CoverActionList {

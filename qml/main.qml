@@ -78,13 +78,9 @@ ApplicationWindow {
     property bool gpsEnabled : false
 
     // Pages sets the cover data to these properties and cover is instantiated every time based on these
-    // Sharing JavaScript array with Cover seems not to work
-    property string coverLine1: ''
-    property string coverLine2: ''
-    property string coverLine3: ''
-    property string coverLine4: ''
-    property string coverLine5: ''
-    property string coverLine6: ''
+    property string coverHeader: ''
+    property string coverContents: ''
+    property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
     property bool searchButtonEnabled: true
 

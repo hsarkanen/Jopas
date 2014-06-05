@@ -71,20 +71,17 @@ Page {
 
     onStatusChanged: {
         if (status == PageStatus.Activating) {
-            appWindow.coverLine1 = ''
-            appWindow.coverLine2 = ''
-            appWindow.coverLine3 = 'JollaOpas'
-            appWindow.coverLine6 = ''
-
-            appWindow.coverLine4 = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
+            appWindow.coverAlignment = Text.AlignHCenter
+            appWindow.coverHeader = 'JollaOpas'
+            appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
 
             var allowGps = Storage.getSetting("gps")
             if(allowGps == "true") {
                 appWindow.gpsEnabled = true
-                appWindow.coverLine5 = qsTr('GPS enabled')
+                appWindow.coverContents += "\n" + qsTr('GPS enabled')
             }
             else {
-                appWindow.coverLine5 = qsTr('GPS disabled')
+                appWindow.coverContents += "\n" + qsTr('GPS disabled')
             }
 
             // Refresh favorite routes if api has been changed in SettingsPage
