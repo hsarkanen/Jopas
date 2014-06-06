@@ -1,3 +1,16 @@
+## 0.4.0 (7th of June, 2014)
+
+Bugfixes:
+
+  - Fixed time differences in StopPage
+
+Features:
+
+  - Added options to filter U lines and Service lines
+  - Added more route details to Cover and Clipboard
+  - Improved Search page
+  - Smaller improvements and bugfixes
+
 ## 0.3.3 (16th of May, 2014)
 
 Bugfixes:
