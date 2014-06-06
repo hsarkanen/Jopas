@@ -52,10 +52,12 @@ Item {
         visible: locationSwitchMouseArea.pressed
     }
     Image {
+        id: switchImage
         anchors.centerIn: parent
-        source: !Theme.theme[appWindow.colorscheme].BUTTONS_INVERTED?'qrc:/images/switch.png':'qrc:/images/switch-inverse.png'
+        source: "image://theme/icon-m-shuffle"
         smooth: true
         height: 50
+        mirror: false
         width: height
     }
     MouseArea {
@@ -64,6 +66,7 @@ Item {
 
         onClicked: {
             Helper.switch_locations(from,to)
+            switchImage.mirror = !switchImage.mirror
             locationSwitch.state = locationSwitch.state == "normal" ? "rotated" : "normal"
         }
     }

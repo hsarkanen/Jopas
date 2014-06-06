@@ -401,7 +401,7 @@ Column {
             id: favoritePicker
             enabled: !disable_favorites
             visible: !disable_favorites
-            source: selected_favorite == -1 ? 'qrc:/images/favorite-unmark.png' : 'qrc:/images/favorite-mark.png'
+            source: (selected_favorite == 0) || (selected_favorite == -1) ? "image://theme/icon-m-favorite" : "image://theme/icon-m-favorite-selected"
             anchors.right: parent.right
             mouseArea.onClicked: {
                 favoritesModel.clear()

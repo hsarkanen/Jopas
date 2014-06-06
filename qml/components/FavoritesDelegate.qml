@@ -39,7 +39,7 @@ ListItem {
 
     Image {
         id: icon
-        source: index == 0?'qrc:/images/gps-icon-inverted.png':'qrc:/images/favorite-mark-inverse.png'
+        source: index == 0 ? "image://theme/icon-m-gps" : "image://theme/icon-m-favorite-selected"
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         height: 40
