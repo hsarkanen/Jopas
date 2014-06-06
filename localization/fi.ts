@@ -80,7 +80,7 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <location filename="../qml/pages/CoverPage.qml" line="75"/>
+        <location filename="../qml/pages/CoverPage.qml" line="92"/>
         <source>Please save a route and add it to cover action by long-press.</source>
         <translation>Tallenna reitti suosikkireitiksi ja lisää se kannen pikavalintaan painamalla sitä pitkään.</translation>
     </message>
@@ -168,43 +168,43 @@
 <context>
     <name>LocationEntry</name>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="222"/>
+        <location filename="../qml/components/LocationEntry.qml" line="221"/>
         <source>No results</source>
         <translation>Ei tuloksia</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="232"/>
+        <location filename="../qml/components/LocationEntry.qml" line="231"/>
         <source>Could not find location</source>
         <translation>Sijaintia ei löydetty</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="251"/>
-        <location filename="../qml/components/LocationEntry.qml" line="263"/>
+        <location filename="../qml/components/LocationEntry.qml" line="250"/>
+        <location filename="../qml/components/LocationEntry.qml" line="262"/>
         <source>Choose location</source>
         <translation>Valitse sijainti</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="281"/>
+        <location filename="../qml/components/LocationEntry.qml" line="280"/>
         <source>Positioning service disabled from application settings</source>
         <translation>Paikannus on otettu pois käytöstä sovelluksen asetuksista</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="353"/>
+        <location filename="../qml/components/LocationEntry.qml" line="351"/>
         <source>Type a location</source>
         <translation>Syötä sijainti</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="413"/>
+        <location filename="../qml/components/LocationEntry.qml" line="409"/>
         <source>Current location</source>
         <translation>Nykyinen sijainti</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="422"/>
+        <location filename="../qml/components/LocationEntry.qml" line="418"/>
         <source>Location added to favorite places</source>
         <translation>Sijainti lisätty suosikkipaikkoihin</translation>
     </message>
     <message>
-        <location filename="../qml/components/LocationEntry.qml" line="424"/>
+        <location filename="../qml/components/LocationEntry.qml" line="420"/>
         <source>Location already in the favorite places</source>
         <translation>Sijainti on jo suosikkipaikoissa</translation>
     </message>
@@ -220,27 +220,27 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="84"/>
+        <location filename="../qml/pages/MainPage.qml" line="77"/>
         <source>GPS enabled</source>
         <translation>GPS käytössä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="87"/>
+        <location filename="../qml/pages/MainPage.qml" line="80"/>
         <source>GPS disabled</source>
         <translation>GPS ei käytössä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="123"/>
+        <location filename="../qml/pages/MainPage.qml" line="115"/>
         <source>Positioning service disabled from application settings</source>
         <translation>Paikannus on otettu pois käytöstä sovelluksen asetuksista</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="207"/>
+        <location filename="../qml/pages/MainPage.qml" line="212"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="208"/>
+        <location filename="../qml/pages/MainPage.qml" line="213"/>
         <source>Exception info</source>
         <translation>Poikkeusinfo</translation>
     </message>
@@ -249,12 +249,12 @@
         <translation type="obsolete">Hallitse suosikkeja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="209"/>
+        <location filename="../qml/pages/MainPage.qml" line="214"/>
         <source>Manage favorite places</source>
         <translation>Hallitse suosikkipaikkoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="212"/>
+        <location filename="../qml/pages/MainPage.qml" line="217"/>
         <source>Add as favorite route</source>
         <translation>Lisää suosikkireitiksi</translation>
     </message>
@@ -271,57 +271,57 @@
         <translation type="obsolete">Suosikkireitti lisätty</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="218"/>
+        <location filename="../qml/pages/MainPage.qml" line="223"/>
         <source>Favorite route added</source>
         <translation>Suosikkireitti lisätty</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="221"/>
+        <location filename="../qml/pages/MainPage.qml" line="226"/>
         <source>Maximum amount of favorite routes is 4!</source>
         <translation>Suurin mahdollinen määrä suosikkireittejä on 4!</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="239"/>
+        <location filename="../qml/pages/MainPage.qml" line="257"/>
         <source>From</source>
         <translation>Mistä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="265"/>
+        <location filename="../qml/pages/MainPage.qml" line="283"/>
         <source>To</source>
         <translation>Mihin</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="306"/>
         <source>Now</source>
         <translation>Nyt</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="319"/>
+        <location filename="../qml/pages/MainPage.qml" line="233"/>
+        <location filename="../qml/pages/MainPage.qml" line="304"/>
         <source>Search</source>
         <translation>Hae</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="341"/>
+        <location filename="../qml/pages/MainPage.qml" line="326"/>
         <source>Favorite routes</source>
         <translation>Suosikkireitit</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="358"/>
+        <location filename="../qml/pages/MainPage.qml" line="343"/>
         <source>No saved favorite routes</source>
         <translation>Ei tallennettuja suosikkireittejä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="368"/>
+        <location filename="../qml/pages/MainPage.qml" line="353"/>
         <source>Add to Cover</source>
         <translation>Lisää kanteen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="373"/>
+        <location filename="../qml/pages/MainPage.qml" line="358"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="396"/>
+        <location filename="../qml/pages/MainPage.qml" line="381"/>
         <source>Favorite route added to cover action.</source>
         <translation>Suosikkireitti lisätty kannen pikavalintaan.</translation>
     </message>
@@ -330,7 +330,7 @@
         <translation type="obsolete">Reitti lisätty kannen pikavalintaan.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="400"/>
+        <location filename="../qml/pages/MainPage.qml" line="385"/>
         <source>Deleting</source>
         <translation>Poistetaan</translation>
     </message>
@@ -358,27 +358,27 @@
 <context>
     <name>ResultPage</name>
     <message>
-        <location filename="../qml/pages/ResultPage.qml" line="93"/>
+        <location filename="../qml/pages/ResultPage.qml" line="90"/>
         <source>Next</source>
         <translation>Seuraavat</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ResultPage.qml" line="115"/>
+        <location filename="../qml/pages/ResultPage.qml" line="112"/>
         <source>Departure</source>
         <translation>Lähtö</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ResultPage.qml" line="116"/>
+        <location filename="../qml/pages/ResultPage.qml" line="113"/>
         <source>Arrival</source>
         <translation>Perillä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ResultPage.qml" line="142"/>
+        <location filename="../qml/pages/ResultPage.qml" line="139"/>
         <source>Previous</source>
         <translation>Edelliset</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ResultPage.qml" line="155"/>
+        <location filename="../qml/pages/ResultPage.qml" line="152"/>
         <source>No results</source>
         <translation>Ei tuloksia</translation>
     </message>
@@ -386,42 +386,80 @@
 <context>
     <name>RoutePage</name>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="46"/>
         <source>Departure</source>
         <translation>Lähtö</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="47"/>
         <source>Arrival</source>
         <translation>Perillä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="88"/>
+        <location filename="../qml/pages/RoutePage.qml" line="71"/>
+        <source>Walking</source>
+        <translation>Kävelyä</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="71"/>
+        <source>km</source>
+        <translation>km</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="75"/>
+        <source>Bus</source>
+        <translation>Bussi</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="77"/>
+        <source>Train</source>
+        <translation>Juna</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="79"/>
+        <source>Metro</source>
+        <translation>Metro</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="81"/>
+        <source>Ferry</source>
+        <translation>Lautta</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="83"/>
+        <source>Tram</source>
+        <translation>Raitiovaunu</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="86"/>
+        <source>min</source>
+        <translation>min</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/RoutePage.qml" line="116"/>
         <source>%1 minutes</source>
         <translation>%1 minuuttia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="93"/>
+        <location filename="../qml/pages/RoutePage.qml" line="121"/>
         <source>Walking %1 km</source>
         <translation>Kävelyä %1 km</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="110"/>
+        <location filename="../qml/pages/RoutePage.qml" line="138"/>
         <source>No results</source>
         <translation>Ei tuloksia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="115"/>
+        <location filename="../qml/pages/RoutePage.qml" line="143"/>
         <source>Copy details to Clipboard</source>
         <translation>Kopioi tiedot leikepöydälle</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="118"/>
+        <location filename="../qml/pages/RoutePage.qml" line="146"/>
         <source>Route details copied to Clipboard</source>
         <translation>Reitin tiedot kopioitu leikepöydälle</translation>
     </message>
     <message>
-        <location filename="../qml/pages/RoutePage.qml" line="122"/>
+        <location filename="../qml/pages/RoutePage.qml" line="150"/>
         <source>Map</source>
         <translation>Kartta</translation>
     </message>
@@ -429,166 +467,214 @@
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="70"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="76"/>
         <source>About</source>
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="80"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="86"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="84"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="90"/>
         <source>Region</source>
         <translation>Alue</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="94"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="100"/>
         <source>Active Region</source>
         <translation>Aktiivinen alue</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="118"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="119"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="124"/>
         <source>GPS enabled</source>
         <translation>GPS käytössä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="122"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="123"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="128"/>
         <source>GPS disabled</source>
         <translation>GPS ei käytössä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="132"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="138"/>
         <source>Toggle GPS Usage</source>
         <translation>Vaihda GPS:n käyttöä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="143"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="149"/>
         <source>Route search parameters</source>
         <translation>Reitinhaku parametrit</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="149"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="156"/>
         <source>Route results will contain Buses</source>
         <translation>Reitillä voidaan käyttää bussia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="151"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="158"/>
         <source>Route results will not contain Buses</source>
         <translation>Reitillä ei käytetä bussia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="159"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="166"/>
         <source>Bus</source>
         <translation>Bussi</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="170"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="178"/>
+        <source>Route results will contain U lines</source>
+        <translation>Reitillä voidaan käyttää U-linjoja</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="180"/>
+        <source>Route results will not contain U lines</source>
+        <translation>Reitillä ei käytetä U-linjoja</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="188"/>
+        <source>U line</source>
+        <translation>U-linja</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="200"/>
+        <source>Route results will contain Service lines</source>
+        <translation>Reitillä voidaan käyttää palvelulinjoja</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="202"/>
+        <source>Route results will not contain Service lines</source>
+        <translation>Reitillä ei käytetä palvelulinjoja</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="210"/>
+        <source>Service line</source>
+        <translation>Palvelulinja</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="222"/>
         <source>Route results will contain Trams</source>
         <translation>Reitillä voidaan käyttää raitiovaunuja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="172"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="224"/>
         <source>Route results will not contain Trams</source>
         <translation>Reitillä ei käytetä raitiovaunuja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="180"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="232"/>
         <source>Tram</source>
         <translation>Raitiovaunu</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="191"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="244"/>
         <source>Route results will contain Metro</source>
         <translation>Reitillä voidaan käyttää metroa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="193"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="246"/>
         <source>Route results will not contain Metro</source>
         <translation>Reitillä ei käytetä metroa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="201"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="254"/>
         <source>Metro</source>
         <translation>Metro</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="212"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="266"/>
         <source>Route results will contain Trains</source>
         <translation>Reitillä voidaan käyttää junia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="214"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="268"/>
         <source>Route results will not contain Trains</source>
         <translation>Reitillä ei käytetä junia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="222"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="276"/>
         <source>Train</source>
         <translation>Juna</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="237"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>Change Margin</source>
         <translation>Vaihtomarginaali</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="237"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>minutes</source>
         <translation>minuuttia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="258"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="312"/>
         <source>Optimize Route by</source>
         <translation>Optimoi reitti</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="261"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="315"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="265"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="319"/>
         <source>Fastest</source>
         <translation>Nopein</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="269"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="323"/>
         <source>Least Transfers</source>
         <translation>Vähiten vaihtoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="273"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="327"/>
         <source>Least Walking</source>
         <translation>Vähiten kävelyä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="286"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="340"/>
         <source>Walking speed</source>
         <translation>Kävelynopeus</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="289"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="343"/>
         <source>Walking 70 m/min</source>
         <translation>Kävely 70 m/min</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="293"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="347"/>
         <source>Fast Walking 100 m/min</source>
         <translation>Nopea kävely 100 m/min</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="297"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="351"/>
         <source>Very Fast Walking 120 m/min</source>
         <translation>Todella nopea kävely 120 m/min</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="301"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="355"/>
         <source>Running 150 m/min</source>
         <translation>Juoksu 150 m/min</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="361"/>
+        <source>UI tweaks</source>
+        <translation>Käyttöliittymä asetukset</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="367"/>
+        <source>Search button is located below parameters</source>
+        <translation>Hae-nappi sijaitsee hakuehtojen alapuolella</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="369"/>
+        <source>Search button is located in the PullDown menu</source>
+        <translation>Hae-nappi sijaitsee alasveto-valikossa</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="377"/>
+        <source>Search button</source>
+        <translation>Hae-nappi</translation>
     </message>
 </context>
 <context>
@@ -629,6 +715,14 @@
         <location filename="../qml/pages/StopPage.qml" line="121"/>
         <source>Walking route</source>
         <translation>Kävelyreitti</translation>
+    </message>
+</context>
+<context>
+    <name>TimeSwitch</name>
+    <message>
+        <location filename="../qml/components/TimeSwitch.qml" line="59"/>
+        <source>Now</source>
+        <translation>Nyt</translation>
     </message>
 </context>
 <context>
