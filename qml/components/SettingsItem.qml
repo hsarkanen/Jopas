@@ -30,8 +30,6 @@
 **********************************************************************/
 
 import QtQuick 2.1
-import com.nokia.symbian 1.1
-
 import "../js/UIConstants.js" as UIConstants
 import "../js/theme.js" as Theme
 
