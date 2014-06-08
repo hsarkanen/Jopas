@@ -378,7 +378,6 @@ Page {
                 description: ""
                 onCheckedChanged: {
                     Storage.setSetting("search_button_disabled", (!checked).toString())
-                    appWindow.searchButtonEnabled = checked
                     searchButtonSwitch.updateDescription()
                 }
             }

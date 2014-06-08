@@ -53,6 +53,8 @@ Page {
     property variant fromCoord: ''
     property variant fromName: ''
 
+    property bool searchButtonDisabled: false
+
     property bool endpointsValid: (toCoord && (fromCoord || currentCoord))
 
     onEndpointsValidChanged: {
@@ -79,6 +81,7 @@ Page {
             else {
                 appWindow.coverContents += "\n" + qsTr('GPS disabled')
             }
+            searchButtonDisabled = Storage.getSetting("search_button_disabled") == "true" ? true : false
 
             // Refresh favorite routes if api has been changed in SettingsPage
             favoriteRoutesModel.clear()
@@ -228,7 +231,7 @@ Page {
                 }
             }
             MenuItem {
-                visible: !searchButtonEnabled
+                visible: searchButtonDisabled
                 enabled: endpointsValid
                 text: qsTr("Search");
                 onClicked: {
@@ -298,7 +301,7 @@ Page {
             }
 
             Button {
-                visible: searchButtonEnabled
+                visible: !searchButtonDisabled
                 anchors.horizontalCenter: parent.horizontalCenter
                 enabled: endpointsValid
                 text: qsTr("Search")

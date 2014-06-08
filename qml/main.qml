@@ -82,7 +82,6 @@ ApplicationWindow {
     property string coverContents: ''
     property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
-    property bool searchButtonEnabled: true
 
     onFollowModeChanged: {
         if(followMode)
