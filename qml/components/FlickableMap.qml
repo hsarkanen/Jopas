@@ -51,10 +51,6 @@ Map {
         Behavior on opacity {
             NumberAnimation { duration: 250 }
         }
-        MouseArea {
-            anchors.fill: parent
-            enabled: mapTypeMenu.active
-        }
     }
 
     plugin: Plugin {
@@ -100,20 +96,23 @@ Map {
                 visible: map.supportedMapTypes.length > 1
                 source: "qrc:/images/maptype.png"
                 onClicked: {
-                    mapTypeMenu.show(map)
+                    mapTypeMenu.open()
                 }
 
-                ContextMenu {
+                MySelectionDialog {
                     id: mapTypeMenu
-
-                    Repeater {
-                        model: map.supportedMapTypes.length
-                        MenuItem {
-                            text: map.supportedMapTypes[modelData].description
-                            visible: map.supportedMapTypes[modelData].mobile
-                            onClicked: map.activeMapType = map.supportedMapTypes[modelData]
+                    model: map.supportedMapTypes
+                    delegate: MaptypesDelegate {
+                        onClicked: {
+                            mapTypeMenu.selectedIndex = index
+                            mapTypeMenu.accept()
                         }
                     }
+                    titleText: qsTr("Choose maptype")
+                    onAccepted: {
+                        map.activeMapType = map.supportedMapTypes[selectedIndex]
+                    }
+                    onRejected: {}
                 }
             }
 
