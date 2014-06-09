@@ -34,7 +34,6 @@ import QtPositioning 5.0
 import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
-import "../js/theme.js" as Theme
 import "../components"
 
 Page {
@@ -129,7 +128,7 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height/2
         width: parent.width
-        color: Theme.theme[appWindow.colorscheme].COLOR_BACKGROUND
+        color: Theme.secondaryColor
 
         Loader {
             id: map_loader
@@ -153,6 +152,7 @@ Page {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 source: "image://theme/icon-m-close"
+                color: "black"
                 onClicked: {
                     appWindow.mapVisible = false
                 }
