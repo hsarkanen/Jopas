@@ -413,12 +413,27 @@ Page {
                     id: label
                     height: Theme.itemSizeSmall
                     text: modelFromName + " - " + modelToName + " "
-                    width: parent.width
+                    width: parent.width - reverseFavoriteRouteButton.width
                     color: Theme.primaryColor
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
                 }
 
+                IconButton {
+                    id: reverseFavoriteRouteButton
+                    anchors.right: parent.right
+                    icon.source: "image://theme/icon-m-shuffle"
+                    onClicked:{
+                        var parameters = {}
+                        setRouteParameters(parameters)
+                        parameters.from_name = modelToName
+                        parameters.from = modelToCoord
+                        parameters.to_name = modelFromName
+                        parameters.to = modelFromCoord
+                        pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                    }
+                }
                 RemorseItem { id: remorse }
             }
         }
