@@ -1,3 +1,17 @@
+## 0.4.1 (23rd of June, 2014)
+
+Bugfixes:
+
+  - Search button location should now work as expected
+  - Close button is now easier to spot in split map view
+
+Features:
+
+  - Added button to query favorite routes in the reverse direction
+  - Added dialog for easier selection of the map type
+  - Adjusted default zoom level to get sharper satellite maps by default
+  - Added padding and scroll decorators to Route and Stop pages
+
 ## 0.4.0 (7th of June, 2014)
 
 Bugfixes:
