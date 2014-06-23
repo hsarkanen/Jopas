@@ -77,6 +77,7 @@ ListItem {
         id: diff
         anchors.top: parent.top
         anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingSmall
         horizontalAlignment: Qt.AlignLeft
         text: "+" + time_diff + " min"
         font.pixelSize: Theme.fontSizeSmall
@@ -87,6 +88,7 @@ ListItem {
         id: time
         anchors.top: diff.bottom
         anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingSmall
         horizontalAlignment: Qt.AlignLeft
         text: (index === 0)? Qt.formatTime(depTime, "hh:mm") : Qt.formatTime(arrTime, "hh:mm")
         font.pixelSize: Theme.fontSizeMedium
@@ -97,6 +99,7 @@ ListItem {
         id: station_code
         anchors.right: parent.right
         anchors.top: parent.top
+        anchors.rightMargin: Theme.paddingSmall
         horizontalAlignment: Qt.AlignRight
         text: shortCode ? "(" + shortCode + ")" : ""
         font.pixelSize: Theme.fontSizeSmall
@@ -108,6 +111,7 @@ ListItem {
         horizontalAlignment: Qt.AlignRight
         anchors.right: parent.right
         anchors.top: station_code.bottom
+        anchors.rightMargin: Theme.paddingSmall
         font.pixelSize: Theme.fontSizeMedium
         color: stop_item.highlight ? Theme.highlightColor : Theme.primaryColor
     }

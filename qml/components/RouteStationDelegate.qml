@@ -41,6 +41,7 @@ Item {
         id: time_column
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
+        anchors.leftMargin: Theme.paddingSmall
         width: 100
 
         Label {
@@ -55,6 +56,7 @@ Item {
         anchors.left: time_column.right
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
+        anchors.rightMargin: Theme.paddingSmall
         layoutDirection: Qt.RightToLeft
 
         Label {

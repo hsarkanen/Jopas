@@ -121,6 +121,8 @@ Page {
                 text: qsTr("Walking %1 km").arg(walking)
                 color: Theme.highlightColor
                 horizontalAlignment: Text.AlignRight
+                anchors.right: parent.right
+                anchors.rightMargin: Theme.paddingSmall
                 wrapMode: Text.WordWrap
             }
 
@@ -129,6 +131,8 @@ Page {
                 text: header
                 color: Theme.highlightColor
                 horizontalAlignment: Text.AlignRight
+                anchors.right: parent.right
+                anchors.rightMargin: Theme.paddingSmall
                 wrapMode: Text.WordWrap
             }
         }

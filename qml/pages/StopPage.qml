@@ -119,6 +119,7 @@ Page {
         header: PageHeader {
             title: leg_code ? qsTr("Stops for line") + " " + leg_code : qsTr("Walking route")
         }
+        VerticalScrollDecorator {}
     }
 
     Rectangle {

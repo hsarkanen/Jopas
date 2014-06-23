@@ -49,6 +49,8 @@ BackgroundItem {
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.secondaryColor
         anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.paddingSmall
         width: Theme.itemSizeMedium
     }
 
