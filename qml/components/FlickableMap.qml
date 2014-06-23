@@ -38,7 +38,7 @@ import Sailfish.Silica 1.0
 Map {
     id: map
     anchors.fill: parent
-    zoomLevel: 16
+    zoomLevel: 17
     clip: true
     gesture.enabled: !appWindow.followMode
     gesture.flickDeceleration: 4000
