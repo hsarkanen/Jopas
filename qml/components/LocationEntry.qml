@@ -379,9 +379,7 @@ Column {
             BusyIndicator {
                 id: busyIndicator
                 running: suggestionModel.status == XmlListModel.Loading
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 15
+                anchors.centerIn: statusIndicator // Place this similarly to statusIndicator
                 size: BusyIndicatorSize.Small
                 MouseArea {
                     id: spinnerMouseArea
