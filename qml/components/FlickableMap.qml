@@ -40,7 +40,8 @@ Map {
     anchors.fill: parent
     zoomLevel: 17
     clip: true
-    gesture.enabled: !appWindow.followMode
+    gesture.enabled: true
+    gesture.activeGestures: appWindow.followMode ? MapGestureArea.ZoomGesture : MapGestureArea.ZoomGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
     gesture.flickDeceleration: 4000
 
     Rectangle {
