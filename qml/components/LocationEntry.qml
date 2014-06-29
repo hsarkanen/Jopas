@@ -366,9 +366,9 @@ Column {
             }
             Rectangle {
                 id: statusIndicator
-                anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: UIConstants.DEFAULT_MARGIN
+                anchors.verticalCenterOffset: -8
                 smooth: true
                 radius: 10
                 height: 20
