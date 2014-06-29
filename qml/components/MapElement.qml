@@ -90,8 +90,8 @@ Item {
                     width: 30
                     source: "qrc:/images/stop.png"
                 }
-                anchorPoint.y: -30 * appWindow.scalingFactor / 2
-                anchorPoint.x: -30 * appWindow.scalingFactor / 2
+                anchorPoint.y: sourceItem.height / 2
+                anchorPoint.x: sourceItem.width / 2
                 z: 45
             }
         }
@@ -108,8 +108,8 @@ Item {
                     font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor
                     text: name
                 }
-                anchorPoint.y: 18
-                anchorPoint.x: -(width/2)
+                anchorPoint.y: sourceItem.height / 2
+                anchorPoint.x: sourceItem.width / 2
                 z: 48
             }
         }
@@ -128,8 +128,8 @@ Item {
                     source: "qrc:/images/station.png"
                 }
 
-                anchorPoint.y: -20 * appWindow.scalingFactor / 2
-                anchorPoint.x: -20 * appWindow.scalingFactor / 2
+                anchorPoint.y: sourceItem.height / 2
+                anchorPoint.x: sourceItem.width / 2
                 z: 45
             }
         }
@@ -144,8 +144,8 @@ Item {
                 width: 50
             }
 
-            anchorPoint.y: -50 * appWindow.scalingFactor + 5
-            anchorPoint.x: -50 * appWindow.scalingFactor / 2
+            anchorPoint.y: sourceItem.height - 5
+            anchorPoint.x: sourceItem.width / 2
             z: 50
         }
 
@@ -159,8 +159,8 @@ Item {
                 width: 50
             }
 
-            anchorPoint.y: -50 * appWindow.scalingFactor + 5
-            anchorPoint.x: -50 * appWindow.scalingFactor / 2
+            anchorPoint.y: sourceItem.height - 5
+            anchorPoint.x: sourceItem.width / 2
             z: 50
         }
 
@@ -211,8 +211,8 @@ Item {
         }
 
         visible: positionSource.position.latitudeValid && positionSource.position.longitudeValid && appWindow.positioningActive
-        anchorPoint.y: -30  * appWindow.scalingFactor / 2
-        anchorPoint.x: -30  * appWindow.scalingFactor / 2
+        anchorPoint.y: sourceItem.height / 2
+        anchorPoint.x: sourceItem.width / 2
         z: 49
     }
 
@@ -239,8 +239,8 @@ Item {
                 height: 20 * appWindow.scalingFactor
                 width: 20 * appWindow.scalingFactor
             }
-            anchorPoint.y: -20 * appWindow.scalingFactor / 2
-            anchorPoint.x: -20 * appWindow.scalingFactor / 2
+            anchorPoint.y: sourceItem.height / 2
+            anchorPoint.x: sourceItem.width / 2
             z: 45
         }
     }
@@ -253,8 +253,8 @@ Item {
                 height: 50 * appWindow.scalingFactor
                 width: 50 * appWindow.scalingFactor
             }
-            anchorPoint.y: -50 * appWindow.scalingFactor + 5
-            anchorPoint.x: -50 * appWindow.scalingFactor / 2
+            anchorPoint.y: sourceItem.height - 5
+            anchorPoint.x: sourceItem.width / 2
             z: 50
         }
     }
@@ -287,8 +287,8 @@ Item {
                     width: 30 * appWindow.scalingFactor
                 }
 // TODO:
-//                offset.y: -30 * appWindow.scalingFactor / 2
-//                offset.x: -30 * appWindow.scalingFactor / 2
+//                offset.y: sourceItem.height / 2
+//                offset.x: sourceItem.width / 2
                 z: 45
             }
             MapPolyline {
