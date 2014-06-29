@@ -35,6 +35,7 @@ import Sailfish.Silica 1.0
 Item {
     property date myTime
     property bool timeNow: true
+    property bool dateToday: dateButton.dateToday
     width: parent.width
     height: 50
     anchors.left: parent.left

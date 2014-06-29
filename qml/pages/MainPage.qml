@@ -142,13 +142,25 @@ Page {
         var walking_speed = Storage.getSetting("walking_speed")
         var optimize = Storage.getSetting("optimize")
         var change_margin = Storage.getSetting("change_margin")
+        var currentDate = new Date()
 
         parameters.from_name = fromName ? fromName : currentName
         parameters.from = fromCoord ? fromCoord : currentCoord
         parameters.to_name = toName
         parameters.to = toCoord
 
-        parameters.time = timeSwitch.timeNow ? new Date() : timeSwitch.myTime
+        if (timeSwitch.timeNow) {
+            parameters.time = currentDate
+        }
+        else if (timeSwitch.dateToday) {
+            currentDate.setHours(timeSwitch.myTime.getHours())
+            currentDate.setMinutes(timeSwitch.myTime.getMinutes())
+            parameters.time = currentDate
+        }
+        else {
+            parameters.time = timeSwitch.myTime
+        }
+
         parameters.timetype = timeTypeSwitch.departure ? "departure" : "arrival"
         parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
         parameters.optimize = optimize == "Unknown"?"default":optimize

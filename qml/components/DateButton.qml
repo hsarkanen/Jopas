@@ -37,6 +37,7 @@ BackgroundItem {
     width: dateButton.width
     height: dateButton.height
     property date storedDate
+    property bool dateToday: true
     signal dateChanged(variant newDate)
 
     onClicked: {
@@ -52,11 +53,23 @@ BackgroundItem {
         dateChanged(storedDate)
     }
 
+    onStoredDateChanged: {
+        var currentDate = new Date
+        if (storedDate.getDate() !== currentDate.getDate() ||
+                storedDate.getMonth() !== currentDate.getMonth() ||
+                storedDate.getFullYear() !== currentDate.getFullYear()) {
+            dateContainer.dateToday = false
+        }
+        else {
+            dateContainer.dateToday = true
+        }
+    }
+
     Label {
         id: dateButton
         font.pixelSize: Theme.fontSizeMedium
         anchors.right: parent.right
-        text: Qt.formatDate(storedDate, "ddd, dd.MM.")
+        text: dateContainer.dateToday ? qsTr("Today") : Qt.formatDate(storedDate, "ddd, dd.MM.")
     }
 }
 
