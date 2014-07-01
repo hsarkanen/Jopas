@@ -1,3 +1,17 @@
+## 0.4.2 (1st of July, 2014)
+
+Bugfixes:
+
+  - Locations are now placed correctly on map
+  - Add zoom for map view - FIXED
+  - Change place of the search indicators - FIXED
+
+Features:
+
+  - Improved layout and elements of the Search page
+  - Loading Search page is now smoothier
+  - Smaller improvements and bugfixes
+
 ## 0.4.1 (23rd of June, 2014)
 
 Bugfixes:
