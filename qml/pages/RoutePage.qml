@@ -68,7 +68,7 @@ Page {
                         routeDetails += (Qt.formatTime(leg.time, "hh:mm") + " " + leg.name + shortCodeText + "\n")
                     }
                     else if (type === 'walk') {
-                        routeDetails += (qsTr("Walking") + " " + Math.floor(leg.length/100)/10 + " " + qsTr("km") + "\n")
+                        routeDetails += (qsTr("Walking") + ", " + Math.floor(leg.length/100)/10 + " " + qsTr("km") + "\n")
                     }
                     else {
                         if (type === 'bus')
