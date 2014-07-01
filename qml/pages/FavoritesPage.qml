@@ -51,6 +51,8 @@ Page {
     SilicaListView {
         id: list
         anchors.fill: parent
+        anchors.leftMargin: Theme.paddingSmall
+        anchors.rightMargin: Theme.paddingSmall
         property Item contextMenu
         model: favoritesModel
         delegate: favoritesManageDelegate
