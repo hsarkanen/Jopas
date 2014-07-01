@@ -86,6 +86,14 @@
     </message>
 </context>
 <context>
+    <name>DateButton</name>
+    <message>
+        <location filename="../qml/components/DateButton.qml" line="72"/>
+        <source>Today</source>
+        <translation>Tänään</translation>
+    </message>
+</context>
+<context>
     <name>EditFavoriteDialog</name>
     <message>
         <source>Edit favorite</source>
@@ -135,32 +143,32 @@
         <translation type="obsolete">Ei tallennettuja suosikkeja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FavoritesPage.qml" line="61"/>
+        <location filename="../qml/pages/FavoritesPage.qml" line="63"/>
         <source>Manage favorite places</source>
         <translation>Hallitse suosikkipaikkoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FavoritesPage.qml" line="65"/>
+        <location filename="../qml/pages/FavoritesPage.qml" line="67"/>
         <source>Add favorite place</source>
         <translation>Lisää suosikkipaikka</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FavoritesPage.qml" line="70"/>
+        <location filename="../qml/pages/FavoritesPage.qml" line="72"/>
         <source>No saved favorite places</source>
         <translation>Ei tallennettuja suosikkipaikkoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FavoritesPage.qml" line="80"/>
+        <location filename="../qml/pages/FavoritesPage.qml" line="82"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FavoritesPage.qml" line="85"/>
+        <location filename="../qml/pages/FavoritesPage.qml" line="87"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FavoritesPage.qml" line="105"/>
+        <location filename="../qml/pages/FavoritesPage.qml" line="107"/>
         <source>Deleting</source>
         <translation>Poistetaan</translation>
     </message>
@@ -168,7 +176,7 @@
 <context>
     <name>FlickableMap</name>
     <message>
-        <location filename="../qml/components/FlickableMap.qml" line="111"/>
+        <location filename="../qml/components/FlickableMap.qml" line="112"/>
         <source>Choose maptype</source>
         <translation>Valitse kartantyyppi</translation>
     </message>
@@ -238,17 +246,17 @@
         <translation>GPS ei käytössä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="118"/>
+        <location filename="../qml/pages/MainPage.qml" line="120"/>
         <source>Positioning service disabled from application settings</source>
         <translation>Paikannus on otettu pois käytöstä sovelluksen asetuksista</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="215"/>
+        <location filename="../qml/pages/MainPage.qml" line="230"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="216"/>
+        <location filename="../qml/pages/MainPage.qml" line="231"/>
         <source>Exception info</source>
         <translation>Poikkeusinfo</translation>
     </message>
@@ -257,12 +265,12 @@
         <translation type="obsolete">Hallitse suosikkeja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="217"/>
+        <location filename="../qml/pages/MainPage.qml" line="232"/>
         <source>Manage favorite places</source>
         <translation>Hallitse suosikkipaikkoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="220"/>
+        <location filename="../qml/pages/MainPage.qml" line="235"/>
         <source>Add as favorite route</source>
         <translation>Lisää suosikkireitiksi</translation>
     </message>
@@ -279,22 +287,22 @@
         <translation type="obsolete">Suosikkireitti lisätty</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="226"/>
+        <location filename="../qml/pages/MainPage.qml" line="241"/>
         <source>Favorite route added</source>
         <translation>Suosikkireitti lisätty</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="229"/>
+        <location filename="../qml/pages/MainPage.qml" line="244"/>
         <source>Maximum amount of favorite routes is 4!</source>
         <translation>Suurin mahdollinen määrä suosikkireittejä on 4!</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="260"/>
+        <location filename="../qml/pages/MainPage.qml" line="276"/>
         <source>From</source>
         <translation>Mistä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="286"/>
+        <location filename="../qml/pages/MainPage.qml" line="304"/>
         <source>To</source>
         <translation>Mihin</translation>
     </message>
@@ -303,33 +311,33 @@
         <translation>Nyt</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="236"/>
-        <location filename="../qml/pages/MainPage.qml" line="307"/>
+        <location filename="../qml/pages/MainPage.qml" line="251"/>
+        <location filename="../qml/pages/MainPage.qml" line="326"/>
         <source>Search</source>
         <translation>Hae</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="329"/>
+        <location filename="../qml/pages/MainPage.qml" line="350"/>
         <source>Favorite routes</source>
         <translation>Suosikkireitit</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="346"/>
+        <location filename="../qml/pages/MainPage.qml" line="367"/>
         <source>No saved favorite routes</source>
         <translation>Ei tallennettuja suosikkireittejä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="356"/>
+        <location filename="../qml/pages/MainPage.qml" line="377"/>
         <source>Add to Cover</source>
         <translation>Lisää kanteen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="361"/>
+        <location filename="../qml/pages/MainPage.qml" line="382"/>
         <source>Remove</source>
         <translation>Poista</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="384"/>
+        <location filename="../qml/pages/MainPage.qml" line="405"/>
         <source>Favorite route added to cover action.</source>
         <translation>Suosikkireitti lisätty kannen pikavalintaan.</translation>
     </message>
@@ -338,7 +346,7 @@
         <translation type="obsolete">Reitti lisätty kannen pikavalintaan.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="388"/>
+        <location filename="../qml/pages/MainPage.qml" line="409"/>
         <source>Deleting</source>
         <translation>Poistetaan</translation>
     </message>
@@ -350,7 +358,7 @@
         <translation type="obsolete">Lisää suosikki</translation>
     </message>
     <message>
-        <location filename="../qml/components/MySelectionDialog.qml" line="47"/>
+        <location filename="../qml/components/MySelectionDialog.qml" line="51"/>
         <source>Add favorite place</source>
         <translation>Lisää suosikkipaikka</translation>
     </message>
@@ -480,17 +488,17 @@
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="86"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="84"/>
         <source>Settings</source>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="90"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="88"/>
         <source>Region</source>
         <translation>Alue</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="100"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="98"/>
         <source>Active Region</source>
         <translation>Aktiivinen alue</translation>
     </message>
@@ -728,7 +736,7 @@
 <context>
     <name>TimeSwitch</name>
     <message>
-        <location filename="../qml/components/TimeSwitch.qml" line="59"/>
+        <location filename="../qml/components/TimeSwitch.qml" line="74"/>
         <source>Now</source>
         <translation>Nyt</translation>
     </message>
