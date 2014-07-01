@@ -258,14 +258,15 @@ Page {
 
         Column {
             id: content_column
-    //         spacing: appWindow.inPortrait? UIConstants.DEFAULT_MARGIN : UIConstants.DEFAULT_MARGIN / 2
-            width: parent.width - Theme.paddingLarge
+            width: parent.width
+            anchors.left: parent.left
+            anchors.leftMargin: Theme.paddingSmall
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: topSpacing.bottom
 
             Item {
                 width: parent.width
-                height: from.height + to.height + UIConstants.DEFAULT_MARGIN
+                height: from.height + to.height
 
                 LocationEntry {
                     id: from
@@ -285,10 +286,12 @@ Page {
                     }
                 }
 
-                Spacing { id: location_spacing; anchors.top: from.bottom; height: 30 }
+                Spacing { id: location_spacing; anchors.top: from.bottom; height: 5 }
 
                 SwitchLocation {
-                    anchors.bottom: to.top
+                    anchors.top: from.top
+                    anchors.topMargin: 113  // Hack to place switch a bit over both from and to LocationEntries
+                    z: 1
                     from: from
                     to: to
                 }
@@ -307,10 +310,11 @@ Page {
             TimeTypeSwitch {
                 id: timeTypeSwitch
             }
-
+            Spacing { height: 5 }
             TimeSwitch {
                 id: timeSwitch
             }
+            Spacing { height: 5 }
 
             Button {
                 visible: !searchButtonDisabled
@@ -330,7 +334,9 @@ Page {
 
         Item {
             id: headeritem
-            width: parent.width - Theme.paddingLarge
+            width: parent.width
+            anchors.left: parent.left
+            anchors.leftMargin: Theme.paddingSmall
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: favorites_spacing.bottom
             height: favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN

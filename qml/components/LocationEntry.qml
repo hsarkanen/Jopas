@@ -395,19 +395,21 @@ Column {
             }
         }
 
-        MyButton {
+        IconButton {
             id: favoritePicker
             enabled: !disable_favorites
             visible: !disable_favorites
-            source: (selected_favorite == 0) || (selected_favorite == -1) ? "image://theme/icon-m-favorite" : "image://theme/icon-m-favorite-selected"
+            icon.source: (selected_favorite == 0) || (selected_favorite == -1) ? "image://theme/icon-m-favorite" : "image://theme/icon-m-favorite-selected"
             anchors.right: parent.right
-            mouseArea.onClicked: {
+            anchors.verticalCenter: textfield.verticalCenter
+            anchors.verticalCenterOffset: -8
+            onClicked: {
                 favoritesModel.clear()
                 Favorites.getFavorites(favoritesModel)
                 favoritesModel.insert(0, {modelData: qsTr("Current location"),coord:"0,0"})
                 favoriteQuery.open()
             }
-            mouseArea.onPressAndHold: {
+            onPressAndHold: {
                 if(destination_coord && favoriteQuery.selectedIndex <= 0) {
                     if(("OK" == Favorites.addFavorite(textfield.text, destination_coord))) {
                         favoritesModel.clear()

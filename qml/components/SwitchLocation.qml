@@ -39,8 +39,8 @@ Item {
     state: "normal"
     anchors.right: parent.right
     anchors.top: from.bottom
-    width: 50
-    height: 50
+    width: Theme.itemSizeSmall
+    height: Theme.itemSizeSmall
 
     property variant from
     property variant to
