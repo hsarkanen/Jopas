@@ -76,10 +76,8 @@ Page {
             MenuItem { text: qsTr("About"); onClicked: pageStack.push(Qt.resolvedUrl("AboutDialog.qml")) }
         }
 
-        Grid {
-            columns: 1
+        Column {
             id: content_column
-            spacing: UIConstants.DEFAULT_MARGIN
             width: parent.width
 
             PageHeader {
