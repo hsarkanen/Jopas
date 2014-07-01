@@ -50,7 +50,6 @@ ListItem {
 
     Label {
         id: locType
-        width: 100
         elide: Text.ElideRight
         color: Theme.secondaryColor
         horizontalAlignment: Text.AlignRight

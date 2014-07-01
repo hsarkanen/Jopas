@@ -44,6 +44,7 @@ Dialog {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: Theme.paddingSmall
+        anchors.rightMargin: Theme.paddingSmall
 
         DialogHeader {
             id: header
