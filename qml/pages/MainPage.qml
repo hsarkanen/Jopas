@@ -42,16 +42,16 @@ Page {
     id: mainPage
 
     /* Current location acquired with GPS */
-    property variant currentCoord: ''
-    property variant currentName: ''
+    property string currentCoord: ''
+    property string currentName: ''
 
     /* Values entered in "To" field */
-    property variant toCoord: ''
-    property variant toName: ''
+    property string toCoord: ''
+    property string toName: ''
 
     /* Values entered in "From" field */
-    property variant fromCoord: ''
-    property variant fromName: ''
+    property string fromCoord: ''
+    property string fromName: ''
 
     property bool searchButtonDisabled: false
 

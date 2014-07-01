@@ -46,8 +46,8 @@ Column {
     property alias lineHeight : label.lineHeight
     property alias textfield : textfield.text
 
-    property variant current_name : ''
-    property variant current_coord : ''
+    property string current_name : ''
+    property string current_coord : ''
 
     Location {
         id: previousCoord
@@ -58,8 +58,8 @@ Column {
         }
     }
 
-    property variant destination_name : ''
-    property variant destination_coord : ''
+    property string destination_name : ''
+    property string destination_coord : ''
 
     property bool isFrom : false
 

@@ -70,7 +70,7 @@ ApplicationWindow {
     signal followModeEnabled
 
     property alias banner : banner
-    property variant scalingFactor : 1
+    property int scalingFactor : 1
     property bool positioningActive : (Qt.application.active && gpsEnabled)
     property bool followMode : false
     property bool mapVisible : false
