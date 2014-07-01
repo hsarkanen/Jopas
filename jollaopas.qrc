@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/banner_green.png</file>
-        <file>images/banner_red.png</file>
         <file>images/boat.png</file>
         <file>images/bus.png</file>
         <file>images/metro.png</file>
