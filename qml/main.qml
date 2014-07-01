@@ -56,14 +56,14 @@ ApplicationWindow {
         if (allowGps === "Unknown" || apiValue === "Unknown") {
             var dialog = pageStack.push(Qt.resolvedUrl("pages/StartupDialog.qml"))
             dialog.onAccepted.connect(function() {
-                pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
+                mainPage = pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
             })
             dialog.onRejected.connect(function() {
-                pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
+                mainPage = pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
             })
         }
         else {
-            pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"))
+            mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"))
         }
     }
 
@@ -82,6 +82,7 @@ ApplicationWindow {
     property string coverContents: ''
     property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
+    property variant mainPage
 
     onFollowModeChanged: {
         if(followMode)

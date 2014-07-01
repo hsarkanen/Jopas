@@ -83,12 +83,14 @@ Page {
             }
             searchButtonDisabled = Storage.getSetting("search_button_disabled") == "true" ? true : false
 
-            // Refresh favorite routes if api has been changed in SettingsPage
-            favoriteRoutesModel.clear()
-            Favorites.getFavoriteRoutes('normal', appWindow.currentApi, favoriteRoutesModel)
             // Prevent the keyboard to popup instantly when swithcing back to mainPage
             mainPage.forceActiveFocus()
         }
+    }
+
+    function refreshFavoriteRoutes() {
+            favoriteRoutesModel.clear()
+            Favorites.getFavoriteRoutes('normal', appWindow.currentApi, favoriteRoutesModel)
     }
 
     function newRoute(name, coord) {
@@ -125,6 +127,7 @@ Page {
     Component.onCompleted: {
         timeSwitch.setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
+        refreshFavoriteRoutes()
     }
 
     states: [

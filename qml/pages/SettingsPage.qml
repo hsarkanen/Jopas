@@ -103,6 +103,7 @@ Page {
                             Storage.setSetting("api","helsinki")
                             appWindow.currentApi = "helsinki"
                             appWindow.coverContents = text + "\n" + gpsSwitch.description
+                            appWindow.mainPage.refreshFavoriteRoutes()
                         }
                     }
                     MenuItem {
@@ -111,6 +112,7 @@ Page {
                             Storage.setSetting("api","tampere")
                             appWindow.currentApi = "tampere"
                             appWindow.coverContents = text + "\n" + gpsSwitch.description
+                            appWindow.mainPage.refreshFavoriteRoutes()
                         }
                     }
                 }

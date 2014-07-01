@@ -88,8 +88,8 @@ CoverBackground {
         var coverRoutesItem = []
         var res = Favorites.getFavoriteRoutes('cover', Storage.getSetting("api"), coverRoutesItem)
         if (res == "Unknown") {
-            var page = pageStack.push(Qt.resolvedUrl("MainPage.qml"))
-            page.displayPopupMessage( qsTr("Please save a route and add it to cover action by long-press.") )
+            appWindow.mainPage = pageStack.push(Qt.resolvedUrl("MainPage.qml"))
+            appWindow.mainPage.displayPopupMessage( qsTr("Please save a route and add it to cover action by long-press.") )
         }
         else {
             var parameters = {}
@@ -133,7 +133,7 @@ CoverBackground {
                 if(Storage.getSetting("tram_disabled") === "true")
                     parameters.mode_cost_2 = -1 // trams
             }
-            pageStack.push(Qt.resolvedUrl("MainPage.qml"), {}, PageStackAction.Immediate)
+            appWindow.mainPage = pageStack.push(Qt.resolvedUrl("MainPage.qml"), {}, PageStackAction.Immediate)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
         }
     }
