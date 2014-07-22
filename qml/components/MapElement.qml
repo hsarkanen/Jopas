@@ -33,6 +33,8 @@ import QtQuick 2.1
 import QtLocation 5.0
 import QtPositioning 5.0
 import "../js/reittiopas.js" as Reittiopas
+import "../js/sirilive.js" as Sirilive
+import "../js/storage.js" as Storage
 import "../js/UIConstants.js" as UIConstants
 import "../js/helper.js" as Helper
 import "../js/theme.js" as Theme
@@ -58,6 +60,10 @@ Item {
         flickable_map.map.removeMapObject(root_group)
     }
 
+    function receiveVehicleLocation() {
+        Sirilive.new_live_instance(vehicleModel, Storage.getSetting('api'))
+    }
+
     ListModel {
         id: stationModel
     }
@@ -68,6 +74,20 @@ Item {
 
     ListModel {
         id: stopModel
+    }
+
+    ListModel {
+        id: vehicleModel
+        property bool done: false
+    }
+
+    Timer {
+        id: vehicleUpdateTimer
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            receiveVehicleLocation()
+        }
     }
 
     FlickableMap {
@@ -131,6 +151,36 @@ Item {
                 anchorPoint.y: sourceItem.height / 2
                 anchorPoint.x: sourceItem.width / 2
                 z: 45
+            }
+        }
+
+        // This is the vehicles moving on map
+        MapItemView {
+            id: vehicleView
+            model: vehicleModel
+            delegate: MapQuickItem {
+                coordinate.longitude: modelLongitude
+                coordinate.latitude: modelLatitude
+                sourceItem:
+                    Rectangle {
+                    color: 'blue'
+                    radius: width * 0.5
+                    border.color: 'black'
+                    border.width: 2
+                    width: 50
+                    height: 50
+                    Text {
+                        anchors.centerIn: parent
+                        color: 'white'
+                        font.pixelSize: 20
+                        font.bold: true
+                        text: modelCode
+                    }
+                }
+
+                anchorPoint.y: sourceItem.height / 2
+                anchorPoint.x: sourceItem.width / 2
+                z: 48
             }
         }
 
@@ -302,6 +352,8 @@ Item {
 */
     function initialize() {
         flickable_map.addMapItem(current_position)
+
+        vehicleUpdateTimer.start()
 
         Helper.clear_objects()
         var endpoint_object
