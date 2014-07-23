@@ -163,7 +163,7 @@ Item {
                 coordinate.latitude: modelLatitude
                 sourceItem:
                     Rectangle {
-                    color: 'blue'
+                    color: modelColor
                     radius: width * 0.5
                     border.color: 'black'
                     border.width: 2
@@ -171,7 +171,6 @@ Item {
                     height: 50
                     Text {
                         anchors.centerIn: parent
-                        color: 'white'
                         font.pixelSize: 20
                         font.bold: true
                         text: modelCode
