@@ -44,6 +44,13 @@ Item {
     property bool positioningActive : true
     property alias flickable_map : flickable_map
 
+    Connections {
+        target: Qt.application
+        onActiveChanged:
+            if(Qt.application.active) { vehicleUpdateTimer.start() }
+            else { vehicleUpdateTimer.stop() }
+    }
+
     function next_station() {
         flickable_map.panToCoordinate(Helper.next_station())
     }
