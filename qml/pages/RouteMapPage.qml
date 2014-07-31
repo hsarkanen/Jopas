@@ -51,7 +51,15 @@ Page {
 
         Component.onCompleted: {
             initialize()
-            first_station()
+            panningDelayTimer.start() // Workaround to wait for small delay before panning to ensure that all tiles are loaded correctly when panning
+        }
+        Timer {
+            id: panningDelayTimer
+            interval: 200
+            repeat: false
+            onTriggered: {
+                map.first_station()
+            }
         }
     }
 

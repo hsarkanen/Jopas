@@ -40,12 +40,23 @@ ListItem {
     property bool highlight: false
 
     onClicked: {
+        // follow mode disables panning to location
+        if(!appWindow.followMode) {
+            if (appWindow.mapVisible)
+                map.map_loader.item.flickable_map.panToLatLong(model.latitude,model.longitude)
+            else
+                panningDelayTimer.start() // Workaround to wait for small delay before panning to ensure that all tiles are loaded correctly when panning and map isn't already visible
+        }
         // show map if currently hidden
         appWindow.mapVisible = true
-
-        // follow mode disables panning to location
-        if(!appWindow.followMode)
+    }
+    Timer {
+        id: panningDelayTimer
+        interval: 200
+        repeat: false
+        onTriggered: {
             map.map_loader.item.flickable_map.panToLatLong(model.latitude,model.longitude)
+        }
     }
 
     Location {
