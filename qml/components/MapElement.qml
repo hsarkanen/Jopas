@@ -86,6 +86,7 @@ Item {
     ListModel {
         id: vehicleModel
         property bool done: false
+        property var vehicleCodesToShowOnMap: []
     }
 
     Timer {
@@ -366,6 +367,7 @@ Item {
         var route_coord = []
         var current_route = Reittiopas.get_route_instance()
         current_route.dump_route(route_coord)
+        vehicleModel.vehicleCodesToShowOnMap = []
 
         for (var index in route_coord) {
             var endpointdata = route_coord[index]
@@ -393,6 +395,10 @@ Item {
             p.line.color = Theme.theme['general'].TRANSPORT_COLORS[endpointdata.type]
             p.path = paths
             flickable_map.addMapItem(p)
+
+            if (endpointdata.type !== "walk") {
+                vehicleModel.vehicleCodesToShowOnMap.push({"type": endpointdata.type, "code": endpointdata.code})
+            }
 
             if(endpointdata.type != "walk") {
                 for(var stopindex in endpointdata.locs) {
