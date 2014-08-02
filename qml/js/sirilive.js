@@ -49,12 +49,15 @@ function showVehicle(vehicle, allowedVehicles) {
     {
         var allowedVehicleCode = allowedVehicles[index].code
         // Bus lines have possibly letter in Reittiopas API but not in Siri so leaving it out
-        if (allowedVehicles[index].type === "bus") {
+        if (allowedVehicles[index].type === "bus" && vehicle.type === "bus") {
             allowedVehicleCode = allowedVehicleCode.replace(/[A-Z]$/, '')
             vehicle.code = vehicle.code.replace(/[A-Z]$/, '')
         }
         if (allowedVehicles[index].type === vehicle.type && allowedVehicleCode === vehicle.code) {
             return true
+        }
+        else if (allowedVehicles[index].type === "metro" && allowedVehicles[index].type === vehicle.type ) {
+            return true // Show all subways with "M" or "V" code
         }
     }
     return false
@@ -127,13 +130,13 @@ LiveResult.prototype.parse_json = function(vehicles, parent) {
             vehicleTypeAndCode = {"type": "bus", "code": code}
         }
         else {
-                // Jore parsing applied from example linked in: http://dev.hsl.fi/
-                if (code.match("^1019")) {code = "Ferry"; color = "#0080c8"; vehicleTypeAndCode = {"type": "ferry", "code": "Ferry"} /*Ferry*/}
-                else if (code.match(/^1300/)) {code = code.substring(4,5); color = "#ee5400"; vehicleTypeAndCode = {"type": "metro", "code": code} /*Metro*/}
-                else if (code.match(/^300/)) {code = code.substring(4,5); color = "#61b700"; vehicleTypeAndCode = {"type": "train", "code": code} /*Train*/}
-                else if (code.match(/^10(0|10)/)) {code = code.substring(2,5).trim().replace(/^[0]?/,""); color = "#925bc6"; vehicleTypeAndCode = {"type": "tram", "code": code} /*Tram*/}
-                else if (code.match(/^(1|2|4).../)) {code = code.substring(1).replace(/^[0]?/,""); vehicleTypeAndCode = {"type": "bus", "code": code} /*Use default color for bus*/}
-                //else { console.debug("Unknown vehicle found.") /* Unknown, do nothing*/ }
+            // Jore parsing applied from example linked in: http://dev.hsl.fi/
+            if (code.match("^1019")) {code = "Ferry"; color = "#0080c8"; vehicleTypeAndCode = {"type": "ferry", "code": "Ferry"} /*Ferry*/}
+            else if (code.match(/^1300/)) {code = code.substring(4,5); color = "#ee5400"; vehicleTypeAndCode = {"type": "metro", "code": code}; /*Metro*/}
+            else if (code.match(/^300/)) {code = code.substring(4,5); color = "#61b700"; vehicleTypeAndCode = {"type": "train", "code": code} /*Train*/}
+            else if (code.match(/^10(0|10)/)) {code = code.substring(2,5).trim().replace(/^[0]?/,""); color = "#925bc6"; vehicleTypeAndCode = {"type": "tram", "code": code} /*Tram*/}
+            else if (code.match(/^(1|2|4).../)) {code = code.substring(1).replace(/^[0]?/,""); vehicleTypeAndCode = {"type": "bus", "code": code} /*Use default color for bus*/}
+            else {vehicleTypeAndCode = {"type": "bus", "code": code}; /*console.debug("Unknown vehicle found.") Unknown vehicle, expect bus, use default color */ }
         }
         // Show only vehicles included in the route
         var allowedVehicles = parent.model.vehicleCodesToShowOnMap
