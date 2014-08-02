@@ -43,6 +43,7 @@ Map {
     gesture.enabled: true
     gesture.activeGestures: appWindow.followMode ? MapGestureArea.ZoomGesture : MapGestureArea.ZoomGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
     gesture.flickDeceleration: 4000
+    activeMapType: supportedMapTypes.length < 7 ? supportedMapTypes[0] : supportedMapTypes[6]
 
     Rectangle {
         anchors.fill: map
