@@ -1,40 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fi" sourcelanguage="en">
+<TS version="2.1" language="fi" sourcelanguage="en">
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="43"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="47"/>
         <source>About JollaOpas</source>
         <translation>Tietoja JollaOppaasta</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="60"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="67"/>
+        <source>Journey planner for Helsinki &amp; Tampere area - fork of Jopas originally forked from Meegopas.</source>
+        <translation>Reittiopas Helsingin ja Tampereen alueille - perustuu Jopakseen joka alunperin perustuu Meegopakseen.</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutDialog.qml" line="74"/>
         <source>Changelog</source>
         <translation>Muutosloki</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="68"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="82"/>
         <source>Sources on Github</source>
         <translation>Lähdekoodit Githubilla</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="82"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="96"/>
+        <source>Routing and real-time vehicle location information is based on open data API:s provided by Helsinki Regional Transport Authority&lt;/a&gt; and City of Tampere. Map data is provided by Nokia Here.</source>
+        <translation>Reititys ja reaaliaikainen ajoneuvojen sijainti informaatio perustuu Helsingin seudun liikenteen ja Tampereen kaupungin tarjoamiin avoimiin rajapintoihin. Kartat on tuottanut Nokia Here. </translation>
+    </message>
+    <message>
+        <source>Helsinki</source>
+        <translation type="vanished">Helsinki</translation>
+    </message>
+    <message>
+        <source>Tampere</source>
+        <translation type="vanished">Tampere</translation>
+    </message>
+    <message>
+        <source>Nokia Here</source>
+        <translation type="vanished">Nokia Here</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutDialog.qml" line="129"/>
         <source>Original Author</source>
         <translation>Alkuperäinen tekijä</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="83"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="130"/>
         <source>Additional Credits</source>
         <translation>Muut tekijät</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="99"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="146"/>
         <source>This application is free sofware licenced under the GNU Public License v3.</source>
         <translation>Tämä ohjelma on vapaa ja lisensoitu GNU:n yleisen lisenssin v3 alla.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutDialog.qml" line="100"/>
+        <location filename="../qml/pages/AboutDialog.qml" line="147"/>
         <source>Some parts of the code release under MIT License.</source>
         <translation>Osa ohjelmasta on lisensoitu MIT lisenssin alla.</translation>
     </message>
@@ -176,7 +198,7 @@
 <context>
     <name>FlickableMap</name>
     <message>
-        <location filename="../qml/components/FlickableMap.qml" line="112"/>
+        <location filename="../qml/components/FlickableMap.qml" line="113"/>
         <source>Choose maptype</source>
         <translation>Valitse kartantyyppi</translation>
     </message>
@@ -308,7 +330,7 @@
     </message>
     <message>
         <source>Now</source>
-        <translation>Nyt</translation>
+        <translation type="vanished">Nyt</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="251"/>
@@ -403,11 +425,11 @@
     <name>RoutePage</name>
     <message>
         <source>Departure</source>
-        <translation>Lähtö</translation>
+        <translation type="vanished">Lähtö</translation>
     </message>
     <message>
         <source>Arrival</source>
-        <translation>Perillä</translation>
+        <translation type="vanished">Perillä</translation>
     </message>
     <message>
         <location filename="../qml/pages/RoutePage.qml" line="71"/>
@@ -736,7 +758,7 @@
 <context>
     <name>TimeSwitch</name>
     <message>
-        <location filename="../qml/components/TimeSwitch.qml" line="74"/>
+        <location filename="../qml/components/TimeSwitch.qml" line="73"/>
         <source>Now</source>
         <translation>Nyt</translation>
     </message>
