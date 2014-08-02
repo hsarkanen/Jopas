@@ -18,5 +18,6 @@
         <file>images/stop.png</file>
         <file>images/position.png</file>
         <file>images/station.png</file>
+        <file>images/bearing_indicator.png</file>
     </qresource>
 </RCC>

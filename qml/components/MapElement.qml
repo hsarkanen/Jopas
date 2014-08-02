@@ -183,16 +183,15 @@ Item {
                         font.bold: true
                         text: modelCode
                     }
-                    Rectangle {
+                    Image {
+                        source: "qrc:/images/bearing_indicator.png"
                         enabled: typeof modelBearing !== "undefined"
                         height: 10
-                        width: 2
+                        width: 20
                         visible: (typeof modelBearing !== "undefined") && (modelBearing != 0)
-                        color: "black"
-                        x: 25; y: 0
+                        x: 15; y: -7.5
                         transform: Rotation {
-                            id: testRotation
-                            origin.x: 0; origin.y: 25;
+                            origin.x: 10; origin.y: 32.5;
                             angle: typeof modelBearing === "undefined" ? 0 : modelBearing
                         }
                     }
