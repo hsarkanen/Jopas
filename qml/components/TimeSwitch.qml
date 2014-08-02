@@ -63,7 +63,6 @@ Item {
     onMyTimeChanged: {
         timeButton.storedDate = myTime
         timeButton.text = Qt.formatTime(myTime, "hh:mm")
-        console.debug("Time changed: " + myTime)
     }
 
     TextSwitch {
