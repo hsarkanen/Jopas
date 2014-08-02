@@ -1,3 +1,16 @@
+## 0.5.0 (2nd of August, 2014)
+
+Bugfixes:
+
+  - All map tiles are now loaded correctly when opening map
+  - Search button is no more enabled before route endpoints are valid
+
+Features:
+
+  - Live vehicle locations are now showed on routemap using Siri APIs
+  - Mobile optimized map is now used by default
+  - Smaller improvements and bugfixes
+
 ## 0.4.2 (1st of July, 2014)
 
 Bugfixes:
