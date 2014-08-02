@@ -34,70 +34,118 @@ import Sailfish.Silica 1.0
 import "../components"
 
 Page {
-    anchors.fill: parent
+    SilicaFlickable {
+        anchors.fill: parent
+        contentHeight: contentColumn.height
 
-    Column {
-        width: parent.width
-
-        PageHeader {
-             title: qsTr("About JollaOpas")
-        }
-
-        Spacing {height: 20}
-
-        Label {
+        VerticalScrollDecorator {}
+        Column {
+            id: contentColumn
             width: parent.width
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.bold: true
-            text: "v@VERSION@ (@GIT_SHA@)"
-        }
 
-        Spacing {height: 20}
-
-        Button {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Changelog")
-            onClicked: {
-                Qt.openUrlExternally("https://github.com/hsarkanen/JollaOpas/blob/v@VERSION@/Changelog.md")
+            PageHeader {
+                title: qsTr("About JollaOpas")
             }
-        }
 
-        Button {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: qsTr("Sources on Github")
-            onClicked: {
-                Qt.openUrlExternally("https://github.com/hsarkanen/JollaOpas")
+            Spacing {height: 10}
+
+            Label {
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.bold: true
+                text: "v@VERSION@ (@GIT_SHA@)"
             }
-        }
 
-        Spacing {height: 20}
+            Spacing {height: 10}
 
-        Label {
-            width: parent.width
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
-            text: "(c) Heikki Sarkanen" +"\n" + "<heikki.sarkanen@gmail.com>\n2014\n" +
-                  qsTr("Original Author") + ":\nJukka Nousiainen\n" +
-                  qsTr("Additional Credits") + ":\n" +
-                  "Jani Mikkonen, " +
-                  "Mohammed Sameer\n" +
-                  "Clovis Scotti, " +
-                  "Benoit HERVIER and\n" +
-                  "Morpog"
-        }
+            Label {
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                text: qsTr("Journey planner for Helsinki & Tampere area - fork of Jopas originally forked from Meegopas.")
+            }
 
-        Spacing {height: 20}
+            Spacing {height: 10}
 
-        Label {
-            width: parent.width
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
-            text:
-                qsTr("This application is free sofware licenced under the GNU Public License v3.") + "\n" +
-                qsTr("Some parts of the code release under MIT License.")
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Changelog")
+                onClicked: {
+                    Qt.openUrlExternally("https://github.com/hsarkanen/JollaOpas/blob/v@VERSION@/Changelog.md")
+                }
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Sources on Github")
+                onClicked: {
+                    Qt.openUrlExternally("https://github.com/hsarkanen/JollaOpas")
+                }
+            }
+
+            Spacing {height: 10}
+
+            Label {
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                textFormat: Qt.RichText
+                text: qsTr("Routing and real-time vehicle location information is based on open data API:s provided by Helsinki Regional Transport Authority</a> and City of Tampere. Map data is provided by Nokia Here.")
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Helsinki"
+                onClicked: {
+                    Qt.openUrlExternally("http://developer.reittiopas.fi/pages/en/home.php")
+                }
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Tampere"
+                onClicked: {
+                    Qt.openUrlExternally("http://developer.publictransport.tampere.fi/pages/en/home.php")
+                }
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Nokia Here"
+                onClicked: {
+                    Qt.openUrlExternally("http://here.com/terms/")
+                }
+            }
+
+            Label {
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                text: "(c) Heikki Sarkanen" +"\n" + "<heikki.sarkanen@gmail.com>\n2014\n" +
+                      qsTr("Original Author") + ":\nJukka Nousiainen\n" +
+                      qsTr("Additional Credits") + ":\n" +
+                      "Jani Mikkonen, " +
+                      "Mohammed Sameer\n" +
+                      "Clovis Scotti, " +
+                      "Benoit HERVIER and\n" +
+                      "Morpog"
+            }
+
+            Spacing {height: 10}
+
+            Label {
+                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+                text:
+                    qsTr("This application is free sofware licenced under the GNU Public License v3.") + "\n" +
+                    qsTr("Some parts of the code release under MIT License.")
+            }
         }
     }
 }
