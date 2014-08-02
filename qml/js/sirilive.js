@@ -138,7 +138,7 @@ LiveResult.prototype.parse_json = function(vehicles, parent) {
         // Show only vehicles included in the route
         var allowedVehicles = parent.model.vehicleCodesToShowOnMap
         if (showVehicle(vehicleTypeAndCode, allowedVehicles)) {
-            parent.model.append({"modelLongitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Longitude, "modelLatitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Latitude, "modelCode" : code, "modelColor" : color})
+            parent.model.append({"modelLongitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Longitude, "modelLatitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Latitude, "modelCode" : code, "modelColor" : color, "modelBearing" : vehicleData.MonitoredVehicleJourney.Bearing})
         }
     }
 }

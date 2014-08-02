@@ -183,6 +183,19 @@ Item {
                         font.bold: true
                         text: modelCode
                     }
+                    Rectangle {
+                        enabled: typeof modelBearing !== "undefined"
+                        height: 10
+                        width: 2
+                        visible: (typeof modelBearing !== "undefined") && (modelBearing != 0)
+                        color: "black"
+                        x: 25; y: 0
+                        transform: Rotation {
+                            id: testRotation
+                            origin.x: 0; origin.y: 25;
+                            angle: typeof modelBearing === "undefined" ? 0 : modelBearing
+                        }
+                    }
                 }
 
                 anchorPoint.y: sourceItem.height / 2
