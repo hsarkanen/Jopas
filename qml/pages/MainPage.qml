@@ -55,7 +55,7 @@ Page {
 
     property bool searchButtonDisabled: false
 
-    property bool endpointsValid: (toCoord && (fromCoord || currentCoord))
+    property bool endpointsValid: (toCoord.length > 0 && (fromCoord.length > 0 || currentCoord.length > 0))
 
     onEndpointsValidChanged: {
         /* if we receive coordinates we are waiting for, start route search */
