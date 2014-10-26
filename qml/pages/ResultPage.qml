@@ -49,7 +49,17 @@ Page {
         var route = Reittiopas.get_route_instance()
         appWindow.coverAlignment = Text.AlignHCenter
         appWindow.coverHeader = search_parameters.from_name
-        appWindow.coverContents = route.last_result[0].start.toString().slice(16,21) + " - " + route.last_result[0].finish.toString().slice(16,21) + "\n" + route.last_result[1].start.toString().slice(16,21) + " - " + route.last_result[1].finish.toString().slice(16,21) + "\n" + route.last_result[2].start.toString().slice(16,21) + " - " + route.last_result[2].finish.toString().slice(16,21) + "\n" + route.last_result[3].start.toString().slice(16,21) + " - " + route.last_result[3].finish.toString().slice(16,21) + "\n" + route.last_result[4].start.toString().slice(16,21) + " - " + route.last_result[4].finish.toString().slice(16,21)
+        appWindow.coverContents = ""
+
+        for (var index in route.last_result) {
+            // Add leading zeros if needed
+            var startHours = ('0' + route.last_result[index].start.getHours()).slice(-2)
+            var startMinutes = ('0' + route.last_result[index].start.getMinutes()).slice(-2)
+            var finishHours = ('0' + route.last_result[index].finish.getHours()).slice(-2)
+            var finishMinutes = ('0' + route.last_result[index].finish.getMinutes()).slice(-2)
+
+            appWindow.coverContents += startHours + ":" + startMinutes + " - " + finishHours + ":" + finishMinutes + "\n"
+        }
     }
 
     ListModel {
