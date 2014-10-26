@@ -1,3 +1,10 @@
+## 0.5.1 (26th of October, 2014)
+
+Bugfixes:
+
+  - In Uitukka/Qt5.2: The top of the main page has a 'cancel / choose location' band - FIXED
+  - In Uitukka/Qt5.2: The cover show only a bunch of ':00 2 - :00 2' - FIXED
+
 ## 0.5.0 (2nd of August, 2014)
 
 Bugfixes:
