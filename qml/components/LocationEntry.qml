@@ -247,7 +247,6 @@ Column {
             }
         }
 
-        titleText: qsTr("Choose location")
         onAccepted: {
             updateLocation(suggestionModel.get(selectedIndex).name,
                             suggestionModel.get(selectedIndex).housenumber,
@@ -259,7 +258,6 @@ Column {
     MySelectionDialog {
         id: favoriteQuery
         model: favoritesModel
-        titleText: qsTr("Choose location")
         delegate: FavoritesDelegate {
             onClicked: {
                 favoriteQuery.selectedIndex = index

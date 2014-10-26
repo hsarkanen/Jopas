@@ -110,7 +110,6 @@ Map {
                             mapTypeMenu.accept()
                         }
                     }
-                    titleText: qsTr("Choose maptype")
                     onAccepted: {
                         map.activeMapType = map.supportedMapTypes[selectedIndex]
                     }

@@ -33,7 +33,6 @@ import QtQuick 2.1
 import Sailfish.Silica 1.0
 
 Dialog {
-    property alias titleText: header.acceptText
     property alias model: view.model
     property alias delegate: view.delegate
 
@@ -46,15 +45,10 @@ Dialog {
         anchors.leftMargin: Theme.paddingSmall
         anchors.rightMargin: Theme.paddingSmall
 
-        DialogHeader {
-            id: header
-            acceptText: qsTr("Add favorite place")
-        }
-
         SilicaListView {
             width: parent.width
             // TODO:
-            height: Screen.height - header.height
+            height: Screen.height
             id: view
 
             VerticalScrollDecorator {}
