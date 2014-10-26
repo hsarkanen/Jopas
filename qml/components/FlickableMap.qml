@@ -122,6 +122,18 @@ Map {
                 selected: appWindow.followMode
                 onClicked: appWindow.followMode = !appWindow.followMode
             }
+
+            MapButton {
+                id: zoomIn
+                source: "image://theme/icon-m-add"
+                onClicked: zoomLevel += 1
+            }
+
+            MapButton {
+                id: zoomOut
+                source: "image://theme/icon-m-remove"
+                onClicked: zoomLevel -= 1
+            }
         }
     }
 }

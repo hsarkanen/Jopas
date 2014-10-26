@@ -45,7 +45,7 @@ Rectangle {
     height: 50
     radius: 10
     opacity: 0.7
-    color: (mouseArea.pressed || selected) ? Theme.theme[appWindow.colorscheme].COLOR_MAPBUTTON_CLICKED : Theme.theme[appWindow.colorscheme].COLOR_MAPBUTTON
+    color: (mouseArea.pressed || selected) ? "lightgrey":"grey"
 
     property alias source : image.source
     property alias mouseArea : mouseArea
