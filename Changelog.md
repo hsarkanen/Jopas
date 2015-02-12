@@ -1,3 +1,11 @@
+## 0.5.2 (12th of February, 2015)
+
+Features:
+
+  - Added line codes to ResultPage cover
+  - Added map buttons for easier one handed zooming
+
+
 ## 0.5.1 (26th of October, 2014)
 
 Bugfixes:
