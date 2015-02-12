@@ -47,7 +47,7 @@ Page {
 
     function setCoverData() {
         var route = Reittiopas.get_route_instance()
-        appWindow.coverAlignment = Text.AlignHCenter
+        appWindow.coverAlignment = Text.AlignLeft
         appWindow.coverHeader = search_parameters.from_name
         appWindow.coverContents = ""
 
@@ -57,8 +57,17 @@ Page {
             var startMinutes = ('0' + route.last_result[index].start.getMinutes()).slice(-2)
             var finishHours = ('0' + route.last_result[index].finish.getHours()).slice(-2)
             var finishMinutes = ('0' + route.last_result[index].finish.getMinutes()).slice(-2)
+            var code = ""
 
-            appWindow.coverContents += startHours + ":" + startMinutes + " - " + finishHours + ":" + finishMinutes + "\n"
+            if (route.last_result[index].legs.length > 0 && route.last_result[index].legs[0].type !== "walk" ) {
+                code = " L: " + route.last_result[index].legs[0].code;
+            }
+            else if (route.last_result[index].legs.length > 1 && route.last_result[index].legs[1].type !== "walk" ) {
+                code = " L: " + route.last_result[index].legs[1].code;
+            }
+
+            appWindow.coverContents += startHours + ":" + startMinutes + " - " + finishHours + ":" + finishMinutes
+                    + code + "\n";
         }
     }
 
