@@ -369,55 +369,77 @@ Item {
         }
     }
 */
-    function initialize() {
+    function initialize(showRoutes) {
         flickable_map.addMapItem(current_position)
 
         vehicleUpdateTimer.start()
 
         Helper.clear_objects()
-        var endpoint_object
-        var route_coord = []
         var current_route = Reittiopas.get_route_instance()
-        current_route.dump_route(route_coord)
         vehicleModel.vehicleCodesToShowOnMap = []
 
-        for (var index in route_coord) {
-            var endpointdata = route_coord[index]
-            var paths = []
+        // Map where only startPoint and all the vehicles are shown
+        if (showRoutes === false) {
+            // Add only startPoint to the map
+            add_station2(current_route.last_result[0].legs[0].from, current_route.last_result[0].legs[0].from.name)
+            flickable_map.start_point.coordinate.longitude = current_route.last_result[0].legs[0].from.longitude
+            flickable_map.start_point.coordinate.latitude = current_route.last_result[0].legs[0].from.latitude
 
-            if(index == 0) {
-                add_station2(endpointdata.from, endpointdata.from.name)
-                flickable_map.start_point.coordinate.longitude = endpointdata.from.longitude
-                flickable_map.start_point.coordinate.latitude = endpointdata.from.latitude
+            // Add all the vehicles shown on resultPage
+            for (var result in current_route.last_result) {
+                for (var leg in current_route.last_result[result].legs) {
+                    if (current_route.last_result[result].legs[leg].type !== "walk") {
+                        vehicleModel.vehicleCodesToShowOnMap.push(
+                                    {"type": current_route.last_result[result].legs[leg].type,
+                                        "code": current_route.last_result[result].legs[leg].code})
+                    }
+                }
             }
+        }
+        // Normal map with route paths, stations and vehicles
+        else {
+            var endpoint_object
+            var route_coord = []
+            current_route.dump_route(route_coord)
 
-            add_station2(endpointdata.to, endpointdata.to.name)
+            for (var index in route_coord) {
+                var endpointdata = route_coord[index]
+                var paths = []
 
-            if(index == route_coord.length - 1) {
-                  flickable_map.end_point.coordinate.longitude = endpointdata.to.longitude
-                  flickable_map.end_point.coordinate.latitude = endpointdata.to.latitude
-            }
+                if(index == 0) {
+                    add_station2(endpointdata.from, endpointdata.from.name)
+                    flickable_map.start_point.coordinate.longitude = endpointdata.from.longitude
+                    flickable_map.start_point.coordinate.latitude = endpointdata.from.latitude
+                }
 
-            for(var shapeindex in endpointdata.shape) {
-                var shapedata = endpointdata.shape[shapeindex]
-                paths.push({"longitude": shapedata.x, "latitude": shapedata.y})
-            }
+                add_station2(endpointdata.to, endpointdata.to.name)
 
-            var p = polyline_component.createObject(flickable_map)
-            p.line.color = Theme.theme['general'].TRANSPORT_COLORS[endpointdata.type]
-            p.path = paths
-            flickable_map.addMapItem(p)
+                if(index == route_coord.length - 1) {
+                    flickable_map.end_point.coordinate.longitude = endpointdata.to.longitude
+                    flickable_map.end_point.coordinate.latitude = endpointdata.to.latitude
+                }
 
-            if (endpointdata.type !== "walk") {
-                vehicleModel.vehicleCodesToShowOnMap.push({"type": endpointdata.type, "code": endpointdata.code})
-            }
+                for(var shapeindex in endpointdata.shape) {
+                    var shapedata = endpointdata.shape[shapeindex]
+                    paths.push({"longitude": shapedata.x, "latitude": shapedata.y})
+                }
 
-            if(endpointdata.type != "walk") {
-                for(var stopindex in endpointdata.locs) {
-                    var loc = endpointdata.locs[stopindex]
+                var p = polyline_component.createObject(flickable_map)
+                p.line.color = Theme.theme['general'].TRANSPORT_COLORS[endpointdata.type]
+                p.path = paths
+                flickable_map.addMapItem(p)
 
-                    if(stopindex != 0 && stopindex != endpointdata.locs.length - 1)
-                        add_stop2(loc.latitude, loc.longitude)
+                if (endpointdata.type !== "walk") {
+                    vehicleModel.vehicleCodesToShowOnMap.push({"type": endpointdata.type, "code": endpointdata.code})
+                }
+
+                if(endpointdata.type != "walk") {
+                    for(var stopindex in endpointdata.locs) {
+                        var loc = endpointdata.locs[stopindex]
+
+                        if(stopindex != 0 && stopindex != endpointdata.locs.length - 1)
+                            add_stop2(loc.latitude, loc.longitude)
+                    }
                 }
             }
         }

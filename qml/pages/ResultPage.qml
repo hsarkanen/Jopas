@@ -170,6 +170,13 @@ Page {
             visible: (!busyIndicator.running && routeModel.count == 0)
             text: qsTr("No results")
         }
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Map")
+                onClicked: { pageStack.push(Qt.resolvedUrl("ResultMapPage.qml")) }
+            }
+        }
     }
 
     BusyIndicator {

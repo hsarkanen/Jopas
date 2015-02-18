@@ -135,7 +135,7 @@ Page {
             id: map_loader
             anchors.fill: parent
             onLoaded: {
-                map_loader.item.initialize()
+                map_loader.item.initialize(true)
 
                 // go to first stop
                 map.map_loader.item.flickable_map.panToLatLong(stopModel.get(0).latitude,
