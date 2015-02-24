@@ -33,6 +33,7 @@
 
 import QtQuick 2.1
 import QtLocation 5.0
+import QtPositioning 5.3
 import Sailfish.Silica 1.0
 
 Map {
@@ -74,13 +75,19 @@ Map {
         longitude: 24.9407379411
     }
 
+    Behavior on center {
+        CoordinateAnimation {
+            duration: 500
+            easing.type: Easing.InOutQuad
+        }
+    }
+
     function panToCoordinate(coordinate) {
         map.panToLatLong(coordinate.latitude, coordinate.longitude)
     }
 
     function panToLatLong(latitude,longitude) {
-        map.center.latitude = latitude
-        map.center.longitude = longitude
+        map.center = QtPositioning.coordinate(latitude, longitude)
     }
 
     MapQuickItem {

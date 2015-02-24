@@ -31,7 +31,7 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
-import QtPositioning 5.0
+import QtPositioning 5.3
 
 ListItem {
     id: stop_item
@@ -62,10 +62,7 @@ ListItem {
     Location {
         id: coordinate
 
-        coordinate {
-            latitude: model.latitude
-            longitude: model.longitude
-        }
+        coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
     }
 
     onStateChanged: {

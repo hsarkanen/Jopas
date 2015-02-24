@@ -31,7 +31,7 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
-import QtPositioning 5.0
+import QtPositioning 5.3
 import QtQuick.XmlListModel 2.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
@@ -52,10 +52,7 @@ Column {
     Location {
         id: previousCoord
 
-        coordinate {
-            latitude: 0
-            longitude: 0
-        }
+        coordinate: QtPositioning.coordinate(0, 0)
     }
 
     property string destination_name : ''

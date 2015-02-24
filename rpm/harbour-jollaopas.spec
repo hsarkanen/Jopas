@@ -22,7 +22,7 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-jollaopas.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   qt5-qtdeclarative-import-location >= 5.1.0
-Requires:   qt5-qtdeclarative-import-positioning >= 5.1.0
+Requires:   qt5-qtdeclarative-import-positioning >= 5.2.0
 Requires:   qt5-qtdeclarative-import-qtquick2plugin >= 5.1.0
 Requires:   qt5-qtdeclarative-import-xmllistmodel >= 5.1.0
 BuildRequires:  pkgconfig(sailfishapp) >= 0.0.10

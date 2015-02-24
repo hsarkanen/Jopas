@@ -31,7 +31,7 @@
 
 import QtQuick 2.1
 import QtLocation 5.0
-import QtPositioning 5.0
+import QtPositioning 5.3
 import "../js/reittiopas.js" as Reittiopas
 import "../js/sirilive.js" as Sirilive
 import "../js/storage.js" as Storage
@@ -110,8 +110,7 @@ Item {
             id: stationView
             model: stationModel
             delegate: MapQuickItem {
-                coordinate.longitude: lng
-                coordinate.latitude: lat
+                coordinate: QtPositioning.coordinate(lat, lng)
                 sourceItem: Image {
                     smooth: true
                     height: 30
@@ -129,8 +128,7 @@ Item {
             id: stationTextView
             model: stationTextModel
             delegate: MapQuickItem {
-                coordinate.longitude: lng
-                coordinate.latitude: lat
+                coordinate: QtPositioning.coordinate(lat, lng)
                 sourceItem: Text {
                     // TODO: width and height?
                     font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor
@@ -147,8 +145,7 @@ Item {
             id: stopView
             model: stopModel
             delegate: MapQuickItem {
-                coordinate.longitude: lng
-                coordinate.latitude: lat
+                coordinate: QtPositioning.coordinate(lat, lng)
                 sourceItem: Image {
                     smooth: true
                     height: 20
@@ -167,8 +164,7 @@ Item {
             id: vehicleView
             model: vehicleModel
             delegate: MapQuickItem {
-                coordinate.longitude: modelLongitude
-                coordinate.latitude: modelLatitude
+                coordinate: QtPositioning.coordinate(modelLatitude, modelLongitude)
                 sourceItem:
                     Rectangle {
                     color: modelColor
@@ -283,6 +279,13 @@ Item {
         anchorPoint.y: sourceItem.height / 2
         anchorPoint.x: sourceItem.width / 2
         z: 49
+
+        Behavior on coordinate {
+            CoordinateAnimation {
+                duration: 500
+                easing.type: Easing.Linear
+            }
+        }
     }
 
 //    MapGroup {
