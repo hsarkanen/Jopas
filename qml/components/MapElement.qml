@@ -383,10 +383,17 @@ Item {
 
         // Map where only startPoint and all the vehicles are shown
         if (showRoutes === false) {
-            // Add only startPoint to the map
+            // Add only startPoint and endPoint to the map
             add_station2(current_route.last_result[0].legs[0].from, current_route.last_result[0].legs[0].from.name)
             flickable_map.start_point.coordinate.longitude = current_route.last_result[0].legs[0].from.longitude
             flickable_map.start_point.coordinate.latitude = current_route.last_result[0].legs[0].from.latitude
+
+            add_station2(current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to,
+                         current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.name)
+            flickable_map.end_point.coordinate.longitude =
+                    current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.longitude
+            flickable_map.end_point.coordinate.latitude =
+                    current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.latitude
 
             // Add all the vehicles shown on resultPage
             for (var result in current_route.last_result) {
