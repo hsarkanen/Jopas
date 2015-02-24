@@ -87,6 +87,7 @@ Map {
         width: 50 // width of MapButton
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
+        z: 100
 
         sourceItem: Column {
             id: col
