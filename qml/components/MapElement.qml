@@ -232,6 +232,7 @@ Item {
         MouseArea {
             anchors.fill: parent
             onPressAndHold: appWindow.positioningActive ? flickable_map.panToCoordinate(current_position.coordinate) : first_station()
+            onDoubleClicked: flickable_map.zoomLevel += 1
         }
     }
 
