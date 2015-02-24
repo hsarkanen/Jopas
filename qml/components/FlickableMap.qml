@@ -82,6 +82,13 @@ Map {
         }
     }
 
+    Behavior on zoomLevel {
+        NumberAnimation {
+            duration: 250
+            easing.type: Easing.Linear
+        }
+    }
+
     function panToCoordinate(coordinate) {
         map.panToLatLong(coordinate.latitude, coordinate.longitude)
     }
