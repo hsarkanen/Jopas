@@ -229,6 +229,10 @@ Item {
             z: 50
         }
 
+        MouseArea {
+            anchors.fill: parent
+            onPressAndHold: appWindow.positioningActive ? flickable_map.panToCoordinate(current_position.coordinate) : first_station()
+        }
     }
 
     // Route
