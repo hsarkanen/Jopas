@@ -39,7 +39,7 @@ import Sailfish.Silica 1.0
 Map {
     id: map
     anchors.fill: parent
-    zoomLevel: 17
+    zoomLevel: 14
     clip: true
     gesture.enabled: true
     gesture.activeGestures: appWindow.followMode ? MapGestureArea.ZoomGesture : MapGestureArea.ZoomGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
