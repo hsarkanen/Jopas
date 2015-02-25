@@ -400,9 +400,13 @@ Item {
             flickable_map.end_point.coordinate.latitude =
                     current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.latitude
 
-            // Add all the vehicles shown on resultPage
+            // Add all the vehicles and stops on routes shown on resultPage, skip route polylines for now
             for (var result in current_route.last_result) {
                 for (var leg in current_route.last_result[result].legs) {
+
+                    add_station2(current_route.last_result[result].legs[leg].to,
+                                 current_route.last_result[result].legs[leg].to.name)
+
                     if (current_route.last_result[result].legs[leg].type !== "walk") {
                         vehicleModel.vehicleCodesToShowOnMap.push(
                                     {"type": current_route.last_result[result].legs[leg].type,
