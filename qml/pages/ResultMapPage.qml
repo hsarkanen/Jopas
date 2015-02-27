@@ -37,7 +37,6 @@ import "../components"
 
 Page {
     backNavigation: false
-    anchors.fill: parent
 
     MapElement {
         id: map
