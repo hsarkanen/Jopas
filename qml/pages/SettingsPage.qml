@@ -68,6 +68,8 @@ Page {
             walkingSpeed.set_value(setting == "Unknown"?"70" : setting)
             setting = Storage.getSetting("change_margin")
             changeMargin.set_value(setting == "Unknown"?"3" : Math.floor(setting))
+            setting = Storage.getSetting("default_zoom_level")
+            defaultZoomLevel.set_value(setting == "Unknown"?"5" : Math.floor(setting))
             setting = Storage.getSetting("search_button_disabled")
             searchButtonSwitch.set_value(setting == "Unknown"?"false" : setting)
         }
@@ -357,6 +359,31 @@ Page {
                     }
                 }
             }
+
+            SectionHeader {
+                text: qsTr("Map")
+            }
+            Slider {
+                id: defaultZoomLevel
+                function set_value(value) {
+                    defaultZoomLevel.value = value
+                    defaultZoomLevel.updateLabel()
+                }
+                function updateLabel() {
+                    defaultZoomLevel.label = qsTr("Default zoom level") + " (" + defaultZoomLevel.value + ")"
+                }
+                width: parent.width
+                minimumValue: 1
+                maximumValue: 10
+                value: 5
+                stepSize: 1
+                handleVisible: true
+                onValueChanged: {
+                    Storage.setSetting("default_zoom_level", defaultZoomLevel.value)
+                    defaultZoomLevel.updateLabel()
+                }
+            }
+
             SectionHeader {
                 text: qsTr("UI tweaks")
             }

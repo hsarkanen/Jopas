@@ -35,11 +35,14 @@ import QtQuick 2.1
 import QtLocation 5.0
 import QtPositioning 5.3
 import Sailfish.Silica 1.0
+import "../js/storage.js" as Storage
 
 Map {
     id: map
     anchors.fill: parent
-    zoomLevel: 14
+    // Read the value in settings between 1-10 and scale to rational values between 10-19
+    zoomLevel: Storage.getSetting('default_zoom_level') === "Unknown" ?
+                   14 : parseInt(Storage.getSetting('default_zoom_level'), 10) + 9
     clip: true
     gesture.enabled: true
     gesture.activeGestures: appWindow.followMode ? MapGestureArea.ZoomGesture : MapGestureArea.ZoomGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
