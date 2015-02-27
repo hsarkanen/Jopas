@@ -49,7 +49,7 @@ Page {
         }
 
         Component.onCompleted: {
-            initialize(false)
+            initialize(true)
             panningDelayTimer.start() // Workaround to wait for small delay before panning to ensure that all tiles are loaded correctly when panning
         }
         Timer {

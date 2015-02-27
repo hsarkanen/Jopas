@@ -377,7 +377,7 @@ Item {
         }
     }
 */
-    function initialize(showRoutes) {
+    function initialize(multipleRoutes) {
         flickable_map.addMapItem(current_position)
 
         vehicleUpdateTimer.start()
@@ -386,79 +386,67 @@ Item {
         var current_route = Reittiopas.get_route_instance()
         vehicleModel.vehicleCodesToShowOnMap = []
 
-        // Map where only startPoint and all the vehicles are shown
-        if (showRoutes === false) {
-            // Add only startPoint and endPoint to the map
-            add_station2(current_route.last_result[0].legs[0].from, current_route.last_result[0].legs[0].from.name)
-            flickable_map.start_point.coordinate.longitude = current_route.last_result[0].legs[0].from.longitude
-            flickable_map.start_point.coordinate.latitude = current_route.last_result[0].legs[0].from.latitude
+        // Add startPoint and endPoint to the map
+        add_station2(current_route.last_result[0].legs[0].from, current_route.last_result[0].legs[0].from.name)
+        flickable_map.start_point.coordinate.longitude = current_route.last_result[0].legs[0].from.longitude
+        flickable_map.start_point.coordinate.latitude = current_route.last_result[0].legs[0].from.latitude
 
-            add_station2(current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to,
-                         current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.name)
-            flickable_map.end_point.coordinate.longitude =
-                    current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.longitude
-            flickable_map.end_point.coordinate.latitude =
-                    current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.latitude
+        add_station2(current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to,
+                     current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.name)
+        flickable_map.end_point.coordinate.longitude =
+                current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.longitude
+        flickable_map.end_point.coordinate.latitude =
+                current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.latitude
 
-            // Add all the vehicles and stops on routes shown on resultPage, skip route polylines for now
+        // Add all the routes and vehicles to the map, ResultMapPage shows content for all the 5 routes,
+        // last 4 with thinner line
+        if (multipleRoutes === true) {
             for (var result in current_route.last_result) {
-                for (var leg in current_route.last_result[result].legs) {
-
-                    add_station2(current_route.last_result[result].legs[leg].to,
-                                 current_route.last_result[result].legs[leg].to.name)
-
-                    if (current_route.last_result[result].legs[leg].type !== "walk") {
-                        vehicleModel.vehicleCodesToShowOnMap.push(
-                                    {"type": current_route.last_result[result].legs[leg].type,
-                                        "code": current_route.last_result[result].legs[leg].code})
-                    }
-                }
+                add_route_to_map(current_route.last_result[result], result)
             }
         }
-        // Normal map with route paths, stations and vehicles
         else {
-            var endpoint_object
-            var route_coord = []
-            current_route.dump_route(route_coord)
+            var index = current_route.get_current_route_index()
+            // Passing index == 0 prints with normal line width
+            add_route_to_map(current_route.last_result[index], 0)
+        }
+    }
 
-            for (var index in route_coord) {
-                var endpointdata = route_coord[index]
-                var paths = []
+    function add_route_to_map(route, index) {
+        for (var leg in route.legs) {
 
-                if(index == 0) {
-                    add_station2(endpointdata.from, endpointdata.from.name)
-                    flickable_map.start_point.coordinate.longitude = endpointdata.from.longitude
-                    flickable_map.start_point.coordinate.latitude = endpointdata.from.latitude
-                }
+            var paths = []
+            add_station2(route.legs[leg].to,
+                         route.legs[leg].to.name)
 
-                add_station2(endpointdata.to, endpointdata.to.name)
+            for(var shapeindex in route.legs[leg].shape) {
+                var shapedata = route.legs[leg].shape[shapeindex]
+                paths.push({"longitude": shapedata.x, "latitude": shapedata.y})
+            }
 
-                if(index == route_coord.length - 1) {
-                    flickable_map.end_point.coordinate.longitude = endpointdata.to.longitude
-                    flickable_map.end_point.coordinate.latitude = endpointdata.to.latitude
-                }
+            var p = polyline_component.createObject(flickable_map)
+            p.line.color =
+                    Theme.theme['general'].TRANSPORT_COLORS[route.legs[leg].type]
+            p.path = paths
 
-                for(var shapeindex in endpointdata.shape) {
-                    var shapedata = endpointdata.shape[shapeindex]
-                    paths.push({"longitude": shapedata.x, "latitude": shapedata.y})
-                }
+            // Print all 4 later route options with thinner line
+            if (index > 0) {
+                p.line.width *= 0.5;
+            }
 
-                var p = polyline_component.createObject(flickable_map)
-                p.line.color = Theme.theme['general'].TRANSPORT_COLORS[endpointdata.type]
-                p.path = paths
-                flickable_map.addMapItem(p)
+            flickable_map.addMapItem(p)
 
-                if (endpointdata.type !== "walk") {
-                    vehicleModel.vehicleCodesToShowOnMap.push({"type": endpointdata.type, "code": endpointdata.code})
-                }
+            if (route.legs[leg].type !== "walk") {
+                vehicleModel.vehicleCodesToShowOnMap.push(
+                            {"type": route.legs[leg].type,
+                                "code": route.legs[leg].code})
+            }
+            if(route.legs[leg].type !== "walk") {
+                for(var stopindex in route.legs[leg].locs) {
+                    var loc = route.legs[leg].locs[stopindex]
 
-                if(endpointdata.type != "walk") {
-                    for(var stopindex in endpointdata.locs) {
-                        var loc = endpointdata.locs[stopindex]
-
-                        if(stopindex != 0 && stopindex != endpointdata.locs.length - 1)
-                            add_stop2(loc.latitude, loc.longitude)
-                    }
+                    if(stopindex !== 0 && stopindex !== route.legs[leg].locs.length - 1)
+                        add_stop2(loc.latitude, loc.longitude)
                 }
             }
         }

@@ -334,11 +334,8 @@ route_search.prototype.result_handler = function() {
     _request_parent.model.done = true
 }
 
-route_search.prototype.dump_route = function(target) {
-    var route = this.last_result[this.last_route_index]
-    for (var legindex in route.legs) {
-        target.push(route.legs[legindex])
-    }
+route_search.prototype.get_current_route_index = function() {
+    return this.last_route_index
 }
 
 route_search.prototype.dump_stops = function(index, model) {
