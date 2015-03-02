@@ -1,10 +1,20 @@
+## 0.6.0 (2nd of March, 2015)
+
+Features:
+
+  - Added new map to show all routes and vehicles from ResultPage
+  - Added map gestures for zooming and returning to current location similar to Jolla Maps gestures
+  - Added animations for map usage
+  - Added option to change default zoom level of maps
+  - Use QtPositioning 5.2 and 5.3 API for animations, adds requirement for Sailfish OS 1.1.0.38 or newer
+  - Smaller improvements and bugfixes
+
 ## 0.5.2 (12th of February, 2015)
 
 Features:
 
   - Added line codes to ResultPage cover
   - Added map buttons for easier one handed zooming
-
 
 ## 0.5.1 (26th of October, 2014)
 
