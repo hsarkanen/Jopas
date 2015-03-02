@@ -386,17 +386,11 @@ Item {
         var current_route = Reittiopas.get_route_instance()
         vehicleModel.vehicleCodesToShowOnMap = []
 
-        // Add startPoint and endPoint to the map
+        // Add startPoint to the map
         add_station2(current_route.last_result[0].legs[0].from, current_route.last_result[0].legs[0].from.name)
         flickable_map.start_point.coordinate.longitude = current_route.last_result[0].legs[0].from.longitude
         flickable_map.start_point.coordinate.latitude = current_route.last_result[0].legs[0].from.latitude
 
-        add_station2(current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to,
-                     current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.name)
-        flickable_map.end_point.coordinate.longitude =
-                current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.longitude
-        flickable_map.end_point.coordinate.latitude =
-                current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.latitude
 
         // Add all the routes and vehicles to the map, ResultMapPage shows content for all the 5 routes,
         // last 4 with thinner line
@@ -410,6 +404,14 @@ Item {
             // Passing index == 0 prints with normal line width
             add_route_to_map(current_route.last_result[index], 0)
         }
+
+        // Add endPoint to the map
+        add_station2(current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to,
+                     current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.name)
+        flickable_map.end_point.coordinate.longitude =
+                current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.longitude
+        flickable_map.end_point.coordinate.latitude =
+                current_route.last_result[0].legs[current_route.last_result[0].legs.length - 1].to.latitude
     }
 
     function add_route_to_map(route, index) {
