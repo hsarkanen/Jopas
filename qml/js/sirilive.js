@@ -111,7 +111,9 @@ LiveResult.prototype.result_handler = function() {
 
     var parent = _request_parent
     var vehicles = JSON.parse(_http_request.responseText)
+    var time_stamp = vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].ResponseTimestamp
 
+    _request_parent.model.timeStamp = time_stamp
     _request_parent.parse_json(vehicles, parent)
     _request_parent.model.done = true
 }

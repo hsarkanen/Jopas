@@ -69,6 +69,20 @@ Item {
 
     function receiveVehicleLocation() {
         Sirilive.new_live_instance(vehicleModel, Storage.getSetting('api'))
+
+        var epochTime = vehicleModel.timeStamp
+        var timeDifference = Date.now() - epochTime
+        timeDifference /= 1000  // Convert milliseconds to seconds
+
+        if (timeDifference > 0 && timeDifference < 60) {
+            flickable_map.timeStamp.text = qsTr("Updated ") + Math.round(timeDifference) + qsTr(" s ago ")
+        }
+        else {
+            var updatedDate = new Date(0)
+            updatedDate.setMilliseconds(epochTime)
+            flickable_map.timeStamp.text =
+                    qsTr("Updated ") + Qt.formatDateTime(updatedDate, "d.M. hh:mm:ss ")
+        }
     }
 
     ListModel {
@@ -86,6 +100,7 @@ Item {
     ListModel {
         id: vehicleModel
         property bool done: false
+        property string timeStamp: ""
         property var vehicleCodesToShowOnMap: []
     }
 
@@ -102,6 +117,7 @@ Item {
         id: flickable_map
         property alias start_point: startPoint
         property alias end_point: endPoint
+        property alias timeStamp: timeStamp
 
         anchors.fill: parent
 
@@ -227,6 +243,20 @@ Item {
             anchorPoint.y: sourceItem.height - 5
             anchorPoint.x: sourceItem.width / 2
             z: 50
+        }
+
+        MapQuickItem {
+            id: timeStamp
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            z: 100
+            property alias text: timeStampText.text
+
+            sourceItem: Text {
+                id: timeStampText
+                font.bold: true
+                text: ""
+            }
         }
 
         MouseArea {
