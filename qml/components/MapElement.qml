@@ -71,6 +71,12 @@ Item {
         Sirilive.new_live_instance(vehicleModel, Storage.getSetting('api'))
 
         var epochTime = vehicleModel.timeStamp
+
+        if (!epochTime) {
+            flickable_map.timeStamp.text = qsTr("Backend error ")
+            return
+        }
+
         var timeDifference = Date.now() - epochTime
         timeDifference /= 1000  // Convert milliseconds to seconds
 
