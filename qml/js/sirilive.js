@@ -36,7 +36,7 @@ API['helsinki'] = {}
 API['helsinki'].URL = 'http://dev.hsl.fi/siriaccess/vm/json'
 
 API['tampere'] = {}
-API['tampere'].URL = 'http://data.itsfactory.fi/siriaccess/vm/rest'
+API['tampere'].URL = 'http://data.itsfactory.fi/siriaccess/vm/json'
 
 //sirilive instance
 var _instance = null
