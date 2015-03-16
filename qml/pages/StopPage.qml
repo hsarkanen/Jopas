@@ -153,7 +153,6 @@ Page {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 source: "image://theme/icon-m-close"
-                color: "black"
                 onClicked: {
                     appWindow.mapVisible = false
                 }
