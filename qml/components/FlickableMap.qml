@@ -101,7 +101,7 @@ Map {
     }
 
     MapQuickItem {
-        width: 50 // width of MapButton
+        width: 70 // width of MapButton
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         z: 100

@@ -41,8 +41,8 @@ Rectangle {
 
     signal clicked
 
-    width: 50
-    height: 50
+    width: 70
+    height: 70
     radius: 10
     opacity: 0.7
     color: (mouseArea.pressed || selected) ? "lightgrey":"grey"
