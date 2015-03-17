@@ -73,7 +73,7 @@ Item {
         var epochTime = vehicleModel.timeStamp
 
         if (!epochTime) {
-            flickable_map.timeStamp.text = qsTr("Backend error ")
+            flickable_map.timeStamp.text = qsTr(" Backend error ")
             return
         }
 
@@ -81,13 +81,13 @@ Item {
         timeDifference /= 1000  // Convert milliseconds to seconds
 
         if (timeDifference > 0 && timeDifference < 60) {
-            flickable_map.timeStamp.text = qsTr("Updated ") + Math.round(timeDifference) + qsTr(" s ago ")
+            flickable_map.timeStamp.text = qsTr(" Updated ") + Math.round(timeDifference) + qsTr(" s ago ")
         }
         else {
             var updatedDate = new Date(0)
             updatedDate.setMilliseconds(epochTime)
             flickable_map.timeStamp.text =
-                    qsTr("Updated ") + Qt.formatDateTime(updatedDate, "d.M. hh:mm:ss ")
+                    qsTr(" Updated ") + Qt.formatDateTime(updatedDate, "d.M. hh:mm:ss ")
         }
     }
 
@@ -258,10 +258,19 @@ Item {
             z: 100
             property alias text: timeStampText.text
 
-            sourceItem: Text {
-                id: timeStampText
-                font.bold: true
-                text: ""
+            sourceItem:
+                Rectangle {
+                height: timeStampText.height
+                width: timeStampText.width
+                color: "grey"
+                radius: 10
+                opacity: 0.7
+                Text {
+                    id: timeStampText
+                    anchors.centerIn: parent
+                    font.bold: true
+                    text: ""
+                }
             }
         }
 
