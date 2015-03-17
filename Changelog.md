@@ -1,3 +1,10 @@
+## 0.6.1 (18th of March, 2015)
+
+Features:
+
+  - Added last updated time to Map views
+  - Smaller improvements
+
 ## 0.6.0 (2nd of March, 2015)
 
 Features:
