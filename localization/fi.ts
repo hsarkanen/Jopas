@@ -371,6 +371,25 @@
     </message>
 </context>
 <context>
+    <name>MapElement</name>
+    <message>
+        <location filename="../qml/components/MapElement.qml" line="76"/>
+        <source> Backend error </source>
+        <translation> Palvelinvirhe </translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MapElement.qml" line="84"/>
+        <location filename="../qml/components/MapElement.qml" line="90"/>
+        <source> Updated </source>
+        <translation> Päivitetty </translation>
+    </message>
+    <message>
+        <location filename="../qml/components/MapElement.qml" line="84"/>
+        <source> s ago </source>
+        <translation> s sitten </translation>
+    </message>
+</context>
+<context>
     <name>MySelectionDialog</name>
     <message>
         <source>Add favorite</source>
