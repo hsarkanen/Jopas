@@ -85,6 +85,14 @@ Item {
         }
         else {
             var updatedDate = new Date(0)
+
+            if (updatedDate.getTimezoneOffset() < 180) {
+                var dayLightSavingTime = 0
+                dayLightSavingTime = parseInt(epochTime)
+                dayLightSavingTime += 3600000
+                epochTime = dayLightSavingTime.toString()
+            }
+
             updatedDate.setMilliseconds(epochTime)
             flickable_map.timeStamp.text =
                     qsTr(" Updated ") + Qt.formatDateTime(updatedDate, "d.M. hh:mm:ss ")
