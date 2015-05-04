@@ -69,7 +69,7 @@ BackgroundItem {
         id: dateButton
         font.pixelSize: Theme.fontSizeMedium
         anchors.right: parent.right
-        text: dateContainer.dateToday ? qsTr("Today") : Qt.formatDate(storedDate, "ddd, dd.MM.")
+        text: dateContainer.dateToday ? qsTr("Today") : Qt.formatDate(storedDate, "ddd d.M.")
     }
 }
 
