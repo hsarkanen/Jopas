@@ -69,7 +69,7 @@ Item {
         id: nowSwitch
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        width: 154
+        width: 178
         text: qsTr("Now")
         checked: true
         automaticCheck: false
@@ -99,7 +99,7 @@ Item {
                                                               myTime.getMinutes()? myTime.getMinutes() : 0)
             }
         }
-        Spacing { id: dateButtonSpacing; anchors.left: dateButton.right; width: 15 }
+        Spacing { id: dateButtonSpacing; anchors.left: dateButton.right; width: 10 }
         TimeButton {
             id: timeButton
             anchors.left: dateButtonSpacing.right
