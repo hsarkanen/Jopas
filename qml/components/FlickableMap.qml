@@ -74,8 +74,8 @@ Map {
     }
 
     center {
-        latitude: 60.1687069096
-        longitude: 24.9407379411
+        latitude: Storage.getSetting("api") === "helsinki" ? 60.1687069096 : 61.5000000000
+        longitude: Storage.getSetting("api") === "helsinki" ? 24.9407379411 : 23.7667000000
     }
 
     Behavior on center {
