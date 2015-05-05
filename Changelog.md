@@ -1,3 +1,10 @@
+## 0.6.2 (5th of May, 2015)
+
+Bugfixes:
+
+  - After upgrade to 1.1.4.28: in the main screen, the button for 'Now' (for time selection) is misaligned - FIXED
+  - Smaller bugfixes
+
 ## 0.6.1 (18th of March, 2015)
 
 Features:
