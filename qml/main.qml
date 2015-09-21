@@ -51,9 +51,8 @@ ApplicationWindow {
         Storage.initialize()
         Favorites.initialize()
 
-        var allowGps = Storage.getSetting("gps")
         var apiValue = Storage.getSetting("api")
-        if (allowGps === "Unknown" || apiValue === "Unknown") {
+        if (apiValue === "Unknown") {
             var dialog = pageStack.push(Qt.resolvedUrl("pages/StartupDialog.qml"))
             dialog.onAccepted.connect(function() {
                 mainPage = pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
@@ -71,11 +70,9 @@ ApplicationWindow {
 
     property alias banner : banner
     property int scalingFactor : 1
-    property bool positioningActive : (Qt.application.active && gpsEnabled)
     property bool followMode : false
     property bool mapVisible : false
     property string colorscheme : "default"
-    property bool gpsEnabled : false
 
     // Pages sets the cover data to these properties and cover is instantiated every time based on these
     property string coverHeader: ''

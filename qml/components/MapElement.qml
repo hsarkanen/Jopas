@@ -284,7 +284,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onPressAndHold: appWindow.positioningActive ? flickable_map.panToCoordinate(current_position.coordinate) : first_station()
+            onPressAndHold: flickable_map.panToCoordinate(current_position.coordinate)
             onDoubleClicked: flickable_map.zoomLevel += 1
         }
     }
@@ -303,7 +303,7 @@ Item {
     PositionSource {
         id: positionSource
         updateInterval: 200
-        active: appWindow.positioningActive
+        active: Qt.application.active
         onPositionChanged: {
             if(appWindow.followMode) {
                 flickable_map.panToCoordinate(current_position.coordinate)

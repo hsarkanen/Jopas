@@ -50,24 +50,9 @@ Dialog {
                 MenuItem { text: "Tampere" }
             }
         }
-
-        Label {
-            x: Theme.paddingLarge
-            width: parent.width - Theme.paddingLarge * 2
-            text: qsTr("Allow this application to use the phone location services to enhance the routing experience?") + "\n\n" + qsTr("Choices can be later changed from the application settings.")
-            wrapMode: Text.WordWrap
-        }
-
-        TextSwitch {
-            id: gpsSwitch
-            width: parent.width
-            text: qsTr("Use location services")
-        }
-
     }
 
     onAccepted: {
         Storage.setSetting('api', region.currentIndex == 0 ? "helsinki" : "tampere")
-        Storage.setSetting('gps', gpsSwitch.checked ? 'true' : 'false')
     }
 }

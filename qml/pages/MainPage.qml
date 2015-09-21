@@ -73,14 +73,6 @@ Page {
             appWindow.coverHeader = 'JollaOpas'
             appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
 
-            var allowGps = Storage.getSetting("gps")
-            if(allowGps == "true") {
-                appWindow.gpsEnabled = true
-                appWindow.coverContents += "\n" + qsTr('GPS enabled')
-            }
-            else {
-                appWindow.coverContents += "\n" + qsTr('GPS disabled')
-            }
             searchButtonDisabled = Storage.getSetting("search_button_disabled") == "true" ? true : false
 
             // Prevent the keyboard to popup instantly when swithcing back to mainPage
@@ -115,9 +107,6 @@ Page {
             var parameters = {}
             setRouteParameters(parameters)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-        }
-        else if(appWindow.gpsEnabled == false) {
-            displayPopupMessage( qsTr("Positioning service disabled from application settings") )
         }
         else {
             state = "waiting_route"

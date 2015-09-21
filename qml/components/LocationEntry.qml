@@ -167,7 +167,7 @@ Column {
     PositionSource {
         id: positionSource
         updateInterval: 500
-        active: appWindow.positioningActive
+        active: Qt.application.active
         onPositionChanged: {
             /* if we have moved >250 meters from the previous place, update current location */
             if(previousCoord.coordinate.latitude != 0 && previousCoord.coordinate.longitude != 0 &&

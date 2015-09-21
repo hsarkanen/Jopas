@@ -88,7 +88,7 @@ Page {
     PositionSource {
         id: position
         updateInterval: 500
-        active: appWindow.gpsEnabled
+        active: Qt.application.active
     }
 
     ListModel {

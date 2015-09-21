@@ -48,8 +48,6 @@ Page {
             Storage.initialize()
             var setting = Storage.getSetting("api")
             currentApi.set_value(setting == "Unknown"?"helsinki" : setting)
-            setting = Storage.getSetting("gps")
-            gpsSwitch.set_value(setting == "Unknown"?"false" : setting)
             setting = Storage.getSetting("tram_disabled")
             tramSwitch.set_value(setting == "Unknown"?"false" : setting)
             setting = Storage.getSetting("bus_disabled")
@@ -104,7 +102,7 @@ Page {
                         onClicked: {
                             Storage.setSetting("api","helsinki")
                             appWindow.currentApi = "helsinki"
-                            appWindow.coverContents = text + "\n" + gpsSwitch.description
+                            appWindow.coverContents = text
                             appWindow.mainPage.refreshFavoriteRoutes()
                         }
                     }
@@ -113,37 +111,10 @@ Page {
                         onClicked: {
                             Storage.setSetting("api","tampere")
                             appWindow.currentApi = "tampere"
-                            appWindow.coverContents = text + "\n" + gpsSwitch.description
+                            appWindow.coverContents = text
                             appWindow.mainPage.refreshFavoriteRoutes()
                         }
                     }
-                }
-            }
-            TextSwitch {
-                id: gpsSwitch
-                function updateDescription() {
-                    if (gpsSwitch.checked) {
-                        gpsSwitch.description = qsTr("GPS enabled")
-                        appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1) + "\n" + gpsSwitch.description
-                    }
-                    else {
-                        gpsSwitch.description = qsTr("GPS disabled")
-                        appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1) + "\n" + gpsSwitch.description
-                    }
-                }
-
-                function set_value(value) {
-                    var val = (value === "true")
-                    gpsSwitch.checked = val
-                    gpsSwitch.updateDescription()
-                }
-                text: qsTr("Toggle GPS Usage")
-                description: ""
-                onCheckedChanged: {
-                    var val = (checked?"true":"false")
-                    appWindow.gpsEnabled = checked
-                    Storage.setSetting("gps", val)
-                    gpsSwitch.updateDescription()
                 }
             }
 
