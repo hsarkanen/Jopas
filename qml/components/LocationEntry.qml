@@ -151,7 +151,7 @@ Column {
 
     function getCurrentCoord() {
         /* wait until position is accurate enough */
-        if(positionValid(positionSource.position)) {
+        if(positionValid(positionSource.position) && positionSource.position.horizontalAccuracy > 0 && positionSource.position.horizontalAccuracy < 100) {
             gpsTimer.stop()
             previousCoord.coordinate.latitude = positionSource.position.coordinate.latitude
             previousCoord.coordinate.longitude = positionSource.position.coordinate.longitude

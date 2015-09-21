@@ -333,7 +333,7 @@ Item {
             height: 30
         }
 
-        visible: positionSource.position.latitudeValid && positionSource.position.longitudeValid && appWindow.positioningActive
+        visible: positionSource.position.latitudeValid && positionSource.position.longitudeValid && positionSource.position.horizontalAccuracy > 0 && positionSource.position.horizontalAccuracy < 100
         anchorPoint.y: sourceItem.height / 2
         anchorPoint.x: sourceItem.width / 2
         z: 49
