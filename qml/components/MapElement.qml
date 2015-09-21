@@ -336,7 +336,7 @@ Item {
         visible: positionSource.position.latitudeValid && positionSource.position.longitudeValid && positionSource.position.horizontalAccuracy > 0 && positionSource.position.horizontalAccuracy < 100
         anchorPoint.y: sourceItem.height / 2
         anchorPoint.x: sourceItem.width / 2
-        z: 49
+        z: 51
 
         Behavior on coordinate {
             CoordinateAnimation {
