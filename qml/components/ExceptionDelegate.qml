@@ -30,10 +30,11 @@
 **********************************************************************/
 
 import QtQuick 2.1
+import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/helper.js" as Helper
-import "../js/theme.js" as Theme
+
 // TODO:
 Component {
     id: disruptionDelegate
@@ -52,7 +53,7 @@ Component {
                 anchors.left: parent.left
                 horizontalAlignment: Qt.AlignLeft
                 font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor
-                color: Theme.theme[appWindow.colorscheme].COLOR_FOREGROUND
+                color: Theme.primaryColor
                 lineHeightMode: Text.FixedHeight
                 lineHeight: font.pixelSize * 1.2
             }
@@ -62,7 +63,7 @@ Component {
                 width: parent.width
                 wrapMode: Text.WordWrap
                 font.pixelSize: UIConstants.FONT_DEFAULT * appWindow.scalingFactor
-                color: Theme.theme[appWindow.colorscheme].COLOR_SECONDARY_FOREGROUND
+                color: Theme.secondaryColor
                 lineHeightMode: Text.FixedHeight
                 lineHeight: font.pixelSize * 1.2
             }
