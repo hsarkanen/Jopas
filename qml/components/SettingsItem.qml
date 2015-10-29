@@ -30,8 +30,8 @@
 **********************************************************************/
 
 import QtQuick 2.1
+import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
-import "../js/theme.js" as Theme
 
 Item {
     id: settings_item
@@ -72,7 +72,7 @@ Item {
         height: parent.height
         width: appWindow.width
         anchors.horizontalCenter: parent.horizontalCenter
-        color: Theme.theme[appWindow.colorscheme].COLOR_BACKGROUND_CLICKED
+        color: Theme.highlightColor
         z: -1
         visible: mouseArea.pressed
     }
@@ -82,7 +82,7 @@ Item {
 
         Text {
             id: setting
-            color: Theme.theme[appWindow.colorscheme].COLOR_FOREGROUND
+            color: Theme.primaryColor
             font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor
             lineHeightMode: Text.FixedHeight
             lineHeight: font.pixelSize * 1.2
@@ -90,7 +90,7 @@ Item {
         Text {
             id: value
             width: parent.width
-            color: Theme.theme[appWindow.colorscheme].COLOR_SECONDARY_FOREGROUND
+            color: Theme.secondaryColor
             font.pixelSize: UIConstants.FONT_DEFAULT * appWindow.scalingFactor
             lineHeightMode: Text.FixedHeight
             lineHeight: font.pixelSize * 1.2
