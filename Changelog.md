@@ -1,3 +1,12 @@
+## 0.6.3 (29th of October, 2015)
+
+Bugfixes:
+
+  - Text on Exception info was written in fixed grey color, now uses Silica theme
+  - Removed non-working GPS switch
+  - Improved GPS accuracy when using 'Current location' in query
+  - Smaller bugfixes
+
 ## 0.6.2 (5th of May, 2015)
 
 Bugfixes:
