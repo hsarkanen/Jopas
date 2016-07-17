@@ -282,7 +282,7 @@ Page {
 
                 SwitchLocation {
                     anchors.top: from.top
-                    anchors.topMargin: 113  // Hack to place switch a bit over both from and to LocationEntries
+                    anchors.topMargin: from.height - location_spacing.height - UIConstants.DEFAULT_MARGIN // Hack to place switch between `from` and `to` LocationEntries
                     z: 1
                     from: from
                     to: to
@@ -302,11 +302,11 @@ Page {
             TimeTypeSwitch {
                 id: timeTypeSwitch
             }
-            Spacing { height: 5 }
+            Spacing { height: 5 * Theme.pixelRatio }
             TimeSwitch {
                 id: timeSwitch
             }
-            Spacing { height: 5 }
+            Spacing { height: 5 * Theme.pixelRatio }
 
             Button {
                 visible: !searchButtonDisabled
@@ -321,7 +321,7 @@ Page {
             }
         }
 
-        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 5 }
+        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 5 * Theme.pixelRatio }
 
 
         Item {
@@ -331,11 +331,11 @@ Page {
             anchors.leftMargin: Theme.paddingSmall
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: favorites_spacing.bottom
-            height: favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN
+            height: (favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN) * Theme.pixelRatio
             Text {
                 id: favoriteRouteHeader
                 color: Theme.highlightColor
-                font.pixelSize: 36
+                font.pixelSize: 36 * Theme.pixelRatio
                 text: qsTr("Favorite routes")
             }
         }
@@ -344,7 +344,7 @@ Page {
             id: favoriteRouteList
             anchors.top: headeritem.bottom
             anchors.bottom: parent.bottom
-            spacing: 5
+            spacing: 5 * Theme.pixelRatio
             width: parent.width
             model: favoriteRoutesModel
             delegate: favoriteRouteManageDelegate
@@ -352,7 +352,8 @@ Page {
 
             ViewPlaceholder {
                 enabled: favoriteRouteList.count == 0
-                verticalOffset: -300
+                // Not perfect, but shows the text on Jolla Phone, Jolla Tablet and Fairphone2 (was -300)
+                verticalOffset: (favoriteRouteList.height - mainPage.height) * 0.5
                 text: qsTr("No saved favorite routes")
             }
 
