@@ -56,7 +56,7 @@ Item {
         anchors.centerIn: parent
         source: "image://theme/icon-m-shuffle"
         smooth: true
-        height: 50
+        height: 50 * Theme.pixelRatio
         mirror: false
         width: height
     }

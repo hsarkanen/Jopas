@@ -42,7 +42,7 @@ ListItem {
         source: index == 0 ? "image://theme/icon-m-gps" : "image://theme/icon-m-favorite-selected"
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        height: 40
+        height: 40 * Theme.pixelRatio
         width: height
     }
 

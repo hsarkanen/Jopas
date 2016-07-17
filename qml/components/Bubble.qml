@@ -30,21 +30,23 @@
 **********************************************************************/
 
 import QtQuick 2.1
+import Sailfish.Silica 1.0
+
 import "../js/UIConstants.js" as UIConstants
-import "../js/theme.js" as Theme
+import "../js/theme.js" as ThemeJS
 
 Rectangle {
-    height: 35
-    width: count_label.width + 15
-    radius: 12
+    height: 35 * Theme.pixelRatio
+    width: (count_label.width + 15) * Theme.pixelRatio
+    radius: 12 * Theme.pixelRatio
     smooth: true
     color: "#0d67b3"
     property int count
     Text {
         id: count_label
         text: count
-        font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor
-        color: Theme.theme[appWindow.colorscheme].COLOR_FOREGROUND
+        font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor * Theme.pixelRatio
+        color: ThemeJS.theme[appWindow.colorscheme].COLOR_FOREGROUND
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
     }

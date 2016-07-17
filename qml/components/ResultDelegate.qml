@@ -89,7 +89,7 @@ Component {
                         id: transportIcon
                         source: "qrc:/images/" + type + ".png"
                         smooth: true
-                        height: 50
+                        height: 50 * Theme.pixelRatio
                         width: height
                     }
 

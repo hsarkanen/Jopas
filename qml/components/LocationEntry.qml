@@ -308,10 +308,10 @@ Column {
         }
         Text {
             id: label
-            font.pixelSize: 36
+            font.pixelSize: 36 * Theme.pixelRatio
             color: Theme.highlightColor
             lineHeightMode: Text.FixedHeight
-            lineHeight: font.pixelSize * 1.1
+            lineHeight: font.pixelSize * 1.1 * Theme.pixelRatio
             anchors.left: parent.left
         }
         Bubble {
@@ -365,9 +365,9 @@ Column {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -8
                 smooth: true
-                radius: 10
-                height: 20
-                width: 20
+                radius: 10 * Theme.pixelRatio
+                height: 20 * Theme.pixelRatio
+                width: 20 * Theme.pixelRatio
                 opacity: 0.6
             }
 

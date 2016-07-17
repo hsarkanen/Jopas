@@ -37,7 +37,7 @@ Item {
     property bool timeNow: true
     property bool dateToday: dateButton.dateToday
     width: parent.width
-    height: 50
+    height: 50 * Theme.pixelRatio
     anchors.left: parent.left
 
     function setTimeNow() {
@@ -69,7 +69,8 @@ Item {
         id: nowSwitch
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
-        width: 178
+        // width: 178
+        width: mainPage.width * 0.33
         text: qsTr("Now")
         checked: true
         automaticCheck: false
@@ -99,7 +100,7 @@ Item {
                                                               myTime.getMinutes()? myTime.getMinutes() : 0)
             }
         }
-        Spacing { id: dateButtonSpacing; anchors.left: dateButton.right; width: 10 }
+        Spacing { id: dateButtonSpacing; anchors.left: dateButton.right; width: 10 * Theme.pixelRatio }
         TimeButton {
             id: timeButton
             anchors.left: dateButtonSpacing.right
