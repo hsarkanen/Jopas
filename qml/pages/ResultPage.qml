@@ -122,7 +122,7 @@ Page {
         model: routeModel
         footer: footer
         delegate: ResultDelegate {}
-        spacing: 10
+        spacing: 10 * Theme.pixelRatio
         interactive: !busyIndicator.running
         header: Column {
             width: parent.width
