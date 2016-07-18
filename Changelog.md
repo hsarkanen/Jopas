@@ -1,3 +1,11 @@
+## 0.6.4 (19th of July, 2016)
+
+Bugfixes:
+
+  - Scale the layout for dirrefent screen sizes, tested on JollaPhone,
+    JollaTablet and Fairphone2
+  - Add scaled icons
+
 ## 0.6.3 (29th of October, 2015)
 
 Bugfixes:
