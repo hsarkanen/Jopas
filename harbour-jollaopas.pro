@@ -18,8 +18,17 @@ OTHER_FILES += \
     qml/main.qml \
     harbour-jollaopas.desktop \
     rpm/harbour-jollaopas.yaml \
-    rpm/harbour-jollaopas.spec
+    rpm/harbour-jollaopas.spec \
+    appicons/86x86/apps/harbour-jollaopas.png \
+    appicons/108x108/apps/harbour-jollaopas.png \
+    appicons/128x128/apps/harbour-jollaopas.png \
+    appicons/256x256/apps/harbour-jollaopas.png
 
+
+appicons.files = appicons/*
+appicons.path = /usr/share/icons/hicolor
+
+INSTALLS += appicons
 
 localization.files = localization
 localization.path = /usr/share/$${TARGET}
@@ -50,5 +59,4 @@ include(version.pri)
 include(common.pri)
 configure($${PWD}/qml/pages/AboutDialog.qml.in)
 
-icon.files = harbour-jollaopas.png
 desktop.files = harbour-jollaopas.desktop
