@@ -37,6 +37,7 @@ import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
 import "../js/favorites.js" as Favorites
+import "../js/recentitems.js" as RecentItems
 
 Column {
     property alias type : label.text
@@ -61,7 +62,7 @@ Column {
     property bool isFrom : false
 
     property bool destination_valid : (suggestionModel.count > 0)
-    property alias selected_favorite : favoriteQuery.selectedIndex
+    property alias selected_favorite : favoriteQuery.selectedFavoriteIndex
     property bool disable_favorites : false
 
     height: textfield.height + labelContainer.height
@@ -95,6 +96,7 @@ Column {
 
     Component.onCompleted: {
         Favorites.initialize()
+        RecentItems.initialize()
     }
 
     function clear() {
@@ -234,7 +236,11 @@ Column {
         id: favoritesModel
     }
 
-    MySelectionDialog {
+    ListModel {
+        id: recentItemsModel
+    }
+
+    SuggestionSelectionDialog {
         id: query
         model: suggestionModel
         delegate: SuggestionDelegate {
@@ -252,32 +258,49 @@ Column {
         onRejected: {}
     }
 
-    MySelectionDialog {
+    FavoriteRecentItemSelectionDialog {
         id: favoriteQuery
         model: favoritesModel
         delegate: FavoritesDelegate {
             onClicked: {
-                favoriteQuery.selectedIndex = index
+                favoriteQuery.selectedRecentItemIndex = -1
+                favoriteQuery.selectedFavoriteIndex = index
+                favoriteQuery.accept()
+            }
+        }
+        model2: recentItemsModel
+        delegate2: RecentItemDelegate {
+            onClicked: {
+                favoriteQuery.selectedFavoriteIndex = -1
+                favoriteQuery.selectedRecentItemIndex = index
                 favoriteQuery.accept()
             }
         }
 
         onAccepted: {
-            /* if positionsource used */
-            if(selectedIndex == 0) {
-                if(positionSource.position.latitudeValid && positionSource.position.longitudeValid) {
-                    suggestionModel.source = Reittiopas.get_reverse_geocode(positionSource.position.coordinate.latitude.toString(),
-                                                                            positionSource.position.coordinate.longitude.toString(),
-                                                                            Storage.getSetting('api'))
+            if(selectedRecentItemIndex == -1) {
+                /* if positionsource used */
+                if(selectedFavoriteIndex == 0) {
+                    if(positionSource.position.latitudeValid && positionSource.position.longitudeValid) {
+                        suggestionModel.source = Reittiopas.get_reverse_geocode(positionSource.position.coordinate.latitude.toString(),
+                                                                                positionSource.position.coordinate.longitude.toString(),
+                                                                                Storage.getSetting('api'))
+                    }
+                    else {
+                        favoriteQuery.selectedIndex = -1
+                        displayPopupMessage( qsTr("Positioning service disabled from application settings") )
+                    }
                 }
                 else {
-                    favoriteQuery.selectedIndex = -1
-                    displayPopupMessage( qsTr("Positioning service disabled from application settings") )
+                    updateLocation(favoritesModel.get(selectedFavoriteIndex).modelData,
+                                   0,
+                                   favoritesModel.get(selectedFavoriteIndex).coord)
                 }
-            } else {
-                updateLocation(favoritesModel.get(selectedIndex).modelData,
+            }
+            else {
+                updateLocation(recentItemsModel.get(selectedRecentItemIndex).modelData,
                                0,
-                               favoritesModel.get(selectedIndex).coord)
+                               recentItemsModel.get(selectedRecentItemIndex).coord)
             }
         }
     }
@@ -402,14 +425,16 @@ Column {
                 favoritesModel.clear()
                 Favorites.getFavorites(favoritesModel)
                 favoritesModel.insert(0, {modelData: qsTr("Current location"),coord:"0,0"})
+                recentItemsModel.clear()
+                RecentItems.getRecentItems(recentItemsModel)
                 favoriteQuery.open()
             }
             onPressAndHold: {
-                if(destination_coord && favoriteQuery.selectedIndex <= 0) {
+                if(destination_coord && favoriteQuery.selectedFavoriteIndex <= 0) {
                     if(("OK" == Favorites.addFavorite(textfield.text, destination_coord))) {
                         favoritesModel.clear()
                         Favorites.getFavorites(favoritesModel)
-                        favoriteQuery.selectedIndex = favoritesModel.count
+                        favoriteQuery.selectedFavoriteIndex = favoritesModel.count
                         displayPopupMessage( qsTr("Location added to favorite places") )
                     } else {
                         displayPopupMessage(qsTr("Location already in the favorite places"))

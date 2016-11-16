@@ -36,6 +36,7 @@ import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
 import "../js/helper.js" as Helper
 import "../js/favorites.js" as Favorites
+import "../js/recentitems.js" as RecentItems
 import "../components"
 
 Page {
@@ -135,6 +136,15 @@ Page {
         var optimize = Storage.getSetting("optimize")
         var change_margin = Storage.getSetting("change_margin")
         var currentDate = new Date()
+
+        // Only add to recentitems if the place is not from favorites and
+        // user specified start point
+        if (fromName && from.selected_favorite < 0) {
+            RecentItems.addRecentItem(fromName, fromCoord)
+        }
+        if (to.selected_favorite < 0) {
+            RecentItems.addRecentItem(toName, toCoord)
+        }
 
         parameters.from_name = fromName ? fromName : currentName
         parameters.from = fromCoord ? fromCoord : currentCoord

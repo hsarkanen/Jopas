@@ -32,29 +32,27 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 
-Dialog {
-    property alias model: view.model
-    property alias delegate: view.delegate
+ListItem {
+    id: delegateItem
+    width: ListView.view.width
+    contentHeight: Theme.itemSizeMedium
 
-    anchors.fill: parent
-
-    Column {
-        width: parent.width
+    Image {
+        id: icon
+        source: "image://theme/icon-m-location"
         anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: Theme.paddingSmall
-        anchors.rightMargin: Theme.paddingSmall
-
-        SilicaListView {
-            width: parent.width
-            // TODO:
-            height: Screen.height
-            id: view
-
-            VerticalScrollDecorator {}
-        }
-
+        anchors.verticalCenter: parent.verticalCenter
+        height: 40 * Theme.pixelRatio
+        width: height
     }
-// TODO:
-property int selectedIndex
+
+    Label {
+        id: locName
+        color: Theme.primaryColor
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: icon.right
+        anchors.right: parent.right
+        text: modelData
+        font.pixelSize: Theme.fontSizeMedium
+    }
 }

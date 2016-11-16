@@ -33,6 +33,7 @@ import QtQuick 2.1
 import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/storage.js" as Storage
+import "../js/recentitems.js" as RecentItems
 import "../js/theme.js" as Theme
 import "../components"
 
@@ -379,6 +380,22 @@ Page {
                     searchButtonSwitch.updateDescription()
                 }
             }
+
+            SectionHeader {
+                text: qsTr("Search history")
+            }
+            Button {
+                id: clearSearchHistoryButton
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Clear search history")
+                onClicked: {
+                    RecentItems.deleteRecentItems()
+                    // Reinitialize so the table exist when returning to the MainPage the table
+                    // exists again
+                    RecentItems.initialize()
+                }
+            }
+            Spacing { height: 30 }
         }
     }
 }
