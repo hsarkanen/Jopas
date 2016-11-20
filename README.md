@@ -1,5 +1,3 @@
-![JollaOpas](/harbour-jollaopas.png)
-
 JollaOpas
 =========
 
