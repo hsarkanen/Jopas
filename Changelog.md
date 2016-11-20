@@ -1,3 +1,9 @@
+## 0.7.0 (20th of November, 2016)
+
+Features:
+
+  - Save recent destinations automatically
+
 ## 0.6.4 (19th of July, 2016)
 
 Bugfixes:
