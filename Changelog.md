@@ -1,3 +1,9 @@
+## 0.7.1 (13th of December, 2016)
+
+Bugfixes:
+
+  - JollaOpas doesn't show map - FIXED
+
 ## 0.7.0 (20th of November, 2016)
 
 Features:
