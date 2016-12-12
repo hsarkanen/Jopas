@@ -240,7 +240,7 @@ Column {
         id: recentItemsModel
     }
 
-    SuggestionSelectionDialog {
+    MySelectionDialog {
         id: query
         model: suggestionModel
         delegate: SuggestionDelegate {
