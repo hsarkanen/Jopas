@@ -108,7 +108,6 @@ Map {
 
         sourceItem: Column {
             id: col
-            width: parent.width
             spacing: 16
 
             MapButton {
