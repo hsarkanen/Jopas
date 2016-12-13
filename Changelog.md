@@ -1,3 +1,9 @@
+## 0.7.2 (13th of December, 2016)
+
+Bugfixes:
+
+  - Update used Map plugin from Nokia to Here needed after Haapajoki update
+
 ## 0.7.1 (13th of December, 2016)
 
 Bugfixes:
