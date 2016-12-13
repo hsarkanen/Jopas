@@ -25,6 +25,7 @@ Requires:   qt5-qtdeclarative-import-location >= 5.1.0
 Requires:   qt5-qtdeclarative-import-positioning >= 5.2.0
 Requires:   qt5-qtdeclarative-import-qtquick2plugin >= 5.1.0
 Requires:   qt5-qtdeclarative-import-xmllistmodel >= 5.1.0
+Requires:   qt5-plugin-geoservices-here
 BuildRequires:  pkgconfig(sailfishapp) >= 0.0.10
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)

@@ -23,6 +23,7 @@ Requires:
 - qt5-qtdeclarative-import-positioning >= 5.2.0
 - qt5-qtdeclarative-import-qtquick2plugin >= 5.1.0
 - qt5-qtdeclarative-import-xmllistmodel >= 5.1.0
+- qt5-plugin-geoservices-here
 Files:
 - '%{_bindir}/%{name}'
 - '%{_datadir}/%{name}/qml'
