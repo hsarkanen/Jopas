@@ -1,3 +1,10 @@
+## 0.7.3 (14th of December, 2016)
+
+Bugfixes:
+
+  - Fix dependencies to always install needed Here mapplugin
+
+
 ## 0.7.2 (13th of December, 2016)
 
 Bugfixes:
