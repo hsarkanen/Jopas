@@ -60,16 +60,16 @@ Map {
     }
 
     plugin: Plugin {
-        name: "nokia"
+        name: "here"
 
         PluginParameter {
             name: "app_id"
-            value: "ETjZnV1eZZ5o0JmN320V"
+            value: "27CldTbuDTOoIAGxIjkd"
         }
 
         PluginParameter {
-            name: "token"
-            value: "QYpeZ4z7gwhQr7iW0hOTUQ%3D%3D"
+            name: "app_code"
+            value: "SF5eaRhyqk8Z9hEx3piAxg"
         }
     }
 
