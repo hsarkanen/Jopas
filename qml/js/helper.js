@@ -90,7 +90,7 @@ function parse_disruption_time(time) {
                         newtime.slice(8,10),
                         newtime.slice(11,13),
                         newtime.slice(14,16),
-                        00, 00);
+                        0, 0);
 }
 
 function meter_to_kilometer(distance) {

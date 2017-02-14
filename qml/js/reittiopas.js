@@ -107,7 +107,7 @@ function convTime(hslTime){
                     parseInt(time.slice(6,8), 10),
                     time.slice(8,10),
                     time.slice(10,12),
-                    00, 00);
+                    0, 0);
 }
 
 function get_time_difference_in_minutes(earlierDate,laterDate)
