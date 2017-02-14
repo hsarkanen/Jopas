@@ -39,7 +39,7 @@ Dialog {
     property alias name: editTextField.text
     property string coord
     property string old_name: ""
-    property variant favoritesModel
+    property var favoritesModel
 
     canAccept: name.text != ''
 

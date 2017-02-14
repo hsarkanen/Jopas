@@ -42,8 +42,8 @@ Item {
     width: Theme.itemSizeSmall
     height: Theme.itemSizeSmall
 
-    property variant from
-    property variant to
+    property var from
+    property var to
 
     Rectangle {
         anchors.fill: parent

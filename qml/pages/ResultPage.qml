@@ -36,7 +36,7 @@ import "../js/storage.js" as Storage
 import "../components"
 
 Page {
-    property variant search_parameters
+    property var search_parameters
 
     Component.onCompleted: startSearch()
 

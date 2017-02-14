@@ -38,7 +38,7 @@ BackgroundItem {
     height: dateButton.height
     property date storedDate
     property bool dateToday: true
-    signal dateChanged(variant newDate)
+    signal dateChanged(var newDate)
 
     onClicked: {
         var dialog = pageStack.push("Sailfish.Silica.DatePickerDialog", {date: storedDate})

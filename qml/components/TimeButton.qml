@@ -39,7 +39,7 @@ BackgroundItem {
     property date storedDate
     property alias text: timeButton.text
 
-    signal timeChanged(variant newTime)
+    signal timeChanged(var newTime)
 
     function updateTime() {
         storedDate = new Date()

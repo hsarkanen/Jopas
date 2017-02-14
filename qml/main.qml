@@ -79,7 +79,7 @@ ApplicationWindow {
     property string coverContents: ''
     property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
-    property variant mainPage
+    property var mainPage
 
     onFollowModeChanged: {
         if(followMode)

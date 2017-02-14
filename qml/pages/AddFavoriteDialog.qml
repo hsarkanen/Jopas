@@ -38,7 +38,7 @@ Dialog {
     id: add_dialog
     property string coord: ''
     property alias name: editTextField.text
-    property variant favoritesModel
+    property var favoritesModel
 
     canAccept: add_dialog.coord != '' && name.text != ''
 
