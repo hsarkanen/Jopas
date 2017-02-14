@@ -221,8 +221,6 @@ function route_search(parameters, route_model, api_type) {
     this.to_name = parameters.to_name
 
     this.parameters = parameters
-    delete this.parameters.from_name
-    delete this.parameters.to_name
     delete this.parameters.time
 
     this.parameters.date = Qt.formatDate(this.time, "yyyyMMdd")
