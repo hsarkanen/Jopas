@@ -152,15 +152,15 @@ Page {
         parameters.to = toCoord
 
         if (timeSwitch.timeNow) {
-            parameters.time = currentDate
+            parameters.jstime = currentDate
         }
         else if (timeSwitch.dateToday) {
             currentDate.setHours(timeSwitch.myTime.getHours())
             currentDate.setMinutes(timeSwitch.myTime.getMinutes())
-            parameters.time = currentDate
+            parameters.jstime = currentDate
         }
         else {
-            parameters.time = timeSwitch.myTime
+            parameters.jstime = timeSwitch.myTime
         }
 
         parameters.timetype = timeTypeSwitch.departure ? "departure" : "arrival"

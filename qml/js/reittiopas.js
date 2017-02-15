@@ -213,7 +213,7 @@ function route_search(parameters, route_model, api_type) {
     this.api_type = api_type
     this.model = route_model
 
-    this.time = parameters.time
+    this.jstime = parameters.jstime
 
     this.last_route_index = -1
 
@@ -223,8 +223,8 @@ function route_search(parameters, route_model, api_type) {
     this.parameters = parameters
     delete this.parameters.time
 
-    this.parameters.date = Qt.formatDate(this.time, "yyyyMMdd")
-    this.parameters.time = Qt.formatTime(this.time, "hhmm")
+    this.parameters.date = Qt.formatDate(this.jstime, "yyyyMMdd")
+    this.parameters.time = Qt.formatTime(this.jstime, "hhmm")
 
     this.parameters.format = "json"
     this.parameters.request = "route"

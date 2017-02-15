@@ -99,7 +99,8 @@ Page {
                 /* workaround to modify qml array is to make a copy of it,
                    modify the copy and assign the copy back to the original */
                 var new_parameters = search_parameters
-                new_parameters.time.setMinutes(new_parameters.time.getMinutes() + 15)
+                new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() + 15)
+                new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
                 search_parameters = new_parameters
 
                 startSearch()
@@ -128,8 +129,8 @@ Page {
             width: parent.width
             PageHeader {
                 title: search_parameters.timetype == "departure" ?
-                           qsTr("Departure") + " " + Qt.formatDateTime(search_parameters.time,"dd.MM hh:mm") :
-                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.time,"dd.MM hh:mm")
+                           qsTr("Departure") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm") :
+                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm")
             }
 
             Label {
@@ -148,7 +149,8 @@ Page {
                     /* workaround to modify qml array is to make a copy of it,
                        modify the copy and assign the copy back to the original */
                     var new_parameters = search_parameters
-                    new_parameters.time.setMinutes(new_parameters.time.getMinutes() - 15)
+                    new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() - 15)
+                    new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
                     search_parameters = new_parameters
 
                     startSearch()
