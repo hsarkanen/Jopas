@@ -102,7 +102,7 @@ CoverBackground {
             parameters.to_name = direction == "straight" ? coverRoutesItem.modelToName : coverRoutesItem.modelFromName
             parameters.to = direction == "straight" ? coverRoutesItem.modelToCoord : coverRoutesItem.modelFromCoord
 
-            parameters.time = new Date()
+            parameters.jstime = new Date()
             parameters.timetype = "departure"
             parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
             parameters.optimize = optimize == "Unknown"?"default":optimize
