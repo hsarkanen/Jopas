@@ -1,3 +1,12 @@
+## 0.7.4 (17th of February, 2017)
+
+Bugfixes:
+
+  - Does not work on Sailfish 2.1 - FIXED
+  - Fix issues introduced by the Qt5.6 update
+  - Fix a bug that caused Favorite routes search fail if the to field
+    had input
+
 ## 0.7.3 (14th of December, 2016)
 
 Bugfixes:
