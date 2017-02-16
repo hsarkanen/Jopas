@@ -1,3 +1,9 @@
+## 0.7.5 (17th of February, 2017)
+
+Bugfixes:
+
+  - Fix search from cover after changes in time handling
+
 ## 0.7.4 (17th of February, 2017)
 
 Bugfixes:
