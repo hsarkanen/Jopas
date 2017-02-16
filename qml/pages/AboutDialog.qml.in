@@ -125,7 +125,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
-                text: "(c) Heikki Sarkanen" +"\n" + "<heikki.sarkanen@gmail.com>\n2014-2016\n" +
+                text: "(c) Heikki Sarkanen" +"\n" + "<heikki.sarkanen@gmail.com>\n2014-2017\n" +
                       qsTr("Original Author") + ":\nJukka Nousiainen\n" +
                       qsTr("Additional Credits") + ":\n" +
                       "Jani Mikkonen, " +
