@@ -142,7 +142,7 @@ Page {
         if (fromName && from.selected_favorite < 0) {
             RecentItems.addRecentItem(fromName, fromCoord)
         }
-        if (to.selected_favorite < 0) {
+        if (toName && to.selected_favorite < 0) {
             RecentItems.addRecentItem(toName, toCoord)
         }
 
