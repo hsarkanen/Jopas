@@ -258,13 +258,11 @@ Column {
                 }
                 else {
                     updateLocation(favoritesModel.get(selectedFavoriteIndex).modelData,
-                                   0,
                                    favoritesModel.get(selectedFavoriteIndex).coord)
                 }
             }
             else {
                 updateLocation(recentItemsModel.get(selectedRecentItemIndex).modelData,
-                               0,
                                recentItemsModel.get(selectedRecentItemIndex).coord)
             }
         }

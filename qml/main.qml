@@ -80,6 +80,11 @@ ApplicationWindow {
     property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
     property var mainPage
+    property ListModel itinerariesModel: itinerariesModel
+    property string itinerariesJson: ""
+    property int itinerariesIndex: -1
+    property string fromName: ""
+    property string toName: ""
 
     onFollowModeChanged: {
         if(followMode)
@@ -88,5 +93,10 @@ ApplicationWindow {
 
     Label {
         id: banner
+    }
+
+    ListModel {
+        id: itinerariesModel
+        property bool done: false
     }
 }

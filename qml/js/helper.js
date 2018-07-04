@@ -75,11 +75,11 @@ function switch_locations(from, to) {
     var tempindex = from.selected_favorite
 
     from.clear()
-    from.updateLocation(to.destination_name, 0, to.destination_coord)
+    from.updateLocation(to.destination_name, to.destination_coord)
     from.selected_favorite = to.selected_favorite
 
     to.clear()
-    to.updateLocation(templo, 0, tempcoord)
+    to.updateLocation(templo, tempcoord)
     to.selected_favorite = tempindex
 }
 

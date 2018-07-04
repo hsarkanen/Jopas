@@ -96,6 +96,7 @@ CoverBackground {
             var walking_speed = Storage.getSetting("walking_speed")
             var optimize = Storage.getSetting("optimize")
             var change_margin = Storage.getSetting("change_margin")
+            parameters.modes = ""
 
             parameters.from_name = direction == "straight" ? coverRoutesItem.modelFromName : coverRoutesItem.modelToName
             parameters.from = direction == "straight" ? coverRoutesItem.modelFromCoord : coverRoutesItem.modelToCoord
@@ -109,30 +110,27 @@ CoverBackground {
             parameters.change_margin = change_margin == "Unknown"?"3":Math.floor(change_margin)
 
             if (appWindow.currentApi === "helsinki") {
-                if(Storage.getSetting("train_disabled") === "true")
-                    parameters.mode_cost_12 = -1 // commuter trains
-                if(Storage.getSetting("bus_disabled") === "true") {
-                    parameters.mode_cost_1 = -1 // Helsinki internal bus lines
-                    parameters.mode_cost_3 = -1 // Espoo internal bus lines
-                    parameters.mode_cost_4 = -1 // Vantaa internal bus lines
-                    parameters.mode_cost_5 = -1 // regional bus lines
-                    parameters.mode_cost_22 = -1 // Helsinki night buses
-                    parameters.mode_cost_25 = -1 // region night buses
-                    parameters.mode_cost_36 = -1 // Kirkkonummi internal bus lines
-                    parameters.mode_cost_39 = -1 // Kerava internal bus lines
+                if(Storage.getSetting("bus_disabled") === "false") {
+                    parameters.modes += "BUS,";
                 }
-                if(Storage.getSetting("uline_disabled") === "true")
-                    parameters.mode_cost_8 = -1 // U-lines
-                if(Storage.getSetting("service_disabled") === "true") {
-                    parameters.mode_cost_21 = -1 // Helsinki service lines
-                    parameters.mode_cost_23 = -1 // Espoo service lines
-                    parameters.mode_cost_24 = -1 // Vantaa service lines
+                if(Storage.getSetting("tram_disabled") === "false") {
+                    parameters.modes += "TRAM,";
                 }
-                if(Storage.getSetting("metro_disabled") === "true")
-                    parameters.mode_cost_6 = -1 // metro
-                if(Storage.getSetting("tram_disabled") === "true")
-                    parameters.mode_cost_2 = -1 // trams
+                if(Storage.getSetting("metro_disabled") === "false") {
+                    parameters.modes += "SUBWAY,"
+                }
+                if(Storage.getSetting("train_disabled") === "false") {
+                    parameters.modes += "RAIL,";
+                }
+                if(Storage.getSetting("ferry_disabled") === "false") {
+                    parameters.modes += "FERRY,";
+                }
             }
+            else {
+                parameters.modes += "BUS,"
+            }
+            parameters.modes += "WALK"
+
             appWindow.mainPage = pageStack.push(Qt.resolvedUrl("MainPage.qml"), {}, PageStackAction.Immediate)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
         }

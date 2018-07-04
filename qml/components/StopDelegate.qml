@@ -81,6 +81,8 @@ ListItem {
         }
     ]
 
+    // TODO: Investigate if it's easily possible to retrieve stop times
+    // from digitransit graphql API, for now just hide these fields
     Label {
         id: diff
         anchors.top: parent.top
@@ -90,6 +92,7 @@ ListItem {
         text: "+" + time_diff + " min"
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.secondaryColor
+        visible: false
     }
 
     Label {
@@ -101,6 +104,7 @@ ListItem {
         text: (index === 0)? Qt.formatTime(depTime, "hh:mm") : Qt.formatTime(arrTime, "hh:mm")
         font.pixelSize: Theme.fontSizeMedium
         color: stop_item.highlight ? Theme.highlightColor : Theme.primaryColor
+        visible: false
     }
 
     Label {
