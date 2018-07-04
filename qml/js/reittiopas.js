@@ -42,6 +42,9 @@ API['tampere'].URL = 'http://api.publictransport.tampere.fi/prod/'
 API['tampere'].USER = 'JollaOpas'
 API['tampere'].PASS = 'J_0P4s'
 
+API['digitransitgeocoding'] = {}
+API['digitransitgeocoding'].URL = 'https://api.digitransit.fi/geocoding/v1/'
+
 var transType = {}
 transType[1] = "bus"
 transType[2] = "tram"
@@ -119,47 +122,76 @@ function get_time_difference_in_minutes(earlierDate,laterDate)
 /****************************************************************************************************/
 /*                     address to location                                                          */
 /****************************************************************************************************/
-function get_geocode(term, api_type) {
-    api_type = api_type || 'helsinki'
-    var parameters = {}
-    parameters.format = "xml"
-    parameters.request = "geocode"
-    parameters.key = term
-    parameters.disable_unique_stop_names = 0
-    parameters.user = API[api_type].USER
-    parameters.pass = API[api_type].PASS
-    parameters.epsg_in = "wgs84"
-    parameters.epsg_out = "wgs84"
-    var query = []
-    for(var p in parameters) {
-        query.push(p + "=" + parameters[p])
+function get_geocode(term, model, api_type) {
+    model.done = false;
+    api_type = api_type || 'helsinki';
+    var size = 10;
+    var queryType = 'search';
+    var boundarycircleradius = 40;
+    // Search only on 40km radius from Helsinki railway station or Tampere Keskustori
+    var boundarycirclelat = 60.169;
+    var boundarycirclelon = 24.940;
+    if (api_type === 'tampere') {
+        boundarycirclelat = 61.498;
+        boundarycirclelon = 23.759;
     }
+    var query = "boundary.circle.lat=" + boundarycirclelat + "&boundary.circle.lon=" + boundarycirclelon
+            + "&boundary.circle.radius=" + boundarycircleradius + "&size=" + size + "&text=" + term;
 
-    //console.debug( API[api_type].URL + '?' + query.join('&'))
-    return API[api_type].URL + '?' + query.join('&')
+//    console.debug(API['digitransitgeocoding'].URL + queryType + '?' + query);
+    var http_request = new XMLHttpRequest();
+    http_request.open("GET", API['digitransitgeocoding'].URL + queryType + '?' + query);
+    http_request.onreadystatechange = function() {
+        if (http_request.readyState === XMLHttpRequest.DONE) {
+            var a = JSON.parse(http_request.responseText);
+//            console.debug("js result: " + JSON.stringify(a));
+            // TODO: Find a way to display no results when features array is empty
+            for (var index in a.features) {
+                var parsedCoordinates = a.features[index].geometry.coordinates[0] + "," +
+                        a.features[index].geometry.coordinates[1];
+                model.append({label: a.features[index].properties.label,
+                           coord: parsedCoordinates});
+            }
+            model.done = true;
+        }
+        else {
+//            console.debug("Error receiving geocode");
+        }
+    }
+    http_request.send();
 }
 
 /****************************************************************************************************/
 /*                     location to address                                                          */
 /****************************************************************************************************/
-function get_reverse_geocode(latitude, longitude, api_type) {
-    api_type = api_type || 'helsinki'
-    var parameters = {}
-    parameters.format = "xml"
-    parameters.request = 'reverse_geocode'
-    parameters.coordinate = longitude + ',' + latitude
-    parameters.user = API[api_type].USER
-    parameters.pass = API[api_type].PASS
-    parameters.epsg_in = "wgs84"
-    parameters.epsg_out = "wgs84"
+function get_reverse_geocode(latitude, longitude, model, api_type) {
+    model.done = false;
+    api_type = api_type || 'helsinki';
+    var size = 1;
+    var queryType = 'reverse';
+    var query = "point.lat=" + latitude + "&point.lon=" + longitude + "&size=" + size;
 
-    var query = []
-    for(var p in parameters) {
-        query.push(p + "=" + parameters[p])
+//    console.debug(API['digitransitgeocoding'].URL + queryType + '?' + query);
+    var http_request = new XMLHttpRequest();
+    http_request.open("GET", API['digitransitgeocoding'].URL + queryType + '?' + query);
+    http_request.onreadystatechange = function() {
+        if (http_request.readyState === XMLHttpRequest.DONE) {
+            var a = JSON.parse(http_request.responseText);
+//            console.debug("js result: " + JSON.stringify(a));
+            // TODO: Find a way to display no results when features array is empty
+            for (var index in a.features) {
+                var parsedCoordinates = a.features[index].geometry.coordinates[0] + "," +
+                        a.features[index].geometry.coordinates[1];
+                model.append({label: a.features[index].properties.label,
+                           coord: parsedCoordinates});
+            }
+            model.done = true;
+        }
+        else {
+//            console.debug("Error receiving geocode");
+        }
     }
-
-    //console.debug( API[api_type].URL + '?' + query.join('&'))
-    return API[api_type].URL + '?' + query.join('&')
+    http_request.send();
 }
 
 /****************************************************************************************************/

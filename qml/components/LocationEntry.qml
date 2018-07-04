@@ -32,7 +32,6 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 import QtPositioning 5.3
-import QtQuick.XmlListModel 2.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
@@ -100,39 +99,25 @@ Column {
     }
 
     function clear() {
-        suggestionModel.source = ""
+        suggestionModel.clear()
         textfield.text = ''
         destination_coord = ''
         query.selectedIndex = -1
         locationDone("","")
     }
 
-    function updateLocation(name, housenumber, coord) {
-        suggestionModel.source = ""
-        var address = name
-
-        if(housenumber && address.slice(address.length - housenumber.length) != housenumber)
-            address += " " + housenumber
-
-        destination_name = address
+    function updateLocation(label, coord) {
+        destination_name = label
         destination_coord = coord
-        textfield.text = address
-
-        locationDone(address, coord)
+        textfield.text = label
+        locationDone(label, coord)
     }
 
-    function updateCurrentLocation(name, housenumber, coord) {
-        currentLocationModel.source = ""
-        var address = name
-
-        if(housenumber && address.slice(address.length - housenumber.length) != housenumber)
-            address += " " + housenumber
-
-        current_name = address
+    function updateCurrentLocation(label, coord) {
+        current_name = label
         current_coord = coord
-
-        textfield.placeholderText = address
-        currentLocationDone(address, coord)
+        textfield.placeholderText = label
+        currentLocationDone(label, coord)
     }
 
     Timer {
@@ -157,8 +142,9 @@ Column {
             gpsTimer.stop()
             previousCoord.coordinate.latitude = positionSource.position.coordinate.latitude
             previousCoord.coordinate.longitude = positionSource.position.coordinate.longitude
-            currentLocationModel.source = Reittiopas.get_reverse_geocode(previousCoord.coordinate.latitude.toString(),
+            Reittiopas.get_reverse_geocode(previousCoord.coordinate.latitude.toString(),
                                                                          previousCoord.coordinate.longitude.toString(),
+                                                                         currentLocationModel,
                                                                          Storage.getSetting('api'))
         } else {
             /* poll again in 200ms */
@@ -179,55 +165,34 @@ Column {
         }
     }
 
-    XmlListModel {
+    ListModel {
         id: currentLocationModel
-        query: "/response/node"
-        XmlRole { name: "name"; query: "name/string()" }
-        XmlRole { name: "city"; query: "city/string()" }
-        XmlRole { name: "coord"; query: "coords/string()" }
-        XmlRole { name: "shortCode"; query: "shortCode/string()" }
-        XmlRole { name: "housenumber"; query: "details/houseNumber/string()" }
+        property bool done: true
 
-        onStatusChanged: {
-            if(status == XmlListModel.Ready && source != "") {
-                /* if only result, take it into use */
+        onDoneChanged: {
+            if (done) {
+                /* There should be always just one result since query size=1 */
                 if(currentLocationModel.count > 0) {
-                    updateCurrentLocation(currentLocationModel.get(0).name.split(',', 1).toString(),
-                                   currentLocationModel.get(0).housenumber,
-                                   currentLocationModel.get(0).coord)
+                    updateCurrentLocation(currentLocationModel.get(0).label,
+                                          currentLocationModel.get(0).coord)
                 }
             }
         }
     }
 
-    XmlListModel {
+    ListModel {
         id: suggestionModel
-        query: "/response/node"
-        XmlRole { name: "name"; query: "name/string()" }
-        XmlRole { name: "city"; query: "city/string()" }
-        XmlRole { name: "coord"; query: "coords/string()" }
-        XmlRole { name: "shortCode"; query: "shortCode/string()" }
-        XmlRole { name: "housenumber"; query: "details/houseNumber/string()" }
+        property bool done: true
 
-        onStatusChanged: {
-            if(status == XmlListModel.Ready && source != "") {
+        onDoneChanged: {
+            if (done) {
                 /* if only result, take it into use */
                 if(suggestionModel.count == 1) {
-                    updateLocation(suggestionModel.get(0).name.split(',', 1).toString(),
-                                   suggestionModel.get(0).housenumber,
-                                   suggestionModel.get(0).coord)
-                } else if (suggestionModel.count == 0) {
-                    displayPopupMessage( qsTr("No results") )
+                    updateLocation(suggestionModel.get(0).label, suggestionModel.get(0).coord)
                 } else {
                     /* just update the first result to main page */
-                    locationDone(suggestionModel.get(0).name.split(',', 1).toString(),suggestionModel.get(0).coord)
+                    locationDone(suggestionModel.get(0).label, suggestionModel.get(0).coord)
                 }
-            } else if (status == XmlListModel.Error) {
-                selected_favorite = -1
-                suggestionModel.source = ""
-                locationDone("", 0, "")
-                locationError()
-                displayPopupMessage( qsTr("Could not find location") )
             }
         }
     }
@@ -251,8 +216,7 @@ Column {
         }
 
         onAccepted: {
-            updateLocation(suggestionModel.get(selectedIndex).name,
-                            suggestionModel.get(selectedIndex).housenumber,
+            updateLocation(suggestionModel.get(selectedIndex).label,
                             suggestionModel.get(selectedIndex).coord)
         }
         onRejected: {}
@@ -282,8 +246,9 @@ Column {
                 /* if positionsource used */
                 if(selectedFavoriteIndex == 0) {
                     if(positionSource.position.latitudeValid && positionSource.position.longitudeValid) {
-                        suggestionModel.source = Reittiopas.get_reverse_geocode(positionSource.position.coordinate.latitude.toString(),
+                        Reittiopas.get_reverse_geocode(positionSource.position.coordinate.latitude.toString(),
                                                                                 positionSource.position.coordinate.longitude.toString(),
+                                                                                currentLocationModel,
                                                                                 Storage.getSetting('api'))
                     }
                     else {
@@ -312,7 +277,7 @@ Column {
         triggeredOnStart: false
         onTriggered: {
             if(textfield.acceptableInput) {
-                suggestionModel.source = Reittiopas.get_geocode(textfield.text, Storage.getSetting('api'))
+                Reittiopas.get_geocode(textfield.text, suggestionModel, Storage.getSetting('api'))
             }
         }
     }
@@ -370,7 +335,7 @@ Column {
 
             onTextChanged: {
                 if(text != destination_name) {
-                    suggestionModel.source = ""
+                    suggestionModel.clear()
                     selected_favorite = -1
                     destination_coord = ""
                     destination_name = ""
@@ -396,7 +361,7 @@ Column {
 
             BusyIndicator {
                 id: busyIndicator
-                running: suggestionModel.status == XmlListModel.Loading
+                running: !suggestionModel.done
                 anchors.centerIn: statusIndicator // Place this similarly to statusIndicator
                 size: BusyIndicatorSize.Small
                 MouseArea {

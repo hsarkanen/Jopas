@@ -43,19 +43,7 @@ ListItem {
         color: Theme.primaryColor
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.right: locType.left
-        text: name + " " + housenumber
+        text: label
         font.pixelSize: Theme.fontSizeMedium
-    }
-
-    Label {
-        id: locType
-        elide: Text.ElideRight
-        color: Theme.secondaryColor
-        horizontalAlignment: Text.AlignRight
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        text: city
-        font.pixelSize: Theme.fontSizeSmall
     }
 }
