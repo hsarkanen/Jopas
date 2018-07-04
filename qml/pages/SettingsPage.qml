@@ -252,8 +252,11 @@ Page {
                 }
             }
 
+            // TODO: Digitransit API has different concept for walkReluctance and optimize,
+            // disable old style optimization for now since its not working
             ComboBox {
                 id: optimizeRoute
+                visible: false
                 function set_value(value) {
                     var idx = {"default": 0, "fastest": 1, "least_transfers": 2, "least_walking": 3}[value]
                     optimizeRoute.currentIndex = idx
