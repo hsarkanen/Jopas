@@ -1,3 +1,9 @@
+## 0.8.0 (5th of July, 2018)
+
+Bugfixes:
+
+  - Update to use Digitransit API, the old one in Helsinki was closed in May 2018
+
 ## 0.7.5 (17th of February, 2017)
 
 Bugfixes:

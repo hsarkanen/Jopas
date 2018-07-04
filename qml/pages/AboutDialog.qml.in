@@ -54,7 +54,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
                 horizontalAlignment: Text.AlignHCenter
                 font.bold: true
-                text: "v@VERSION@ (@GIT_SHA@)"
+                text: "v@VERSION@"
             }
 
             Spacing {height: 10}
