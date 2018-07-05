@@ -50,6 +50,7 @@ HEADERS += \
     libmqtt/qmqtt_global.h \
     libmqtt/qmqtt.h \
     src/qmlmqttclient.h \
+    src/qmlmqttsubscription.h \
 
 
 PUBLIC_HEADERS += \
@@ -93,6 +94,7 @@ RESOURCES += \
 
 SOURCES += src/main.cpp \
     src/qmlmqttclient.cpp \
+    src/qmlmqttsubscription.cpp \
 
 INCLUDEPATH += \
     src 
