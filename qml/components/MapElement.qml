@@ -32,6 +32,7 @@
 import QtQuick 2.1
 import QtLocation 5.0
 import QtPositioning 5.3
+import MqttClient 1.0
 import "../js/reittiopas.js" as Reittiopas
 import "../js/sirilive.js" as Sirilive
 import "../js/storage.js" as Storage
@@ -43,12 +44,57 @@ Item {
     id: map_element
     property bool positioningActive : true
     property alias flickable_map : flickable_map
+    property variant mqttSubscriptionMap : []
+
+    MqttClient {
+        id: mqttClient
+        hostname: "mqtt.hsl.fi"
+    }
+    Component.onDestruction: {
+        if (appWindow.currentApi === "helsinki") {
+            mqttClient.disconnectFromHost()
+        }
+    }
 
     Connections {
         target: Qt.application
-        onActiveChanged:
-            if(Qt.application.active) { vehicleUpdateTimer.start() }
-            else { vehicleUpdateTimer.stop() }
+        onActiveChanged: {
+            if(Qt.application.active) {
+                vehicleUpdateTimer.start()
+            }
+            else {
+                vehicleModel.clear()
+                if (appWindow.currentApi !== "helsinki") {
+                    vehicleUpdateTimer.stop()
+                }
+                else {
+                    mqttClient.disconnectFromHost()
+                }
+            }
+        }
+    }
+
+    function addMqttVehicle(topic, payload) {
+        var payload_json = JSON.parse(payload)
+        var vehicleUniqueId = payload_json.VP.oper + payload_json.VP.veh;
+        for (var vehicleIndex = 0; vehicleIndex < vehicleModel.count; ++vehicleIndex) {
+            if (vehicleModel.get(vehicleIndex).modelUniqueId === vehicleUniqueId) {
+                vehicleModel.remove(vehicleIndex);
+                break;
+            }
+        }
+        // Mqtt API doesn't support subway or ferry yet so leave those colors out for now
+        var vehicleColor = "#08a7cc"; // Default to bus
+        if (topic.substring(24, 28) === "tram") {
+            vehicleColor = "#925bc6"
+        }
+        else if (topic.substring(24, 29) === "train") {
+            vehicleColor = "#61b700"
+        }
+        vehicleModel.append({"modelUniqueId": vehicleUniqueId,
+                                "modelLongitude": payload_json.VP.long, "modelLatitude":
+                                payload_json.VP.lat, "modelCode": payload_json.VP.desi,
+                                "modelColor": vehicleColor, "modelBearing": payload_json.VP.hdg})
     }
 
     function next_station() {
@@ -120,10 +166,23 @@ Item {
 
     Timer {
         id: vehicleUpdateTimer
-        interval: 2000
-        repeat: true
+        interval: appWindow.currentApi !== "helsinki" ? 2000 : 300
+        repeat: appWindow.currentApi !== "helsinki"
         onTriggered: {
-            receiveVehicleLocation()
+            if (appWindow.currentApi !== "helsinki") {
+                receiveVehicleLocation()
+            }
+            else {
+                mqttClient.port = "443"
+                mqttClient.connectToHost()
+                for (var allowedLine in vehicleModel.vehicleCodesToShowOnMap) {
+                    var vehicleToSubscribe = mqttClient.subscribe("/hfp/v1/journey/ongoing/+/+/+/" +
+                            vehicleModel.vehicleCodesToShowOnMap[allowedLine].gtfsId
+                            + "/#");
+                    vehicleToSubscribe.messageReceived.connect(addMqttVehicle)
+                    mqttSubscriptionMap.push(vehicleToSubscribe)
+                }
+            }
         }
     }
 
@@ -495,7 +554,8 @@ Item {
 
             if (legdata.type !== "walk") {
                 vehicleModel.vehicleCodesToShowOnMap.push(
-                            {"type": legdata.type,
+                            {"gtfsId": legdata.gtfsId,
+                                "type": legdata.type,
                                 "code": legdata.code})
             }
             if(legdata.type !== "walk") {

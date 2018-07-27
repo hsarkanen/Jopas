@@ -225,7 +225,7 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
             + graphqlTime + '",numItineraries:' + graphqlNumberOfItinaries
             + ',modes:"' + parameters.modes + '",minTransferTime:'
             + graphqlTransferTime + ',walkSpeed:' + graphqlWalkSpeed + graphqlArriveBy
-            + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
+            + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
 
 //    console.debug(query);
     var http_request = new XMLHttpRequest();
@@ -252,6 +252,7 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
                     output.legs[leg] = {
                         "type": legdata.mode.toLowerCase(),
                         "code": legdata.route ? legdata.route.shortName : "",
+                        "gtfsId": legdata.route ? legdata.route.gtfsId.split(':', 2)[1] : "",
                         "shortCode": legdata.from.stop ? legdata.from.stop.name : "",
                         "length": legdata.distance,
                         "polyline": legdata.legGeometry.points,
