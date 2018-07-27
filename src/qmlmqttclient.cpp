@@ -10,8 +10,10 @@ QmlQmqttClient::QmlQmqttClient(QObject *parent) :
 
 QmlQmqttClient::~QmlQmqttClient()
 {
-    for (QmlQmqttSubscription *subscriber: m_subscriptions)
-        delete subscriber;
+    for (QmlQmqttSubscription *subscriber: m_subscriptions) {
+        // using deleteLater seems to fix frequent crashes when destructing the client
+        subscriber->deleteLater();
+    }
 }
 
 void QmlQmqttClient::setHostname(const QString &h)
@@ -54,7 +56,8 @@ void QmlQmqttClient::unsubscribe(const QString &topicFilter)
         if (subscription->topicFilter() == topicFilter)
         {
             // The onDestroyed function will unsubscribe the topic
-            delete subscription;
+            // using deleteLater seems to fix frequent crashes when destructing the client
+            subscription->deleteLater();
             return;
         }
     }
@@ -69,7 +72,8 @@ void QmlQmqttClient::unsubscribe(QmlQmqttSubscription *subscription)
         return;
     }
     // The onDestroyed function will unsubscribe the topic
-    delete subscription;
+    // using deleteLater seems to fix frequent crashes when destructing the client
+    subscription->deleteLater();
     Q_ASSERT(!m_subscriptions.contains(subscription));
 }
 
