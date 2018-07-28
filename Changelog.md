@@ -1,3 +1,14 @@
+## 0.8.1 (28th of July, 2018)
+
+Features:
+
+  - Show vehicle speed on map in Helsinki
+
+Bugfixes:
+
+  - Use Mqtt API instead of Siri in Helsinki, Siri has not been working for some time
+  - Attempt to fix font scaling on Exception Info page
+
 ## 0.8.0 (5th of July, 2018)
 
 Bugfixes:
