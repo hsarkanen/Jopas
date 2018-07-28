@@ -47,7 +47,6 @@ Page {
     }
 
     function setCoverData() {
-        var route = Reittiopas.get_route_instance()
         appWindow.coverAlignment = Text.AlignLeft
         appWindow.coverHeader = search_parameters.from_name
         appWindow.coverContents = ""
