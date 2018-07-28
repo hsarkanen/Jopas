@@ -418,10 +418,6 @@ Item {
         }
     }
 
-//    MapGroup {
-//        id: root_group
-//    }
-
     Component {
         id: coord_component
 
@@ -446,62 +442,7 @@ Item {
             z: 45
         }
     }
-/*
-    Component {
-        id: endpoint
-        MapQuickItem {
-            sourceItem: Image {
-                smooth: true
-                height: 50 * appWindow.scalingFactor
-                width: 50 * appWindow.scalingFactor
-            }
-            anchorPoint.y: sourceItem.height - 5
-            anchorPoint.x: sourceItem.width / 2
-            z: 50
-        }
-    }
-*/
-/*
-    Component {
-        id: group
 
-        MapGroup {
-            id: stop_group
-            property alias station_text : station_text
-            property alias station : station
-            property alias route : route
-
-            MapText {
-                id: station_text
-                smooth: true
-                font.pixelSize: UIConstants.FONT_LARGE * appWindow.scalingFactor
-                offset.x: -(width/2)
-                offset.y: 18
-                z: 48
-            }
-
-            MapImage {
-                id: station
-                sourceItem: Image {
-                    smooth: true
-                    source: "qrc:/images/stop.png"
-                    height: 30 * appWindow.scalingFactor
-                    width: 30 * appWindow.scalingFactor
-                }
-// TODO:
-//                offset.y: sourceItem.height / 2
-//                offset.x: sourceItem.width / 2
-                z: 45
-            }
-            MapPolyline {
-                id: route
-                smooth: true
-                border.width: 8 * appWindow.scalingFactor
-                z: 30
-            }
-        }
-    }
-*/
     function initialize(multipleRoutes) {
         flickable_map.addMapItem(current_position)
 
