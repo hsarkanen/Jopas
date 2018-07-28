@@ -164,8 +164,10 @@ Page {
         else {
             parameters.jstime = timeSwitch.myTime
         }
+        parameters.timetype = "departure"
         if (!timeTypeSwitch.departure) {
             parameters.arriveBy = true
+            parameters.timetype = "arrival"
         }
         parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
         parameters.optimize = optimize == "Unknown"?"default":optimize
