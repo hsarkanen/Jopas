@@ -332,7 +332,10 @@ Column {
             placeholderText: qsTr("Type a location")
 
             onTextChanged: {
-                if(text != destination_name) {
+                if (text.length === 0) {
+                    clear()
+                }
+                else if(text != destination_name) {
                     suggestionModel.clear()
                     selected_favorite = -1
                     destination_coord = ""
