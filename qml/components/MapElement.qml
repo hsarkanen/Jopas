@@ -91,10 +91,12 @@ Item {
         else if (topic.substring(24, 29) === "train") {
             vehicleColor = "#61b700"
         }
+        var vehicleSpeed = Math.round(payload_json.VP.spd * 3.6) // Convert to km/h
         vehicleModel.append({"modelUniqueId": vehicleUniqueId,
                                 "modelLongitude": payload_json.VP.long, "modelLatitude":
                                 payload_json.VP.lat, "modelCode": payload_json.VP.desi,
-                                "modelColor": vehicleColor, "modelBearing": payload_json.VP.hdg})
+                                "modelColor": vehicleColor, "modelBearing": payload_json.VP.hdg,
+                                "modelSpeed": vehicleSpeed})
     }
 
     function next_station() {
@@ -263,11 +265,22 @@ Item {
                     width: 50
                     height: 50
                     Text {
+                        id: lineCodeText
                         anchors.centerIn: parent
+                        anchors.verticalCenterOffset: appWindow.currentApi === "helsinki" ? -8 : 0
                         font.pixelSize: 20
                         font.bold: true
                         text: modelCode
                     }
+                    Text {
+                        anchors.centerIn: parent
+                        anchors.verticalCenterOffset: 8
+                        text: appWindow.currentApi === "helsinki" ? modelSpeed + "km/h" : ""
+                        visible: appWindow.currentApi === "helsinki"
+                        font.pixelSize: 12
+                        font.bold: true
+                    }
+
                     Image {
                         source: "qrc:/images/bearing_indicator.png"
                         enabled: typeof modelBearing !== "undefined"
