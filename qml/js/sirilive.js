@@ -32,9 +32,6 @@
 .pragma library
 
 var API = {}
-API['helsinki'] = {}
-API['helsinki'].URL = 'http://dev.hsl.fi/siriaccess/vm/json'
-
 API['tampere'] = {}
 API['tampere'].URL = 'http://data.itsfactory.fi/siriaccess/vm/json'
 
@@ -127,19 +124,9 @@ LiveResult.prototype.parse_json = function(vehicles, parent) {
         var code = vehicleData.MonitoredVehicleJourney.LineRef.value
         var color = "#08a7cc"
         var vehicleTypeAndCode = {};
-        if (parent.api_type !== 'helsinki') {
-            // No JORE codes in use outside of Helsinki
-            vehicleTypeAndCode = {"type": "bus", "code": code}
-        }
-        else {
-            // Jore parsing applied from example linked in: http://dev.hsl.fi/
-            if (code.match("^1019")) {code = "Ferry"; color = "#0080c8"; vehicleTypeAndCode = {"type": "ferry", "code": "Ferry"} /*Ferry*/}
-            else if (code.match(/^1300/)) {code = code.substring(4,5); color = "#ee5400"; vehicleTypeAndCode = {"type": "metro", "code": code}; /*Metro*/}
-            else if (code.match(/^300/)) {code = code.substring(4,5); color = "#61b700"; vehicleTypeAndCode = {"type": "train", "code": code} /*Train*/}
-            else if (code.match(/^10(0|10)/)) {code = code.substring(2,5).trim().replace(/^[0]?/,""); color = "#925bc6"; vehicleTypeAndCode = {"type": "tram", "code": code} /*Tram*/}
-            else if (code.match(/^(1|2|4).../)) {code = code.substring(1).replace(/^[0]?/,""); vehicleTypeAndCode = {"type": "bus", "code": code} /*Use default color for bus*/}
-            else {vehicleTypeAndCode = {"type": "bus", "code": code}; /*console.debug("Unknown vehicle found.") Unknown vehicle, expect bus, use default color */ }
-        }
+        // Siri API is used only for Tampere now and trams are not in Tampere yet, so always
+        // default to bus
+        vehicleTypeAndCode = {"type": "bus", "code": code}
         // Show only vehicles included in the route
         var allowedVehicles = parent.model.vehicleCodesToShowOnMap
         if (showVehicle(vehicleTypeAndCode, allowedVehicles)) {
