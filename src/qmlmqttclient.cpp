@@ -43,7 +43,7 @@ QmlQmqttSubscription *QmlQmqttClient::subscribe(const QString &topicFilter)
     m_subscriptions.append(subscriber);
     if (m_client != nullptr)
     {
-        qInfo() << "Subscribing to" << topicFilter;
+        qDebug() << "Subscribing to" << topicFilter;
         m_client->subscribe(topicFilter);
     }
     return subscriber;
@@ -90,7 +90,7 @@ void QmlQmqttClient::connectToHost()
 {
     if (m_client == nullptr)
     {
-        qInfo() << "Creating MQTT connection with" << m_hostname << m_port;
+        qDebug() << "Creating MQTT connection with" << m_hostname << m_port;
         // TODO: how to provide QSslConfiguration to the client in case of SSL?
 
         QSslConfiguration sslConfig = QSslConfiguration::defaultConfiguration();

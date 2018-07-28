@@ -6,7 +6,7 @@ CONFIG        += link_pkgconfig
 CONFIG        += sailfishapp
 PKGCONFIG     += qdeclarative5-boostable
 
-
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 QML_IMPORT_PATH = qml
 
