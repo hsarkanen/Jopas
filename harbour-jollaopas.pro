@@ -22,6 +22,7 @@ OTHER_FILES += \
     appicons/86x86/apps/harbour-jollaopas.png \
     appicons/108x108/apps/harbour-jollaopas.png \
     appicons/128x128/apps/harbour-jollaopas.png \
+    appicons/172x172/apps/harbour-jollaopas.png \
     appicons/256x256/apps/harbour-jollaopas.png
 
 
