@@ -1,3 +1,9 @@
+## 0.8.2 (9th of February, 2019)
+
+Bugfixes:
+
+  - Fix Helsinki live vehicle locations map
+
 ## 0.8.1 (28th of July, 2018)
 
 Features:
