@@ -175,7 +175,7 @@ Item {
                 receiveVehicleLocation()
             }
             else {
-                mqttClient.port = "443"
+                mqttClient.port = "8883"
                 mqttClient.connectToHost()
                 for (var allowedLine in vehicleModel.vehicleCodesToShowOnMap) {
                     var vehicleToSubscribe = mqttClient.subscribe("/hfp/v1/journey/ongoing/+/+/+/" +
