@@ -1,5 +1,6 @@
 *.o
 *.pro.user
+*.pro.user.4.8-pre1
 Makefile
 .gitignore
 harbour-jollaopas.spec
