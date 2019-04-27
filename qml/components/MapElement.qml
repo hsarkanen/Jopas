@@ -173,7 +173,7 @@ Item {
 
     Timer {
         id: vehicleUpdateTimer
-        interval: appWindow.currentApi !== "helsinki" ? 2000 : 300
+        interval: appWindow.currentApi !== "helsinki" ? 3000 : 300
         repeat: appWindow.currentApi !== "helsinki"
         onTriggered: {
             if (appWindow.currentApi !== "helsinki") {
