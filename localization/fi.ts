@@ -29,22 +29,6 @@
         <translation>Reititys ja reaaliaikainen ajoneuvojen sijainti-informaatio perustuu ITS Factoryn, Turun seudun liikenteen, Helsingin seudun liikenteen ja Liikenneviraston tarjoamiin avoimiin rajapintoihin. Kartat on tuottanut Here. </translation>
     </message>
     <message>
-        <source>Routing and real-time vehicle location information is based on open data API:s provided by Helsinki Regional Transport Authority&lt;/a&gt; and City of Tampere. Map data is provided by Nokia Here.</source>
-        <translation type="vanished">Reititys ja reaaliaikainen ajoneuvojen sijainti informaatio perustuu Helsingin seudun liikenteen ja Tampereen kaupungin tarjoamiin avoimiin rajapintoihin. Kartat on tuottanut Nokia Here. </translation>
-    </message>
-    <message>
-        <source>Helsinki</source>
-        <translation type="obsolete">Helsinki</translation>
-    </message>
-    <message>
-        <source>Tampere</source>
-        <translation type="obsolete">Tampere</translation>
-    </message>
-    <message>
-        <source>Nokia Here</source>
-        <translation type="obsolete">Nokia Here</translation>
-    </message>
-    <message>
         <location filename="../qml/pages/AboutDialog.qml" line="135"/>
         <source>Original Author</source>
         <translation>Alkuperäinen tekijä</translation>
@@ -64,25 +48,9 @@
         <source>Some parts of the code release under MIT License.</source>
         <translation>Osa ohjelmasta on lisensoitu MIT lisenssin alla.</translation>
     </message>
-    <message>
-        <source>Some  parts of the code release under MIT License.</source>
-        <translation type="obsolete">Osa ohjelmasta on lisensoitu MIT lisenssin alla.</translation>
-    </message>
-    <message>
-        <source>This application is free sofware licenced under the GNU Public License v3</source>
-        <translation type="obsolete">Tämä ohjelma on vapaa ja lisensoitu GNU:n yleisen lisenssin v3 alla</translation>
-    </message>
-    <message>
-        <source>Some  parts of the code release under MIT License</source>
-        <translation type="obsolete">Osa ohjelmasta on lisensoitu MIT lisenssin alla</translation>
-    </message>
 </context>
 <context>
     <name>AddFavoriteDialog</name>
-    <message>
-        <source>Add favorite</source>
-        <translation type="obsolete">Lisää suosikki</translation>
-    </message>
     <message>
         <location filename="../qml/pages/AddFavoriteDialog.qml" line="58"/>
         <source>Add favorite place</source>
@@ -97,10 +65,6 @@
         <location filename="../qml/pages/AddFavoriteDialog.qml" line="77"/>
         <source>Enter name for the favorite place</source>
         <translation>Syötä nimi suosikkipaikalle</translation>
-    </message>
-    <message>
-        <source>Enter name for the favorite</source>
-        <translation type="obsolete">Syötä nimi suosikille</translation>
     </message>
 </context>
 <context>
@@ -121,10 +85,6 @@
 </context>
 <context>
     <name>EditFavoriteDialog</name>
-    <message>
-        <source>Edit favorite</source>
-        <translation type="obsolete">Muokkaa suosikkia</translation>
-    </message>
     <message>
         <location filename="../qml/pages/EditFavoriteDialog.qml" line="57"/>
         <source>Edit favorite place</source>
@@ -170,18 +130,6 @@
 <context>
     <name>FavoritesPage</name>
     <message>
-        <source>Manage favorites</source>
-        <translation type="obsolete">Hallitse suosikkeja</translation>
-    </message>
-    <message>
-        <source>Add favorite</source>
-        <translation type="obsolete">Lisää suosikki</translation>
-    </message>
-    <message>
-        <source>No saved favorites</source>
-        <translation type="obsolete">Ei tallennettuja suosikkeja</translation>
-    </message>
-    <message>
         <location filename="../qml/pages/FavoritesPage.qml" line="63"/>
         <source>Manage favorite places</source>
         <translation>Hallitse suosikkipaikkoja</translation>
@@ -213,26 +161,7 @@
     </message>
 </context>
 <context>
-    <name>FlickableMap</name>
-    <message>
-        <source>Choose maptype</source>
-        <translation type="obsolete">Valitse kartantyyppi</translation>
-    </message>
-</context>
-<context>
     <name>LocationEntry</name>
-    <message>
-        <source>No results</source>
-        <translation type="vanished">Ei tuloksia</translation>
-    </message>
-    <message>
-        <source>Could not find location</source>
-        <translation type="vanished">Sijaintia ei löydetty</translation>
-    </message>
-    <message>
-        <source>Choose location</source>
-        <translation type="obsolete">Valitse sijainti</translation>
-    </message>
     <message>
         <location filename="../qml/components/LocationEntry.qml" line="256"/>
         <source>Positioning service disabled from application settings</source>
@@ -258,29 +187,9 @@
         <source>Location already in the favorite places</source>
         <translation>Sijainti on jo suosikkipaikoissa</translation>
     </message>
-    <message>
-        <source>Location added to favorites</source>
-        <translation type="obsolete">Sijainti lisätty suosikkeihin</translation>
-    </message>
-    <message>
-        <source>Location already in the favorites</source>
-        <translation type="obsolete">Sijainti on jo suosikeissa</translation>
-    </message>
 </context>
 <context>
     <name>MainPage</name>
-    <message>
-        <source>GPS enabled</source>
-        <translation type="obsolete">GPS käytössä</translation>
-    </message>
-    <message>
-        <source>GPS disabled</source>
-        <translation type="obsolete">GPS ei käytössä</translation>
-    </message>
-    <message>
-        <source>Positioning service disabled from application settings</source>
-        <translation type="obsolete">Paikannus on otettu pois käytöstä sovelluksen asetuksista</translation>
-    </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="231"/>
         <source>Settings</source>
@@ -292,10 +201,6 @@
         <translation>Poikkeusinfo</translation>
     </message>
     <message>
-        <source>Manage favorites</source>
-        <translation type="obsolete">Hallitse suosikkeja</translation>
-    </message>
-    <message>
         <location filename="../qml/pages/MainPage.qml" line="233"/>
         <source>Manage favorite places</source>
         <translation>Hallitse suosikkipaikkoja</translation>
@@ -304,18 +209,6 @@
         <location filename="../qml/pages/MainPage.qml" line="236"/>
         <source>Add as favorite route</source>
         <translation>Lisää suosikkireitiksi</translation>
-    </message>
-    <message>
-        <source>Route added to favorites</source>
-        <translation type="obsolete">Reitti lisätty suosikkeihin</translation>
-    </message>
-    <message>
-        <source>Maximum amount of routes is 4!</source>
-        <translation type="obsolete">Suurin mahdollinen määrä reittejä on 4!</translation>
-    </message>
-    <message>
-        <source>Added as favorite route</source>
-        <translation type="obsolete">Suosikkireitti lisätty</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="242"/>
@@ -336,10 +229,6 @@
         <location filename="../qml/pages/MainPage.qml" line="305"/>
         <source>To</source>
         <translation>Mihin</translation>
-    </message>
-    <message>
-        <source>Now</source>
-        <translation type="obsolete">Nyt</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="252"/>
@@ -373,10 +262,6 @@
         <translation>Suosikkireitti lisätty kannen pikavalintaan.</translation>
     </message>
     <message>
-        <source>Route added to cover action.</source>
-        <translation type="obsolete">Reitti lisätty kannen pikavalintaan.</translation>
-    </message>
-    <message>
         <location filename="../qml/pages/MainPage.qml" line="411"/>
         <source>Deleting</source>
         <translation>Poistetaan</translation>
@@ -399,17 +284,6 @@
         <location filename="../qml/components/MapElement.qml" line="137"/>
         <source> s ago </source>
         <translation> s sitten </translation>
-    </message>
-</context>
-<context>
-    <name>MySelectionDialog</name>
-    <message>
-        <source>Add favorite</source>
-        <translation type="obsolete">Lisää suosikki</translation>
-    </message>
-    <message>
-        <source>Add favorite place</source>
-        <translation type="obsolete">Lisää suosikkipaikka</translation>
     </message>
 </context>
 <context>
@@ -455,14 +329,6 @@
 </context>
 <context>
     <name>RoutePage</name>
-    <message>
-        <source>Departure</source>
-        <translation type="obsolete">Lähtö</translation>
-    </message>
-    <message>
-        <source>Arrival</source>
-        <translation type="obsolete">Perillä</translation>
-    </message>
     <message>
         <location filename="../qml/pages/RoutePage.qml" line="100"/>
         <source>Walking</source>
@@ -557,18 +423,6 @@
         <translation>Aktiivinen alue</translation>
     </message>
     <message>
-        <source>GPS enabled</source>
-        <translation type="obsolete">GPS käytössä</translation>
-    </message>
-    <message>
-        <source>GPS disabled</source>
-        <translation type="obsolete">GPS ei käytössä</translation>
-    </message>
-    <message>
-        <source>Toggle GPS Usage</source>
-        <translation type="obsolete">Vaihda GPS:n käyttöä</translation>
-    </message>
-    <message>
         <location filename="../qml/pages/SettingsPage.qml" line="130"/>
         <source>Route search parameters</source>
         <translation>Reitinhaku parametrit</translation>
@@ -587,30 +441,6 @@
         <location filename="../qml/pages/SettingsPage.qml" line="147"/>
         <source>Bus</source>
         <translation>Bussi</translation>
-    </message>
-    <message>
-        <source>Route results will contain U lines</source>
-        <translation type="vanished">Reitillä voidaan käyttää U-linjoja</translation>
-    </message>
-    <message>
-        <source>Route results will not contain U lines</source>
-        <translation type="vanished">Reitillä ei käytetä U-linjoja</translation>
-    </message>
-    <message>
-        <source>U line</source>
-        <translation type="vanished">U-linja</translation>
-    </message>
-    <message>
-        <source>Route results will contain Service lines</source>
-        <translation type="vanished">Reitillä voidaan käyttää palvelulinjoja</translation>
-    </message>
-    <message>
-        <source>Route results will not contain Service lines</source>
-        <translation type="vanished">Reitillä ei käytetä palvelulinjoja</translation>
-    </message>
-    <message>
-        <source>Service line</source>
-        <translation type="vanished">Palvelulinja</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="159"/>
@@ -780,22 +610,6 @@
         <source>Choose region</source>
         <translation>Valitse alue</translation>
     </message>
-    <message>
-        <source>Allow this application to use the phone location services to enhance the routing experience?</source>
-        <translation type="obsolete">Salli tämän sovelluksen käyttää puhelimen sijaintitietoa parantamaan reitinhaku kokemusta?</translation>
-    </message>
-    <message>
-        <source>Choices can be later changed from the application settings.</source>
-        <translation type="obsolete">Valintoja voidaan muuttaa myöhemmin sovelluksen asetuksissa.</translation>
-    </message>
-    <message>
-        <source>The settings can be later changed from the application preferences.</source>
-        <translation type="obsolete">Valintoja voidaan myöhemmin muuttaa sovelluksen asetuksissa.</translation>
-    </message>
-    <message>
-        <source>Use location services</source>
-        <translation type="obsolete">Käytä sijaintitietoa</translation>
-    </message>
 </context>
 <context>
     <name>StopPage</name>
@@ -829,13 +643,6 @@
         <location filename="../qml/components/TimeTypeSwitch.qml" line="55"/>
         <source>Arrival</source>
         <translation>Perillä</translation>
-    </message>
-</context>
-<context>
-    <name>translations</name>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Oletus</translation>
     </message>
 </context>
 </TS>
