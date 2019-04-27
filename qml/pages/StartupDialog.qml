@@ -48,11 +48,20 @@ Dialog {
             menu: ContextMenu {
                 MenuItem { text: "Helsinki" }
                 MenuItem { text: "Tampere" }
+                MenuItem { text: "Turku" }
             }
         }
     }
 
     onAccepted: {
-        Storage.setSetting('api', region.currentIndex == 0 ? "helsinki" : "tampere")
+        if (region.currentIndex === 0) {
+            Storage.setSetting('api', "helsinki")
+        }
+        else if (region.currentIndex === 1) {
+            Storage.setSetting('api', "tampere")
+        }
+        else if (region.currentIndex === 2) {
+            Storage.setSetting('api', "turku")
+        }
     }
 }

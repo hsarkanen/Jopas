@@ -35,6 +35,9 @@ var API = {}
 API['tampere'] = {}
 API['tampere'].URL = 'http://data.itsfactory.fi/siriaccess/vm/json'
 
+API['turku'] = {}
+API['turku'].URL = 'http://data.foli.fi/siri/vm'
+
 //sirilive instance
 var _instance = null
 var _http_request = null
@@ -108,9 +111,15 @@ LiveResult.prototype.result_handler = function() {
 
     var parent = _request_parent
     var vehicles = JSON.parse(_http_request.responseText)
-    var time_stamp = vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].ResponseTimestamp
-
+    var time_stamp
+    if (parent.api_type === 'tampere') {
+        time_stamp = vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].ResponseTimestamp
+    }
+    else if (parent.api_type === 'turku') {
+        time_stamp = vehicles.result.responsetimestamp
+    }
     _request_parent.model.timeStamp = time_stamp
+
     _request_parent.parse_json(vehicles, parent)
     _request_parent.model.done = true
 }
@@ -119,18 +128,36 @@ LiveResult.prototype.parse_json = function(vehicles, parent) {
     if (typeof parent.model.clear === "function") {
         parent.model.clear()
     }
-    for (var monitoredVehicle in vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].VehicleActivity) {
-        var vehicleData = vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].VehicleActivity[monitoredVehicle]
-        var code = vehicleData.MonitoredVehicleJourney.LineRef.value
-        var color = "#08a7cc"
-        var vehicleTypeAndCode = {};
-        // Siri API is used only for Tampere now and trams are not in Tampere yet, so always
-        // default to bus
-        vehicleTypeAndCode = {"type": "bus", "code": code}
-        // Show only vehicles included in the route
-        var allowedVehicles = parent.model.vehicleCodesToShowOnMap
-        if (showVehicle(vehicleTypeAndCode, allowedVehicles)) {
-            parent.model.append({"modelLongitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Longitude, "modelLatitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Latitude, "modelCode" : code, "modelColor" : color, "modelBearing" : vehicleData.MonitoredVehicleJourney.Bearing})
+
+    var monitoredVehicle, vehicleData, code;
+    var color = "#08a7cc";
+    var vehicleTypeAndCode = {};
+    var allowedVehicles = parent.model.vehicleCodesToShowOnMap
+
+    if (parent.api_type === 'tampere') {
+        for (monitoredVehicle in vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].VehicleActivity) {
+            vehicleData = vehicles.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].VehicleActivity[monitoredVehicle]
+            code = vehicleData.MonitoredVehicleJourney.LineRef.value
+            // Default to bus in Tampere for now
+            vehicleTypeAndCode = {"type": "bus", "code": code}
+            if (showVehicle(vehicleTypeAndCode, allowedVehicles)) {
+                parent.model.append({"modelLongitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Longitude, "modelLatitude" : vehicleData.MonitoredVehicleJourney.VehicleLocation.Latitude, "modelCode" : code, "modelColor" : color, "modelBearing" : vehicleData.MonitoredVehicleJourney.Bearing})
+            }
+        }
+    }
+    else if (parent.api_type === 'turku') {
+        for (monitoredVehicle in vehicles.result.vehicles) {
+            vehicleData = vehicles.result.vehicles[monitoredVehicle]
+            // Turku API has lots of not monitored vehicles, skip them
+            if (vehicleData.monitored) {
+                code = vehicleData.lineref
+                // Default to bus in Turku for now
+                vehicleTypeAndCode = {"type": "bus", "code": code}
+                if (showVehicle(vehicleTypeAndCode, allowedVehicles)) {
+                    // Turku API doesn't contain bearing so add zero
+                    parent.model.append({"modelLongitude" : vehicleData.longitude, "modelLatitude" : vehicleData.latitude, "modelCode" : code, "modelColor" : color, "modelBearing" : 0})
+                }
+            }
         }
     }
 }

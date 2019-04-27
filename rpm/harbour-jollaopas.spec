@@ -15,7 +15,7 @@ Name:       harbour-jollaopas
 %{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
-Summary:    Journey planner for Helsinki and Tampere area
+Summary:    Journey planner for Helsinki, Tampere and Turku area
 Version:    0.8.2
 Release:    1
 Group:      Qt/Qt
@@ -36,7 +36,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Journey planner for Helsinki & Tampere area - based on Meegopas. 
+Journey planner for Helsinki, Tampere & Turku area - based on Meegopas.
 
 %prep
 %setup -q -n %{name}-%{version}

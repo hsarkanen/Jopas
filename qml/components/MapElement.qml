@@ -125,6 +125,11 @@ Item {
             return
         }
 
+        // Convert Turku specific seconds to milliseconds
+        if (Storage.getSetting('api') === 'turku') {
+            epochTime *= 1000
+        }
+
         var timeDifference = Date.now() - epochTime
         timeDifference /= 1000  // Convert milliseconds to seconds
 

@@ -51,6 +51,11 @@ function get_geocode(term, model, api_type) {
         boundarycirclelat = 61.498;
         boundarycirclelon = 23.759;
     }
+    else if (api_type ==='turku') {
+        boundarycirclelat = 60.451;
+        boundarycirclelon = 22.267;
+    }
+
     var query = "boundary.circle.lat=" + boundarycirclelat + "&boundary.circle.lon=" + boundarycirclelon
             + "&boundary.circle.radius=" + boundarycircleradius + "&size=" + size + "&text=" + term;
 
@@ -118,7 +123,7 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
     api_type = api_type || 'helsinki';
     var size = 5;
     var queryType = 'routing/v1/routers/hsl/index/graphql';
-    if (api_type === 'tampere') {
+    if (api_type === 'tampere' || api_type === 'turku') {
         queryType = 'routing/v1/routers/finland/index/graphql';
     }
 

@@ -1,5 +1,5 @@
 Name: harbour-jollaopas
-Summary: Journey planner for Helsinki and Tampere area
+Summary: Journey planner for Helsinki, Tampere and Turku area
 Version: 0.8.2
 Release: 1
 Group: Qt/Qt
@@ -7,7 +7,7 @@ URL: http://hsarkanen.github.io/JollaOpas/
 License: "GPLv3"
 Sources:
 - '%{name}-%{version}.tar.bz2'
-Description: "Journey planner for Helsinki & Tampere area - based on Meegopas. "
+Description: "Journey planner for Helsinki, Tampere & Turku area - based on Meegopas."
 Configure: none
 Builder: qtc5
 QMakeOptions:

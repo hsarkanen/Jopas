@@ -93,7 +93,7 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
                 textFormat: Qt.RichText
-                text: qsTr("Routing and real-time vehicle location information is based on open data API:s provided by ITS Factory, Helsinki Regional Transport and Liikennevirasto. Map data is provided by Here.")
+                text: qsTr("Routing and real-time vehicle location information is based on open data API:s provided by ITS Factory, Turku Region Public Transport, Helsinki Regional Transport and Liikennevirasto. Map data is provided by Here.")
             }
 
             Button {
@@ -108,6 +108,13 @@ Page {
                 text: "Tampere real-time API"
                 onClicked: {
                     Qt.openUrlExternally("http://wiki.itsfactory.fi/index.php/ITS_Factory_Developer_Wiki")
+                }
+            }
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Turku real-time API"
+                onClicked: {
+                    Qt.openUrlExternally("https://www.foli.fi/fi/avoin-data")
                 }
             }
 
