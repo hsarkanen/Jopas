@@ -133,8 +133,9 @@ Page {
 
     function setRouteParameters(parameters) {
         var walking_speed = Storage.getSetting("walking_speed")
-        var optimize = Storage.getSetting("optimize")
         var change_margin = Storage.getSetting("change_margin")
+        var change_reluctance = Storage.getSetting("change_reluctance")
+        var walk_reluctance = Storage.getSetting("walk_reluctance")
         var currentDate = new Date()
 
         // Only add to recentitems if the place is not from favorites and
@@ -170,8 +171,9 @@ Page {
             parameters.timetype = "arrival"
         }
         parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
-        parameters.optimize = optimize == "Unknown"?"default":optimize
         parameters.change_margin = change_margin == "Unknown"?"3":Math.floor(change_margin)
+        parameters.change_reluctance = change_reluctance == "Unknown"?"10":Math.floor(change_reluctance)
+        parameters.walk_reluctance = walk_reluctance == "Unknown"?"2":Math.floor(walk_reluctance)
         parameters.modes =""
 
         if (appWindow.currentApi === "helsinki") {

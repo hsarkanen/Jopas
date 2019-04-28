@@ -59,12 +59,14 @@ Page {
             metroSwitch.set_value(setting == "Unknown"?"false" : setting)
             setting = Storage.getSetting("train_disabled")
             trainSwitch.set_value(setting == "Unknown"?"false" : setting)
-            setting = Storage.getSetting("optimize")
-            optimizeRoute.set_value(setting == "Unknown"?"default" : setting)
             setting = Storage.getSetting("walking_speed")
             walkingSpeed.set_value(setting == "Unknown"?"70" : setting)
             setting = Storage.getSetting("change_margin")
             changeMargin.set_value(setting == "Unknown"?"3" : Math.floor(setting))
+            setting = Storage.getSetting("change_reluctance")
+            changeReluctance.set_value(setting == "Unknown"?"10" : Math.floor(setting))
+            setting = Storage.getSetting("walk_reluctance")
+            walkReluctance.set_value(setting == "Unknown"?"2" : Math.floor(setting))
             setting = Storage.getSetting("default_zoom_level")
             defaultZoomLevel.set_value(setting == "Unknown"?"5" : Math.floor(setting))
             setting = Storage.getSetting("search_button_disabled")
@@ -261,34 +263,45 @@ Page {
                 }
             }
 
-            // TODO: Digitransit API has different concept for walkReluctance and optimize,
-            // disable old style optimization for now since its not working
-            ComboBox {
-                id: optimizeRoute
-                visible: false
+            Slider {
+                id: changeReluctance
                 function set_value(value) {
-                    var idx = {"default": 0, "fastest": 1, "least_transfers": 2, "least_walking": 3}[value]
-                    optimizeRoute.currentIndex = idx
+                    changeReluctance.value = value
+                    changeReluctance.updateLabel()
                 }
+                function updateLabel() {
+                    changeReluctance.label = qsTr("Change Reluctance") + " (" + changeReluctance.value + ")"
+                }
+                width: parent.width
+                minimumValue: 1
+                maximumValue: 20
+                value: 10
+                stepSize: 1
+                handleVisible: true
+                onValueChanged: {
+                    Storage.setSetting("change_reluctance", changeReluctance.value)
+                    changeReluctance.updateLabel()
+                }
+            }
 
-                label: qsTr("Optimize Route by")
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("Default")
-                        onClicked: Storage.setSetting('optimize','default')
-                    }
-                    MenuItem {
-                        text: qsTr("Fastest")
-                        onClicked: Storage.setSetting('optimize','fastest')
-                    }
-                    MenuItem {
-                        text: qsTr("Least Transfers")
-                        onClicked: Storage.setSetting('optimize','least_transfers')
-                    }
-                    MenuItem {
-                        text: qsTr("Least Walking")
-                        onClicked: Storage.setSetting('optimize','least_walking')
-                    }
+            Slider {
+                id: walkReluctance
+                function set_value(value) {
+                    walkReluctance.value = value
+                    walkReluctance.updateLabel()
+                }
+                function updateLabel() {
+                    walkReluctance.label = qsTr("Walk Reluctance") + " (" + walkReluctance.value + ")"
+                }
+                width: parent.width
+                minimumValue: 1
+                maximumValue: 20
+                value: 2
+                stepSize: 1
+                handleVisible: true
+                onValueChanged: {
+                    Storage.setSetting("walk_reluctance", walkReluctance.value)
+                    walkReluctance.updateLabel()
                 }
             }
 

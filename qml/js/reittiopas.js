@@ -135,6 +135,8 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
     var graphqlDate = Qt.formatDate(parameters.jstime, "yyyy-MM-dd");
     var graphqlTime = Qt.formatTime(parameters.jstime, "hh:mm:ss");
     var graphqlTransferTime = parameters.change_margin * 60;
+    var graphqlWalkBoardCost = parameters.change_reluctance * 60;
+    var graphqlWalkReluctance = parameters.walk_reluctance;
     var graphqlNumberOfItinaries = 5;
     var graphqlWalkSpeed = parameters.walk_speed / 60;
     var graphqlArriveBy = ""
@@ -145,7 +147,8 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
             + graphqlToLat + ',lon:' + graphqlToLon + '},date:"' + graphqlDate + '",time:"'
             + graphqlTime + '",numItineraries:' + graphqlNumberOfItinaries
             + ',modes:"' + parameters.modes + '",minTransferTime:'
-            + graphqlTransferTime + ',walkSpeed:' + graphqlWalkSpeed + graphqlArriveBy
+            + graphqlTransferTime + ',walkBoardCost:' + graphqlWalkBoardCost + ',walkReluctance:'
+            + graphqlWalkReluctance + ',walkSpeed:' + graphqlWalkSpeed + graphqlArriveBy
             + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
 
 //    console.debug(query);
