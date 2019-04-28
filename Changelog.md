@@ -1,3 +1,10 @@
+## 0.9.0 (28th of April, 2019)
+
+Features:
+
+  - Add Turku region (Föli) - FIXED
+  - Add options for tuning willingness to change and walk
+
 ## 0.8.2 (9th of February, 2019)
 
 Bugfixes:
