@@ -92,7 +92,7 @@ Page {
             ComboBox {
                 id: currentApi
                 function set_value(value) {
-                    var val = {"helsinki": 0, "tampere": 1, "turku": 2}[value]
+                    var val = {"helsinki": 0, "tampere": 1, "turku": 2, "hameenlinna": 3}[value]
                     currentApi.currentIndex = val
                 }
 
@@ -121,6 +121,15 @@ Page {
                         onClicked: {
                             Storage.setSetting("api","turku")
                             appWindow.currentApi = "turku"
+                            appWindow.coverContents = text
+                            appWindow.mainPage.refreshFavoriteRoutes()
+                        }
+                    }
+                    MenuItem {
+                       text: "Hämeenlinna"
+                        onClicked: {
+                            Storage.setSetting("api","hameenlinna")
+                            appWindow.currentApi = "hameenlinna"
                             appWindow.coverContents = text
                             appWindow.mainPage.refreshFavoriteRoutes()
                         }

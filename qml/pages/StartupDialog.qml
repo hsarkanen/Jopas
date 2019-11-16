@@ -49,6 +49,7 @@ Dialog {
                 MenuItem { text: "Helsinki" }
                 MenuItem { text: "Tampere" }
                 MenuItem { text: "Turku" }
+                MenuItem { text: "Hämeenlinna" }
             }
         }
     }
@@ -62,6 +63,9 @@ Dialog {
         }
         else if (region.currentIndex === 2) {
             Storage.setSetting('api', "turku")
+        }
+        else if (region.currentIndex === 3) {
+            Storage.setSetting('api', "hameenlinna")
         }
     }
 }

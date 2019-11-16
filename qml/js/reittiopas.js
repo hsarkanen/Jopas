@@ -55,6 +55,10 @@ function get_geocode(term, model, api_type) {
         boundarycirclelat = 60.451;
         boundarycirclelon = 22.267;
     }
+    else if (api_type ==='hameenlinna') {
+        boundarycirclelat = 60.997;
+        boundarycirclelon = 24.465;
+    }
 
     var query = "boundary.circle.lat=" + boundarycirclelat + "&boundary.circle.lon=" + boundarycirclelon
             + "&boundary.circle.radius=" + boundarycircleradius + "&size=" + size + "&text=" + term;
@@ -125,6 +129,9 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
     var queryType = 'routing/v1/routers/hsl/index/graphql';
     if (api_type === 'tampere' || api_type === 'turku') {
         queryType = 'routing/v1/routers/finland/index/graphql';
+    }
+    if (api_type === 'hameenlinna') {
+        queryType = 'routing/v1/routers/waltti/index/graphql';
     }
 
 //    console.debug(JSON.stringify(parameters));
