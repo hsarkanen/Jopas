@@ -38,30 +38,20 @@ API['digitransitgeocoding'].URL = 'https://api.digitransit.fi/'
 /****************************************************************************************************/
 /*                     address to location                                                          */
 /****************************************************************************************************/
-function get_geocode(term, model, api_type) {
+function get_geocode(term, model, region) {
     model.done = false;
-    api_type = api_type || 'helsinki';
     var size = 10;
     var queryType = 'geocoding/v1/search';
-    var boundarycircleradius = 40;
-    // Search only on 40km radius from Helsinki railway station or Tampere Keskustori
-    var boundarycirclelat = 60.169;
-    var boundarycirclelon = 24.940;
-    if (api_type === 'tampere') {
-        boundarycirclelat = 61.498;
-        boundarycirclelon = 23.759;
-    }
-    else if (api_type ==='turku') {
-        boundarycirclelat = 60.451;
-        boundarycirclelon = 22.267;
+    var query = "size=" + size + "&text=" + term;
+    if (region.boundarycirclelat && region.boundarycirclelon) {
+        query = query + "&boundary.circle.lat=" + region.boundarycirclelat + "&boundary.circle.lon=" + region.boundarycirclelon
+                    + "&boundary.circle.radius=" + 40;
     }
 
-    var query = "boundary.circle.lat=" + boundarycirclelat + "&boundary.circle.lon=" + boundarycirclelon
-            + "&boundary.circle.radius=" + boundarycircleradius + "&size=" + size + "&text=" + term;
-
-//    console.debug(API['digitransitgeocoding'].URL + queryType + '?' + query);
     var http_request = new XMLHttpRequest();
-    http_request.open("GET", API['digitransitgeocoding'].URL + queryType + '?' + query);
+    var url = API['digitransitgeocoding'].URL + queryType + '?' + query;
+//    console.debug(url);
+    http_request.open("GET", url);
     http_request.onreadystatechange = function() {
         if (http_request.readyState === XMLHttpRequest.DONE) {
             var a = JSON.parse(http_request.responseText);
@@ -118,14 +108,10 @@ function get_reverse_geocode(latitude, longitude, model, api_type) {
 /****************************************************************************************************/
 /*                     Reittiopas query class                                                       */
 /****************************************************************************************************/
-function get_route(parameters, itineraries_model, itineraries_json, api_type) {
+function get_route(parameters, itineraries_model, itineraries_json, region) {
     itineraries_model.done = false;
-    api_type = api_type || 'helsinki';
     var size = 5;
-    var queryType = 'routing/v1/routers/hsl/index/graphql';
-    if (api_type === 'tampere' || api_type === 'turku') {
-        queryType = 'routing/v1/routers/finland/index/graphql';
-    }
+    var queryType = 'routing/v1/routers/' + region.apiName + '/index/graphql';
 
 //    console.debug(JSON.stringify(parameters));
     var graphqlFromLon = parameters.from.split(',', 2)[0]
@@ -146,10 +132,14 @@ function get_route(parameters, itineraries_model, itineraries_json, api_type) {
     var query = '{plan(from:{lat:' + graphqlFromLat + ',lon:' + graphqlFromLon + '},to:{lat:'
             + graphqlToLat + ',lon:' + graphqlToLon + '},date:"' + graphqlDate + '",time:"'
             + graphqlTime + '",numItineraries:' + graphqlNumberOfItinaries
-            + ',modes:"' + parameters.modes + '",minTransferTime:'
-            + graphqlTransferTime + ',walkBoardCost:' + graphqlWalkBoardCost + ',walkReluctance:'
-            + graphqlWalkReluctance + ',walkSpeed:' + graphqlWalkSpeed + graphqlArriveBy
-            + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
+            + ',minTransferTime:' + graphqlTransferTime + ',walkBoardCost:'
+            + graphqlWalkBoardCost + ',walkReluctance:' + graphqlWalkReluctance
+            + ',walkSpeed:' + graphqlWalkSpeed;
+    // Show all results for the Finland region.
+    if (region.identifier !== "finland") {
+        query = query + ',modes:"' + parameters.modes + '"';
+    }
+    query = query + graphqlArriveBy + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
 
 //    console.debug(query);
     var http_request = new XMLHttpRequest();

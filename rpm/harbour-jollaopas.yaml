@@ -7,7 +7,7 @@ URL: http://hsarkanen.github.io/JollaOpas/
 License: "GPLv3"
 Sources:
 - '%{name}-%{version}.tar.bz2'
-Description: "Journey planner for Helsinki, Tampere & Turku area - based on Meegopas."
+Description: "Journey planner for Finnish mass transit regions providing Digitransit API - based on Meegopas."
 Configure: none
 Builder: qtc5
 QMakeOptions:

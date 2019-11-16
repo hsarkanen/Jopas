@@ -275,7 +275,7 @@ Column {
         triggeredOnStart: false
         onTriggered: {
             if(textfield.acceptableInput) {
-                Reittiopas.get_geocode(textfield.text, suggestionModel, Storage.getSetting('api'))
+                Reittiopas.get_geocode(textfield.text, suggestionModel, regions.getRegion())
             }
         }
     }

@@ -92,37 +92,32 @@ Page {
             ComboBox {
                 id: currentApi
                 function set_value(value) {
-                    var val = {"helsinki": 0, "tampere": 1, "turku": 2}[value]
-                    currentApi.currentIndex = val
+                    for(var i = 0; i < regions.count; ++i) {
+                        if (regions.get(i).identifier === value) {
+                            currentApi.currentIndex = i;
+                            break;
+                        }
+                    }
                 }
 
-                label: qsTr("Active Region")
+                label: qsTr("Active region")
                 menu: ContextMenu {
-                    MenuItem {
-                        text: "Helsinki"
-                        onClicked: {
-                            Storage.setSetting("api","helsinki")
-                            appWindow.currentApi = "helsinki"
-                            appWindow.coverContents = text
-                            appWindow.mainPage.refreshFavoriteRoutes()
-                        }
+                    id: regionMenu
+
+                    function set_value(text, value) {
+                        Storage.setSetting("api", value)
+                        appWindow.currentApi = value
+                        appWindow.coverContents = text
+                        appWindow.mainPage.refreshFavoriteRoutes()
                     }
-                    MenuItem {
-                       text: "Tampere"
-                        onClicked: {
-                            Storage.setSetting("api","tampere")
-                            appWindow.currentApi = "tampere"
-                            appWindow.coverContents = text
-                            appWindow.mainPage.refreshFavoriteRoutes()
-                        }
-                    }
-                    MenuItem {
-                       text: "Turku"
-                        onClicked: {
-                            Storage.setSetting("api","turku")
-                            appWindow.currentApi = "turku"
-                            appWindow.coverContents = text
-                            appWindow.mainPage.refreshFavoriteRoutes()
+
+                    Repeater {
+                        model: regions
+
+                        delegate: MenuItem {
+                            text: qsTranslate("main", model.name)
+                            property string value: model.identifier
+                            onClicked: regionMenu.set_value(text, value)
                         }
                     }
                 }

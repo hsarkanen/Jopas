@@ -40,6 +40,144 @@ ApplicationWindow {
 
     cover: Qt.resolvedUrl("pages/CoverPage.qml")
 
+    ListModel {
+        id: regions
+
+        ListElement {
+            name: QT_TR_NOOP("Helsinki and the capital region (HRT)")
+            identifier: "helsinki"
+            apiName: "hsl"
+            boundarycirclelat: 60.169
+            boundarycirclelon: 24.940
+        }
+        ListElement {
+            name: QT_TR_NOOP("Tampere region (Nysse)")
+            identifier: "tampere"
+            apiName: "finland"
+            boundarycirclelat: 61.498
+            boundarycirclelon: 23.759
+        }
+        ListElement {
+            name: QT_TR_NOOP("Turku region (Föli)")
+            identifier: "turku"
+            apiName: "finland"
+            boundarycirclelat: 60.451
+            boundarycirclelon: 22.267
+        }
+        ListElement {
+            name: QT_TR_NOOP("Hämeenlinna region")
+            identifier: "hameenlinna"
+            apiName: "waltti"
+            boundarycirclelat: 60.997
+            boundarycirclelon: 24.465
+        }
+        ListElement {
+            name: QT_TR_NOOP("Iisalmi")
+            identifier: "iisalmi"
+            apiName: "waltti"
+            boundarycirclelat: 63.557
+            boundarycirclelon: 27.190
+        }
+        ListElement {
+            name: QT_TR_NOOP("Joensuu region (JOJO)")
+            identifier: "joensuu"
+            apiName: "waltti"
+            boundarycirclelat: 62.601
+            boundarycirclelon: 29.762
+        }
+        ListElement {
+            name: QT_TR_NOOP("Jyväskylä region (Linkki)")
+            identifier: "jyvaskyla"
+            apiName: "waltti"
+            boundarycirclelat: 62.243
+            boundarycirclelon: 25.747
+        }
+        ListElement {
+            name: QT_TR_NOOP("Kajaani region")
+            identifier: "kajaani"
+            apiName: "waltti"
+            boundarycirclelat: 64.227
+            boundarycirclelon: 27.729
+        }
+        ListElement {
+            name: QT_TR_NOOP("Kotka region")
+            identifier: "kotka"
+            apiName: "waltti"
+            boundarycirclelat: 60.461
+            boundarycirclelon: 26.939
+        }
+        ListElement {
+            name: QT_TR_NOOP("Kouvola")
+            identifier: "kouvola"
+            apiName: "waltti"
+            boundarycirclelat: 60.869
+            boundarycirclelon: 26.700
+        }
+        ListElement {
+            name: QT_TR_NOOP("Kuopio region (Vilkku)")
+            identifier: "kuopio"
+            apiName: "waltti"
+            boundarycirclelat: 62.892
+            boundarycirclelon: 27.678
+        }
+        ListElement {
+            name: QT_TR_NOOP("Lahti region (LSL)")
+            identifier: "lahti"
+            apiName: "waltti"
+            boundarycirclelat: 60.984
+            boundarycirclelon: 25.656
+        }
+        ListElement {
+            name: QT_TR_NOOP("Lappeenranta")
+            identifier: "lappeenranta"
+            apiName: "waltti"
+            boundarycirclelat: 61.056
+            boundarycirclelon: 28.185
+        }
+        ListElement {
+            name: QT_TR_NOOP("Mikkeli")
+            identifier: "mikkeli"
+            apiName: "waltti"
+            boundarycirclelat: 61.688
+            boundarycirclelon: 27.274
+        }
+        ListElement {
+            name: QT_TR_NOOP("Oulu region")
+            identifier: "oulu"
+            apiName: "waltti"
+            boundarycirclelat: 65.012
+            boundarycirclelon: 25.471
+        }
+        ListElement {
+            name: QT_TR_NOOP("Rovaniemi (Linkkari)")
+            identifier: "rovaniemi"
+            apiName: "waltti"
+            boundarycirclelat: 66.500
+            boundarycirclelon: 25.714
+        }
+        ListElement {
+            name: QT_TR_NOOP("Vaasa")
+            identifier: "vaasa"
+            apiName: "waltti"
+            boundarycirclelat: 63.096
+            boundarycirclelon: 21.616
+        }
+        ListElement {
+            name: QT_TR_NOOP("Whole Finland")
+            identifier: "finland"
+            apiName: "finland"
+        }
+
+        function getRegion() {
+            var apiName = Storage.getSetting('api');
+            for (var i = 0; i < regions.count; i++) {
+                var value = regions.get(i);
+                if (apiName === value.identifier) {
+                    return value;
+                }
+            }
+        }
+    }
 
     InfoBanner {
         id: infoBanner
@@ -53,13 +191,8 @@ ApplicationWindow {
 
         var apiValue = Storage.getSetting("api")
         if (apiValue === "Unknown") {
-            var dialog = pageStack.push(Qt.resolvedUrl("pages/StartupDialog.qml"))
-            dialog.onAccepted.connect(function() {
-                mainPage = pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
-            })
-            dialog.onRejected.connect(function() {
-                mainPage = pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
-            })
+            mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"), {}, true)
+            var dialog = pageStack.push(Qt.resolvedUrl("pages/StartupDialog.qml"), {}, true)
         }
         else {
             mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"))
