@@ -298,8 +298,8 @@
     <name>ResultPage</name>
     <message>
         <location filename="../qml/pages/ResultPage.qml" line="104"/>
-        <source>Next</source>
-        <translation>Seuraavat</translation>
+        <source>Next (+%1 min)</source>
+        <translation>Seuraavat (+%1 min)</translation>
     </message>
     <message>
         <location filename="../qml/pages/ResultPage.qml" line="126"/>
@@ -313,8 +313,8 @@
     </message>
     <message>
         <location filename="../qml/pages/ResultPage.qml" line="154"/>
-        <source>Previous</source>
-        <translation>Edelliset</translation>
+        <source>Previous (-%1 min)</source>
+        <translation>Edelliset (-%1 min)</translation>
     </message>
     <message>
         <location filename="../qml/pages/ResultPage.qml" line="167"/>
@@ -425,7 +425,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="132"/>
         <source>Route search parameters</source>
-        <translation>Reitinhaku parametrit</translation>
+        <translation>Reittihaku</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="139"/>

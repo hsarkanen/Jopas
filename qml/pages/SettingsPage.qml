@@ -67,6 +67,8 @@ Page {
             changeReluctance.set_value(setting == "Unknown"?"10" : Math.floor(setting))
             setting = Storage.getSetting("walk_reluctance")
             walkReluctance.set_value(setting == "Unknown"?"2" : Math.floor(setting))
+            setting = Storage.getSetting("search_interval")
+            searchInterval.set_value(setting == "Unknown" ? "15" : Math.floor(setting))
             setting = Storage.getSetting("default_zoom_level")
             defaultZoomLevel.set_value(setting == "Unknown"?"5" : Math.floor(setting))
             setting = Storage.getSetting("search_button_disabled")
@@ -129,7 +131,7 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Route search parameters")
+                text: qsTr("Route search")
             }
             TextSwitch {
                 id: busSwitch
@@ -330,6 +332,27 @@ Page {
                         text: qsTr("Running 150 m/min")
                         onClicked: Storage.setSetting('walking_speed','150')
                     }
+                }
+            }
+
+            Slider {
+                id: searchInterval
+                function set_value(value) {
+                    searchInterval.value = value
+                    searchInterval.updateLabel()
+                }
+                function updateLabel() {
+                    searchInterval.label = qsTr("Search interval") + " (" + searchInterval.value + ")"
+                }
+                width: parent.width
+                minimumValue: 5
+                maximumValue: 120
+                value: 15
+                stepSize: 1
+                handleVisible: true
+                onValueChanged: {
+                    Storage.setSetting("search_interval", searchInterval.value)
+                    searchInterval.updateLabel()
                 }
             }
 
