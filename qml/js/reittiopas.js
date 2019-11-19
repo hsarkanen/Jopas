@@ -157,8 +157,8 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                 output.duration = Math.round(route.duration/60)
                 output.start = new Date(route.startTime)
                 output.finish = new Date(route.endTime)
-                output.first_transport = 0
-                output.last_transport = 0
+                output.first_transport = null
+                output.last_transport = null
                 output.walk = route.walkDistance
                 output.legs = []
                 for (var leg in route.legs) {
