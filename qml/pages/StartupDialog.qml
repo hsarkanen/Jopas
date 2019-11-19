@@ -35,37 +35,32 @@ import "../js/storage.js" as Storage
 import "../components"
 
 Dialog {
-    Column {
+    SilicaFlickable {
         anchors.fill: parent
+        Column {
+            anchors.fill: parent
 
-        DialogHeader {
-            acceptText: defaultAcceptText
-        }
+            DialogHeader {
+                acceptText: defaultAcceptText
+            }
 
-        ComboBox {
-            id: region
-            label: qsTr("Choose region")
-            menu: ContextMenu {
-                MenuItem { text: "Helsinki" }
-                MenuItem { text: "Tampere" }
-                MenuItem { text: "Turku" }
-                MenuItem { text: "Hämeenlinna" }
+            ComboBox {
+                id: region
+                label: qsTr("Choose region")
+                menu: ContextMenu {
+                    Repeater {
+                        model: regions
+
+                        delegate: MenuItem {
+                            text: qsTr(model.text)
+                            property string value: model.text.toLowerCase()
+                        }
+                    }
+                }
             }
         }
     }
-
     onAccepted: {
-        if (region.currentIndex === 0) {
-            Storage.setSetting('api', "helsinki")
-        }
-        else if (region.currentIndex === 1) {
-            Storage.setSetting('api', "tampere")
-        }
-        else if (region.currentIndex === 2) {
-            Storage.setSetting('api', "turku")
-        }
-        else if (region.currentIndex === 3) {
-            Storage.setSetting('api', "hameenlinna")
-        }
+        Storage.setSetting('api', region.currentItem.value);
     }
 }

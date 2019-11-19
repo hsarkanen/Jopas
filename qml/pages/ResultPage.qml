@@ -43,7 +43,7 @@ Page {
     function startSearch() {
         appWindow.itinerariesModel.clear()
         Reittiopas.get_route(search_parameters, appWindow.itinerariesModel,
-                             appWindow.itinerariesJson, Storage.getSetting('api'));
+                             appWindow.itinerariesJson, regions.getRegion());
     }
 
     function setCoverData() {

@@ -40,6 +40,126 @@ ApplicationWindow {
 
     cover: Qt.resolvedUrl("pages/CoverPage.qml")
 
+    ListModel {
+        id: regions
+
+        ListElement {
+            text: QT_TR_NOOP("Finland")
+            apiName: "finland"
+        }
+        ListElement {
+            text: QT_TR_NOOP("Helsinki")
+            apiName: "hsl"
+            boundarycirclelat: 60.169
+            boundarycirclelon: 24.940
+        }
+        ListElement {
+            text: QT_TR_NOOP("Tampere")
+            apiName: "finland"
+            boundarycirclelat: 61.498
+            boundarycirclelon: 23.759
+        }
+        ListElement {
+            text: QT_TR_NOOP("Turku")
+            apiName: "finland"
+            boundarycirclelat: 60.451
+            boundarycirclelon: 22.267
+        }
+        ListElement {
+            text: QT_TR_NOOP("Hämeenlinna")
+            apiName: "waltti"
+            boundarycirclelat: 60.997
+            boundarycirclelon: 24.465
+        }
+        ListElement {
+            text: QT_TR_NOOP("Joensuu")
+            apiName: "waltti"
+            boundarycirclelat: 62.601
+            boundarycirclelon: 29.762
+        }
+        ListElement {
+            text: QT_TR_NOOP("Jyväskylä")
+            apiName: "waltti"
+            boundarycirclelat: 62.243
+            boundarycirclelon: 25.747
+        }
+        ListElement {
+            text: QT_TR_NOOP("Kajaani")
+            apiName: "waltti"
+            boundarycirclelat: 64.227
+            boundarycirclelon: 27.729
+        }
+        ListElement {
+            text: QT_TR_NOOP("Kotka")
+            apiName: "waltti"
+            boundarycirclelat: 60.461
+            boundarycirclelon: 26.939
+        }
+        ListElement {
+            text: QT_TR_NOOP("Kouvola")
+            apiName: "waltti"
+            boundarycirclelat: 60.869
+            boundarycirclelon: 26.700
+        }
+        ListElement {
+            text: QT_TR_NOOP("Kuopio")
+            apiName: "waltti"
+            boundarycirclelat: 62.892
+            boundarycirclelon: 27.678
+        }
+        ListElement {
+            text: QT_TR_NOOP("Lahti")
+            apiName: "waltti"
+            boundarycirclelat: 60.984
+            boundarycirclelon: 25.656
+        }
+        ListElement {
+            text: QT_TR_NOOP("Lappeenranta")
+            apiName: "waltti"
+            boundarycirclelat: 61.056
+            boundarycirclelon: 28.185
+        }
+        ListElement {
+            text: QT_TR_NOOP("Mikkeli")
+            apiName: "waltti"
+            boundarycirclelat: 61.688
+            boundarycirclelon: 27.274
+        }
+        ListElement {
+            text: QT_TR_NOOP("Oulu")
+            apiName: "waltti"
+            boundarycirclelat: 65.012
+            boundarycirclelon: 25.471
+        }
+        ListElement {
+            text: QT_TR_NOOP("Rovaniemi")
+            apiName: "waltti"
+            boundarycirclelat: 66.500
+            boundarycirclelon: 25.714
+        }
+        ListElement {
+            text: QT_TR_NOOP("Salo")
+            apiName: "waltti"
+            boundarycirclelat: 60.385
+            boundarycirclelon: 23.129
+        }
+        ListElement {
+            text: QT_TR_NOOP("Vaasa")
+            apiName: "waltti"
+            boundarycirclelat: 63.096
+            boundarycirclelon: 21.616
+        }
+
+        function getRegion() {
+            var apiName = Storage.getSetting('api');
+            for (var i = 0; i < regions.count; i++) {
+                var value = regions.get(i);
+                if (apiName === value.text.toLowerCase()) {
+                    return value;
+                }
+            }
+        }
+    }
 
     InfoBanner {
         id: infoBanner
