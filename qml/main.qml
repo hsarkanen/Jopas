@@ -48,28 +48,28 @@ ApplicationWindow {
             apiName: "finland"
         }
         ListElement {
-            name: QT_TR_NOOP("Helsinki ja pääkaupunkiseutu (HSL)")
+            name: QT_TR_NOOP("Helsinki and the capital region (HRT)")
             identifier: "helsinki"
             apiName: "hsl"
             boundarycirclelat: 60.169
             boundarycirclelon: 24.940
         }
         ListElement {
-            name: QT_TR_NOOP("Tampereen alue (Nysse)")
+            name: QT_TR_NOOP("Tampere region (Nysse)")
             identifier: "tampere"
             apiName: "finland"
             boundarycirclelat: 61.498
             boundarycirclelon: 23.759
         }
         ListElement {
-            name: QT_TR_NOOP("Turun alue (Föli)")
+            name: QT_TR_NOOP("Turku region (Föli)")
             identifier: "turku"
             apiName: "finland"
             boundarycirclelat: 60.451
             boundarycirclelon: 22.267
         }
         ListElement {
-            name: QT_TR_NOOP("Hämeenlinnan seutu")
+            name: QT_TR_NOOP("Hämeenlinna region")
             identifier: "hameenlinna"
             apiName: "waltti"
             boundarycirclelat: 60.997
@@ -83,28 +83,28 @@ ApplicationWindow {
             boundarycirclelon: 27.190
         }
         ListElement {
-            name: QT_TR_NOOP("Joensuun seutu (JOJO)")
+            name: QT_TR_NOOP("Joensuu region (JOJO)")
             identifier: "joensuu"
             apiName: "waltti"
             boundarycirclelat: 62.601
             boundarycirclelon: 29.762
         }
         ListElement {
-            name: QT_TR_NOOP("Jyväskylän seutu (Linkki)")
+            name: QT_TR_NOOP("Jyväskylä region (Linkki)")
             identifier: "jyvaskyla"
             apiName: "waltti"
             boundarycirclelat: 62.243
             boundarycirclelon: 25.747
         }
         ListElement {
-            name: QT_TR_NOOP("Kajaanin seutu")
+            name: QT_TR_NOOP("Kajaani region")
             identifier: "kajaani"
             apiName: "waltti"
             boundarycirclelat: 64.227
             boundarycirclelon: 27.729
         }
         ListElement {
-            name: QT_TR_NOOP("Kotkan seutu")
+            name: QT_TR_NOOP("Kotka region")
             identifier: "kotka"
             apiName: "waltti"
             boundarycirclelat: 60.461
@@ -118,14 +118,14 @@ ApplicationWindow {
             boundarycirclelon: 26.700
         }
         ListElement {
-            name: QT_TR_NOOP("Kuopion seutu (Vilkku)")
+            name: QT_TR_NOOP("Kuopio region (Vilkku)")
             identifier: "kuopio"
             apiName: "waltti"
             boundarycirclelat: 62.892
             boundarycirclelon: 27.678
         }
         ListElement {
-            name: QT_TR_NOOP("Lahden seutu (LSL)")
+            name: QT_TR_NOOP("Lahti region (LSL)")
             identifier: "lahti"
             apiName: "waltti"
             boundarycirclelat: 60.984
@@ -146,7 +146,7 @@ ApplicationWindow {
             boundarycirclelon: 27.274
         }
         ListElement {
-            name: QT_TR_NOOP("Oulun seutu")
+            name: QT_TR_NOOP("Oulu region")
             identifier: "oulu"
             apiName: "waltti"
             boundarycirclelat: 65.012

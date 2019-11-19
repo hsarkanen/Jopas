@@ -52,7 +52,7 @@ Dialog {
                         model: regions
 
                         delegate: MenuItem {
-                            text: qsTr(model.name)
+                            text: qsTranslate("main", model.name)
                             property string value: model.identifier
                         }
                     }
