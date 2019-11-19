@@ -72,6 +72,12 @@ ApplicationWindow {
             boundarycirclelon: 24.465
         }
         ListElement {
+            text: QT_TR_NOOP("Iisalmi")
+            apiName: "waltti"
+            boundarycirclelat: 63.557
+            boundarycirclelon: 27.190
+        }
+        ListElement {
             text: QT_TR_NOOP("Joensuu")
             apiName: "waltti"
             boundarycirclelat: 62.601
@@ -136,12 +142,6 @@ ApplicationWindow {
             apiName: "waltti"
             boundarycirclelat: 66.500
             boundarycirclelon: 25.714
-        }
-        ListElement {
-            text: QT_TR_NOOP("Salo")
-            apiName: "waltti"
-            boundarycirclelat: 60.385
-            boundarycirclelon: 23.129
         }
         ListElement {
             text: QT_TR_NOOP("Vaasa")
