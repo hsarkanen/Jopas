@@ -59,13 +59,29 @@ Page {
 
     function dumpStops(index, model) {
         var legdata = appWindow.itinerariesModel.get(appWindow.itinerariesIndex).legs.get(index)
+        var stop = {
+            "name" : legdata.from.name,
+            "shortCode" : legdata.from.shortCode,
+            "latitude" : legdata.from.latitude,
+            "longitude" : legdata.from.longitude,
+            "arrTime" : 0,
+            "depTime" : 0,
+            "time_diff": 0
+        }
+        model.append(stop)
         var countOfLocations = legdata.locs.count;
         for (var locindex = 0; locindex < countOfLocations; ++locindex) {
             var locdata =  legdata.locs.get(locindex)
             model.append(locdata)
+        }
+        stop.name = legdata.to.name
+        stop.shortCode = legdata.to.shortCode
+        stop.latitude = legdata.to.latitude
+        stop.longitude = legdata.to.longitude
+        model.append(stop)
+
+        model.done = true
     }
-    model.done = true
-}
 
 /*
 // TODO:
