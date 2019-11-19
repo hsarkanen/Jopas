@@ -52,8 +52,8 @@ Dialog {
                         model: regions
 
                         delegate: MenuItem {
-                            text: qsTr(model.text)
-                            property string value: model.text.toLowerCase()
+                            text: qsTr(model.name)
+                            property string value: model.identifier
                         }
                     }
                 }

@@ -93,14 +93,14 @@ Page {
                 id: currentApi
                 function set_value(value) {
                     for(var i = 0; i < regions.count; ++i) {
-                        if (regions.get(i).text.toLowerCase() === value) {
+                        if (regions.get(i).identifier === value) {
                             currentApi.currentIndex = i;
                             break;
                         }
                     }
                 }
 
-                label: qsTr("Active Region")
+                label: qsTr("Active region")
                 menu: ContextMenu {
                     id: regionMenu
 
@@ -115,8 +115,8 @@ Page {
                         model: regions
 
                         delegate: MenuItem {
-                            text: qsTr(model.text)
-                            property string value: model.text.toLowerCase()
+                            text: qsTr(model.name)
+                            property string value: model.identifier
                             onClicked: regionMenu.set_value(text, value)
                         }
                     }
