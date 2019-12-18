@@ -44,10 +44,6 @@ ApplicationWindow {
         id: regions
 
         ListElement {
-            name: QT_TR_NOOP("Finland")
-            apiName: "finland"
-        }
-        ListElement {
             name: QT_TR_NOOP("Helsinki and the capital region (HRT)")
             identifier: "helsinki"
             apiName: "hsl"
@@ -165,6 +161,11 @@ ApplicationWindow {
             apiName: "waltti"
             boundarycirclelat: 63.096
             boundarycirclelon: 21.616
+        }
+        ListElement {
+            name: QT_TR_NOOP("Whole Finland")
+            identifier: "finland"
+            apiName: "finland"
         }
 
         function getRegion() {

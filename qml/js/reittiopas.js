@@ -132,10 +132,14 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
     var query = '{plan(from:{lat:' + graphqlFromLat + ',lon:' + graphqlFromLon + '},to:{lat:'
             + graphqlToLat + ',lon:' + graphqlToLon + '},date:"' + graphqlDate + '",time:"'
             + graphqlTime + '",numItineraries:' + graphqlNumberOfItinaries
-            + ',modes:"' + parameters.modes + '",minTransferTime:'
-            + graphqlTransferTime + ',walkBoardCost:' + graphqlWalkBoardCost + ',walkReluctance:'
-            + graphqlWalkReluctance + ',walkSpeed:' + graphqlWalkSpeed + graphqlArriveBy
-            + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
+            + ',minTransferTime:' + graphqlTransferTime + ',walkBoardCost:'
+            + graphqlWalkBoardCost + ',walkReluctance:' + graphqlWalkReluctance
+            + ',walkSpeed:' + graphqlWalkSpeed;
+    // Show all results for the Finland region.
+    if (region.identifier !== "finland") {
+        query = query + ',modes:"' + parameters.modes + '"';
+    }
+    query = query + graphqlArriveBy + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
 
 //    console.debug(query);
     var http_request = new XMLHttpRequest();

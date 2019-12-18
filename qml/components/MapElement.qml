@@ -176,10 +176,7 @@ Item {
         interval: appWindow.currentApi !== "helsinki" ? 3000 : 300
         repeat: appWindow.currentApi !== "helsinki"
         onTriggered: {
-            if (appWindow.currentApi !== "helsinki") {
-                receiveVehicleLocation()
-            }
-            else {
+            if (appWindow.currentApi === "helsinki") {
                 mqttClient.port = "8883"
                 mqttClient.connectToHost()
                 for (var allowedLine in vehicleModel.vehicleCodesToShowOnMap) {
@@ -189,6 +186,9 @@ Item {
                     vehicleToSubscribe.messageReceived.connect(addMqttVehicle)
                     mqttSubscriptionMap.push(vehicleToSubscribe)
                 }
+            }
+            else {
+                receiveVehicleLocation()
             }
         }
     }
@@ -451,7 +451,9 @@ Item {
     function initialize(multipleRoutes) {
         flickable_map.addMapItem(current_position)
 
-        vehicleUpdateTimer.start()
+        if (appWindow.currentApi === "helsinki" || appWindow.currentApi === "turku" || appWindow.currentApi === "tampere") {
+            vehicleUpdateTimer.start()
+        }
 
         Helper.clear_objects()
         vehicleModel.vehicleCodesToShowOnMap = []
