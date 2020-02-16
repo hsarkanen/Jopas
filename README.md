@@ -1,7 +1,7 @@
 JollaOpas
 =========
 
-Journey planner for Finnish mass transit regions using the Digitransit API. Fork of [Jopas](https://github.com/rasjani/Jopas) originally forked from [Meegopas](https://github.com/junousia/Meegopas) for SailfishOS. Routing information is based on open data API:s provided by [Helsinki Regional Transport Authority](http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php) and [City of Tampere](http://developer.publictransport.tampere.fi/pages/en/http-get-interface.php).
+Journey planner for Finnish mass transit regions using the [Digitransit API](https://www.digitransit.fi/en/developers/). Fork of [Jopas](https://github.com/rasjani/Jopas) originally forked from [Meegopas](https://github.com/junousia/Meegopas) for SailfishOS.
 
 Installing
 ----------
