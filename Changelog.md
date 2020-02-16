@@ -1,3 +1,11 @@
+## 0.9.1 (17th of February, 2020)
+
+Features:
+
+  - Add Waltti regions for routing
+  - Add from and to stops on listing
+  - Add configurable parameter to change search interval
+
 ## 0.9.0 (28th of April, 2019)
 
 Features:
