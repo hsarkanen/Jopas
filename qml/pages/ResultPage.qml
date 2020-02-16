@@ -93,7 +93,7 @@ Page {
                 /* workaround to modify qml array is to make a copy of it,
                    modify the copy and assign the copy back to the original */
                 var new_parameters = search_parameters
-                new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() + Storage.getSetting("search_interval"))
+                new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() + parseInt(Storage.getSetting("search_interval")))
                 new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
                 search_parameters = new_parameters
 
@@ -143,7 +143,7 @@ Page {
                     /* workaround to modify qml array is to make a copy of it,
                        modify the copy and assign the copy back to the original */
                     var new_parameters = search_parameters
-                    new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() - 15)
+                    new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() - parseInt(Storage.getSetting("search_interval")))
                     new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
                     search_parameters = new_parameters
 

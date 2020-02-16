@@ -343,7 +343,7 @@ Page {
                 minimumValue: 5
                 maximumValue: 120
                 value: 15
-                stepSize: 1
+                stepSize: 5
                 handleVisible: true
                 onValueChanged: {
                     Storage.setSetting("search_interval", searchInterval.value)
