@@ -36,11 +36,15 @@ import "../js/storage.js" as Storage
 import "../components"
 
 Page {
+    id: resultPage
     property var search_parameters
+    property var search_interval
 
     Component.onCompleted: startSearch()
 
     function startSearch() {
+        var settings_search_interval = Storage.getSetting("search_interval");
+        search_interval = settings_search_interval === "Unknown" ? "15" : settings_search_interval;
         appWindow.itinerariesModel.clear()
         Reittiopas.get_route(search_parameters, appWindow.itinerariesModel,
                              appWindow.itinerariesJson, regions.getRegion());
@@ -93,7 +97,7 @@ Page {
                 /* workaround to modify qml array is to make a copy of it,
                    modify the copy and assign the copy back to the original */
                 var new_parameters = search_parameters
-                new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() + parseInt(Storage.getSetting("search_interval")))
+                new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() + parseInt(resultPage.search_interval))
                 new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
                 search_parameters = new_parameters
 
@@ -101,7 +105,7 @@ Page {
             }
 
             Label {
-                text: qsTr("Next (+%1 min)").arg(Math.floor(Storage.getSetting("search_interval")))
+                text: qsTr("Next (+%1 min)").arg(Math.floor(resultPage.search_interval))
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -143,7 +147,7 @@ Page {
                     /* workaround to modify qml array is to make a copy of it,
                        modify the copy and assign the copy back to the original */
                     var new_parameters = search_parameters
-                    new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() - parseInt(Storage.getSetting("search_interval")))
+                    new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() - parseInt(resultPage.search_interval))
                     new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
                     search_parameters = new_parameters
 
@@ -151,7 +155,7 @@ Page {
                 }
 
                 Label {
-                    text: qsTr("Previous (-%1 min)").arg(Math.floor(Storage.getSetting("search_interval")))
+                    text: qsTr("Previous (-%1 min)").arg(Math.floor(resultPage.search_interval))
                     width: parent.width
                     horizontalAlignment: Text.AlignHCenter
                     anchors.verticalCenter: parent.verticalCenter
