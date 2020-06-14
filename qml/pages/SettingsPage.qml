@@ -75,7 +75,28 @@ Page {
             searchButtonSwitch.set_value(setting == "Unknown"?"false" : setting)
         }
 
+        function reset_all_defaults() {
+            tramSwitch.set_value("false");
+            busSwitch.set_value("false");
+            ferrySwitch.set_value("false");
+            metroSwitch.set_value("false");
+            trainSwitch.set_value("false");
+            walkingSpeed.set_value("70");
+            changeMargin.set_value("3");
+            changeReluctance.set_value("10");
+            walkReluctance.set_value("2");
+            searchInterval.set_value("15");
+            defaultZoomLevel.set_value("5");
+            searchButtonSwitch.set_value("false");
+        }
+
         PullDownMenu {
+            MenuItem {
+                text: qsTr("Reset to defaults");
+                onClicked: {
+                    settingsContent.reset_all_defaults();
+                }
+            }
             MenuItem { text: qsTr("About"); onClicked: pageStack.push(Qt.resolvedUrl("AboutDialog.qml")) }
         }
 
