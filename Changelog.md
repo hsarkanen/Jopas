@@ -1,3 +1,15 @@
+## 0.9.2 (15th of June, 2020)
+
+Features:
+
+  - Add reset to defaults option to settings
+
+Bugfixes:
+
+  - Fix Helsinki live vehicle locations map
+  - Fix 'nan' search time after upgrading to 0.9.1
+  - Fix initial usage with Helsinki region
+
 ## 0.9.1 (17th of February, 2020)
 
 Features:
