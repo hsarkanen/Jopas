@@ -433,7 +433,7 @@ Page {
                     }
 
                     favoriteRouteList.contextMenu.currentItem = rootItem
-                    favoriteRouteList.contextMenu.show(rootItem)
+                    favoriteRouteList.contextMenu.open(rootItem)
                 }
 
                 Label {

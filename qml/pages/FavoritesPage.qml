@@ -116,7 +116,7 @@ Page {
                 }
 
                 list.contextMenu.currentItem = rootItem
-                list.contextMenu.show(rootItem)
+                list.contextMenu.open(rootItem)
             }
 
             Label {
