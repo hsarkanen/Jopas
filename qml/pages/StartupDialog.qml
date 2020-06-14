@@ -61,6 +61,20 @@ Dialog {
         }
     }
     onAccepted: {
-        Storage.setSetting('api', region.currentItem.value);
+        Storage.setSetting('api', region.currentItem.value === "Unknown" ? "helsinki" :
+                                                                          region.currentItem.value);
+        appWindow.currentApi = Storage.getSetting("api");
+        Storage.setSetting("bus_disabled", "false");
+        Storage.setSetting("ferry_disabled", "false");
+        Storage.setSetting("tram_disabled", "false");
+        Storage.setSetting("metro_disabled", "false");
+        Storage.setSetting("train_disabled", "false");
+        Storage.setSetting("change_margin", "3");
+        Storage.setSetting("change_reluctance", "10");
+        Storage.setSetting("walk_reluctance", "2");
+        Storage.setSetting('walking_speed', "70");
+        Storage.setSetting("search_interval", "15");
+        Storage.setSetting("default_zoom_level", "5");
+        Storage.setSetting("search_button_disabled", "false");
     }
 }
