@@ -85,10 +85,10 @@ Item {
         }
         // Mqtt API doesn't support subway or ferry yet so leave those colors out for now
         var vehicleColor = "#08a7cc"; // Default to bus
-        if (topic.substring(24, 28) === "tram") {
+        if (topic.substring(27, 31) === "tram") {
             vehicleColor = "#925bc6"
         }
-        else if (topic.substring(24, 29) === "train") {
+        else if (topic.substring(27, 32) === "train") {
             vehicleColor = "#61b700"
         }
         var vehicleSpeed = Math.round(payload_json.VP.spd * 3.6) // Convert to km/h
@@ -180,7 +180,7 @@ Item {
                 mqttClient.port = "8883"
                 mqttClient.connectToHost()
                 for (var allowedLine in vehicleModel.vehicleCodesToShowOnMap) {
-                    var vehicleToSubscribe = mqttClient.subscribe("/hfp/v1/journey/ongoing/+/+/+/" +
+                    var vehicleToSubscribe = mqttClient.subscribe("/hfp/v2/journey/ongoing/vp/+/+/+/" +
                             vehicleModel.vehicleCodesToShowOnMap[allowedLine].gtfsId
                             + "/#");
                     vehicleToSubscribe.messageReceived.connect(addMqttVehicle)
