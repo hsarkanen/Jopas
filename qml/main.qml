@@ -223,6 +223,10 @@ ApplicationWindow {
         while(i < nrArg-1) {
             if (argList[i] === "-q" || argList[i] === "--query") {
                 result = schemeComponents(argList[i+1], decode, sepStr)
+<<<<<<< HEAD
+=======
+
+>>>>>>> c62d043ffd452fc5fbbc8c691585e479a4a27960
                 i = nrArg
             } else if (argList[i] === "--address" || argList[i] === "--to") {
                 result.parameters.to = argList[i+1]
