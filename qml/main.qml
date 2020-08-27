@@ -31,6 +31,7 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import org.nemomobile.notifications 1.0
 import "js/storage.js" as Storage
 import "js/favorites.js" as Favorites
 import "components"
@@ -178,6 +179,12 @@ ApplicationWindow {
             }
         }
     }
+    Notification {
+        id: notification
+        previewBody : ""
+        previewSummary : ""
+        onClicked : notification.close()
+    }
 
     InfoBanner {
         id: infoBanner
@@ -218,6 +225,12 @@ ApplicationWindow {
     property int itinerariesIndex: -1
     property string fromName: ""
     property string toName: ""
+    
+    function useNotification(text){
+        notification.close()
+        notification.previewSummary = text
+        notification.publish()
+    }
 
     onFollowModeChanged: {
         if(followMode)
