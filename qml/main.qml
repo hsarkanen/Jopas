@@ -225,6 +225,19 @@ ApplicationWindow {
     property int itinerariesIndex: -1
     property string fromName: ""
     property string toName: ""
+    property var locationParameters: {
+        /* Current location acquired with GPS */
+        "gps": {},
+
+        /* Values entered in "To" field */
+        "to": {},
+
+        /* Values entered in "From" field */
+        "from": {},
+
+        /* Values entered in "Date" and "Time" fields */
+        "datetime": {}
+    }
     
     function useNotification(text){
         notification.close()
