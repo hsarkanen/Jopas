@@ -39,42 +39,39 @@ import "../js/favorites.js" as Favorites
 import "../js/recentitems.js" as RecentItems
 import "../components"
 
-Page {
+Dialog {
     id: mainPage
+    forwardNavigation: true
+    canNavigateForward: paramsValid
+    canAccept: paramsValid
+    acceptDestination: Qt.resolvedUrl("ResultPage.qml")
 
-    /* Current location acquired with GPS */
-    property string currentCoord: ''
-    property string currentName: ''
+    /* ReittiOpas query params */
+    property bool paramsValid
+    property variant searchParameters
 
-    /* Values entered in "To" field */
-    property string toCoord: ''
-    property string toName: ''
-
-    /* Values entered in "From" field */
-    property string fromCoord: ''
-    property string fromName: ''
-
-    property bool searchButtonDisabled: false
-
-    property bool endpointsValid: (toCoord.length > 0 && (fromCoord.length > 0 || currentCoord.length > 0))
-
-    onEndpointsValidChanged: {
+    onParamsValidChanged: {
         /* if we receive coordinates we are waiting for, start route search */
-        if(state == "waiting_route" && endpointsValid) {
+        if(state == "waiting_route" && paramsValid) {
             var parameters = {}
             setRouteParameters(parameters)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
             state = "normal"
+        } else {
+            setRouteParameters({})
         }
+    }
+
+    onAcceptPendingChanged: {
+        mainPage.acceptDestinationInstance.search_parameters = searchParameters
+        mainPage.acceptDestinationInstance.startSearch()
     }
 
     onStatusChanged: {
         if (status == PageStatus.Activating) {
             appWindow.coverAlignment = Text.AlignHCenter
-            appWindow.coverHeader = 'JollaOpas'
+            appWindow.coverHeader = "JollaOpas"
             appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
-
-            searchButtonDisabled = Storage.getSetting("search_button_disabled") == "true" ? true : false
 
             // Prevent the keyboard to popup instantly when swithcing back to mainPage
             mainPage.forceActiveFocus()
@@ -83,7 +80,7 @@ Page {
 
     function refreshFavoriteRoutes() {
             favoriteRoutesModel.clear()
-            Favorites.getFavoriteRoutes('normal', appWindow.currentApi, favoriteRoutesModel)
+            Favorites.getFavoriteRoutes("normal", appWindow.currentApi, favoriteRoutesModel)
     }
 
     function newRoute(name, coord) {
@@ -104,7 +101,7 @@ Page {
         from.clear()
 
         /* use current location if available - otherwise wait for it */
-        if(currentCoord != "") {
+        if(appWindow.locationParameters.gps.coord) {
             var parameters = {}
             setRouteParameters(parameters)
             pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
@@ -115,7 +112,7 @@ Page {
     }
 
     Component.onCompleted: {
-        timeSwitch.setTimeNow()
+        timeButton.setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
         refreshFavoriteRoutes()
     }
@@ -132,49 +129,46 @@ Page {
     state: "normal"
 
     function setRouteParameters(parameters) {
-        var walking_speed = Storage.getSetting("walking_speed")
-        var change_margin = Storage.getSetting("change_margin")
-        var change_reluctance = Storage.getSetting("change_reluctance")
-        var walk_reluctance = Storage.getSetting("walk_reluctance")
-        var currentDate = new Date()
+        try {
+            var walking_speed = Storage.getSetting("walking_speed")
+            var change_margin = Storage.getSetting("change_margin")
+            var change_reluctance = Storage.getSetting("change_reluctance")
+            var walk_reluctance = Storage.getSetting("walk_reluctance")
+            var currentDate = new Date()
 
-        // Only add to recentitems if the place is not from favorites and
-        // user specified start point
-        if (fromName && from.selected_favorite < 0) {
-            RecentItems.addRecentItem(fromName, fromCoord)
-        }
-        if (toName && to.selected_favorite < 0) {
-            RecentItems.addRecentItem(toName, toCoord)
-        }
+            // Only add to recentitems if the place is not from favorites and
+            // user specified start point
+            if (appWindow.locationParameters.from.name && from.selected_favorite < 0) {
+                RecentItems.addRecentItem(appWindow.locationParameters.from.name, appWindow.locationParameters.from.coord)
+            }
+            if (appWindow.locationParameters.to.name && to.selected_favorite < 0) {
+                RecentItems.addRecentItem(appWindow.locationParameters.to.name, appWindow.locationParameters.to.coord)
+            }
 
-        parameters.from_name = fromName ? fromName : currentName
-        parameters.from = fromCoord ? fromCoord : currentCoord
-        parameters.to_name = toName
-        appWindow.fromName = parameters.from_name
-        appWindow.toName = parameters.to_name
-        parameters.to = toCoord
+            parameters.from_name = appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name
+            parameters.from = appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord
+            parameters.to_name = appWindow.locationParameters.to.name
+            parameters.to = appWindow.locationParameters.to.coord
 
-        if (timeSwitch.timeNow) {
+            appWindow.locationParameters.from.name = parameters.from_name
+            appWindow.locationParameters.from.coord = parameters.from
+
+            currentDate.setFullYear(appWindow.locationParameters.datetime.year || currentDate.getFullYear())
+            currentDate.setMonth(appWindow.locationParameters.datetime.month || currentDate.getMonth())
+            currentDate.setDate(appWindow.locationParameters.datetime.date || currentDate.getDate())
+            currentDate.setHours(appWindow.locationParameters.datetime.hour || currentDate.getHours())
+            currentDate.setMinutes(appWindow.locationParameters.datetime.minute || currentDate.getMinutes())
+
             parameters.jstime = currentDate
-        }
-        else if (timeSwitch.dateToday) {
-            currentDate.setHours(timeSwitch.myTime.getHours())
-            currentDate.setMinutes(timeSwitch.myTime.getMinutes())
-            parameters.jstime = currentDate
-        }
-        else {
-            parameters.jstime = timeSwitch.myTime
-        }
-        parameters.timetype = "departure"
-        if (!timeTypeSwitch.departure) {
-            parameters.arriveBy = true
-            parameters.timetype = "arrival"
-        }
-        parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
-        parameters.change_margin = change_margin == "Unknown"?"3":Math.floor(change_margin)
-        parameters.change_reluctance = change_reluctance == "Unknown"?"10":Math.floor(change_reluctance)
-        parameters.walk_reluctance = walk_reluctance == "Unknown"?"2":Math.floor(walk_reluctance)
-        parameters.modes =""
+
+            parameters.timetype = timeBy.firstActive ? "departure" : "arrival"
+            parameters.arriveBy = !timeBy.firstActive
+
+            parameters.walk_speed = walking_speed === "Unknown" ? "70" : walking_speed
+            parameters.change_margin = change_margin === "Unknown" ? "3" : Math.floor(change_margin)
+            parameters.change_reluctance = change_reluctance === "Unknown" ? "10" : Math.floor(change_reluctance)
+            parameters.walk_reluctance = walk_reluctance === "Unknown" ? "2" : Math.floor(walk_reluctance)
+            parameters.modes =""
 
         if (appWindow.currentApi === "helsinki") {
             if(Storage.getSetting("bus_disabled") === "false") {
@@ -197,6 +191,15 @@ Page {
             parameters.modes += "BUS,"
         }
         parameters.modes += "WALK"
+        } catch (err) {
+            console.log("setRouteParameters", JSON.stringify(err))
+            return false
+    }
+        if(!!parameters.from_name || !!parameters.from || !!parameters.to_name || !!parameters.to) {
+            searchParameters = parameters
+            return true
+        }
+        return  false
     }
 
     Rectangle {
@@ -234,12 +237,18 @@ Page {
             MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
             MenuItem { text: qsTr("Manage favorite places"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
             MenuItem {
-                enabled: endpointsValid
+                enabled: paramsValid
                 text: qsTr("Add as favorite route");
                 onClicked: {
-                    var fromNameToAdd = fromName ? fromName : currentName
-                    var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
-                    var res = Favorites.addFavoriteRoute('normal', appWindow.currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
+                    var res = Favorites.addFavoriteRoute(
+                        "normal",
+                        appWindow.currentApi,
+                        appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name,
+                        appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord,
+                        appWindow.locationParameters.to.coord,
+                        appWindow.locationParameters.to.name,
+                        favoriteRoutesModel
+                    )
                     if (res === "OK") {
                         displayPopupMessage( qsTr("Favorite route added") )
                     }
@@ -249,88 +258,264 @@ Page {
                 }
             }
             MenuItem {
-                visible: searchButtonDisabled
-                enabled: endpointsValid
-                text: qsTr("Search");
+                text: qsTr("Get Return Route");
                 onClicked: {
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                    var fromObj = JSON.parse(JSON.stringify(appWindow.locationParameters.from))
+                    var toObj = JSON.parse(JSON.stringify(appWindow.locationParameters.to))
+                    appWindow.locationParameters.from = toObj
+                    appWindow.locationParameters.to = fromObj
+                    from.value = appWindow.locationParameters.from.name || "Choose Location"
+                    to.value = appWindow.locationParameters.to.name || "Choose Location"
+                    paramsValid = setRouteParameters({})
                 }
             }
         }
-
-        Spacing { id: topSpacing; anchors.top: parent.top; height: Theme.paddingMedium }
-
+        PageHeader { id: header ; title: qsTr("Search")}
         Column {
             id: content_column
             width: parent.width
             anchors.left: parent.left
             anchors.leftMargin: Theme.paddingSmall
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: topSpacing.bottom
+            anchors.top: header.bottom
 
-            Item {
+            ComboBox {
+                id: from
                 width: parent.width
-                height: from.height + to.height
-
-                LocationEntry {
-                    id: from
-                    type: qsTr("From")
-                    isFrom: true
-                    onLocationDone: {
-                        fromName = name
-                        fromCoord = coord
+                label: "Departure"
+                description: "Select journeys starting point"
+                value: appWindow.locationParameters.from.name || "Choose location"
+                menu: ContextMenu {
+                    MenuItem {
+                        text: "Search"
+                        onClicked: function() {
+                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/SearchAddress.qml"))
+                            dialog.accepted.connect(function() {
+                                from.value = appWindow.locationParameters.from.name
+                                paramsValid = setRouteParameters({})
+                            })
+                        }
                     }
-                    onCurrentLocationDone: {
-                        currentName = name
-                        currentCoord = coord
+                    MenuItem {
+                        text: "Map"
+                        onClicked: function() {
+                            var dialog = pageStack.push(
+                                Qt.resolvedUrl("./dialogs/Map.qml"),
+                                {
+                                    inputCoord: appWindow.locationParameters.from.coord || '',
+                                    resultName: appWindow.locationParameters.from.name || ''
+                                }
+                            )
+                            dialog.accepted.connect(function() {
+                                appWindow.locationParameters.from = dialog.resultObject
+                                from.value = appWindow.locationParameters.from.name
+                                paramsValid = setRouteParameters({})
+                            })
+                        }
                     }
-                    onLocationError: {
-                        /* error in getting current position, cancel the wait */
-                        mainPage.state = "normal"
+                    MenuItem {
+                        text: "Favorite"
+                        onClicked: function() {
+                            var dialog = pageStack.push(Qt.resolvedUrl("./FavoritesPage.qml"))
+                            dialog.accepted.connect(function() {
+                                from.value = appWindow.locationParameters.from.name
+                                paramsValid = setRouteParameters({})
+                            })
+                        }
                     }
                 }
-
-                Spacing { id: location_spacing; anchors.top: from.bottom; height: 5 }
-
-                SwitchLocation {
-                    anchors.top: from.top
-                    anchors.topMargin: from.height - location_spacing.height - UIConstants.DEFAULT_MARGIN // Hack to place switch between `from` and `to` LocationEntries
-                    z: 1
-                    from: from
-                    to: to
+                onPressAndHold: function(){
+                    from.value = "Using GPS"
+                    fromGPS.timer.running = true
                 }
-
-                LocationEntry {
-                    id: to
-                    type: qsTr("To")
-                    onLocationDone: {
-                        toName = name
-                        toCoord = coord
+                LocationSource {
+                    id: fromGPS
+                    onLocationFound: function() {
+                        appWindow.locationParameters.from = appWindow.locationParameters.gps
+                        from.value = appWindow.locationParameters.from.name
+                        paramsValid = setRouteParameters({})
                     }
-                    anchors.top: location_spacing.bottom
+                    onNoLocationSource: function(){
+                        appWindow.useNotification( qsTr("Location service unavailable") )
+                        from.value = appWindow.locationParameters.from.name || "Choose location"
+                    }
                 }
             }
+            ComboBox {
+                id: to
+                width: parent.width
+                label: "Destination"
+                description: "Select where journey ends"
+                value: appWindow.locationParameters.to.name || "Choose location"
+                menu: ContextMenu {
+                    MenuItem {
+                        text: "Search"
+                        onClicked: function() {
+                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/SearchAddress.qml"), { departure: false })
+                            dialog.accepted.connect(function() {
+                                to.value = appWindow.locationParameters.to.name
+                                paramsValid = setRouteParameters({})
+                            })
+                        }
+                    }
+                    MenuItem {
+                        text: "Map"
+                        onClicked: function() {
+                            var dialog = pageStack.push(
+                                Qt.resolvedUrl("./dialogs/Map.qml"),
+                                {
+                                    inputCoord: appWindow.locationParameters.to.coord || '',
+                                    resultName: appWindow.locationParameters.to.name || ''
+                                }
+                            )
+                            dialog.accepted.connect(function() {
+                                appWindow.locationParameters.to = dialog.resultObject
+                                to.value = appWindow.locationParameters.to.name
+                                paramsValid = setRouteParameters({})
+                            })
+                        }
+                    }
+                    MenuItem {
+                        text: "Favorite"
+                        onClicked: function() {
+                            var dialog = pageStack.push(Qt.resolvedUrl("./FavoritesPage.qml"))
+                            dialog.accepted.connect(function() {
+                                to.value = appWindow.locationParameters.to.name
+                                paramsValid = setRouteParameters({})
+                            })
+                        }
+                    }
+                }
+                onPressAndHold: function(){
+                    to.value = "Using GPS"
+                    toGPS.timer.running = true
+                }
+                LocationSource {
+                    id: toGPS
+                    onLocationFound: function() {
+                        appWindow.locationParameters.to = appWindow.locationParameters.gps
+                        to.value = appWindow.locationParameters.to.name
+                        paramsValid = setRouteParameters({})
+                    }
+                    onNoLocationSource: function(){
+                        appWindow.useNotification( qsTr("Location service unavailable") )
+                        to.value = appWindow.locationParameters.to.name || "Choose location"
+                    }
+                    }
+                }
+            ValueToggle {
+                id: dateToggle
+                label: qsTr("Date")
+                visible: !dateToggle.selectedDate
+                property bool selectedDate
 
-            TimeTypeSwitch {
-                id: timeTypeSwitch
-            }
-            Spacing { height: 5 * Theme.pixelRatio }
-            TimeSwitch {
-                id: timeSwitch
-            }
-            Spacing { height: 5 * Theme.pixelRatio }
+                function openDateDialog() {
+                    var now = new Date()
+                    var date = appWindow.locationParameters.datetime.date || now.getDate()
+                    var month = appWindow.locationParameters.datetime.month || now.getMonth()
+                    var year = appWindow.locationParameters.datetime.year || now.getFullYear()
+                    var obj = pageStack.animatorPush("Sailfish.Silica.DatePickerDialog",
+                                                     { date: new Date(year, month, date, 0, 0, 0) })
 
-            Button {
-                visible: !searchButtonDisabled
-                anchors.horizontalCenter: parent.horizontalCenter
-                enabled: endpointsValid
-                text: qsTr("Search")
+                    obj.pageCompleted.connect(function(page) {
+                        page.accepted.connect(function() {
+                            appWindow.locationParameters.datetime.date = page.date.getDate()
+                            appWindow.locationParameters.datetime.month = page.date.getMonth()
+                            appWindow.locationParameters.datetime.year = page.date.getFullYear()
+                            selectedDate = true
+                            paramsValid = setRouteParameters({})
+                        })
+                    })
+                }
+
+                function toggle() {
+                    var d = new Date()
+                    if (!dateToggle.firstActive) {
+                        d.setDate(d.getDate() + 1)
+                    }
+                    appWindow.locationParameters.datetime.date = d.getDate()
+                    appWindow.locationParameters.datetime.month = d.getMonth()
+                    appWindow.locationParameters.datetime.year = d.getFullYear()
+                    paramsValid = setRouteParameters({})
+                }
+                firstValue: "Today"
+                secondValue: "Tomorrow"
+                onPressAndHold: openDateDialog()
+                onClicked: toggle()
+                description: "Press and hold to select a custom date"
+                onSelectedDateChanged: function() {
+                    var now = new Date()
+                    var date = appWindow.locationParameters.datetime.date || now.getDate()
+                    var month = appWindow.locationParameters.datetime.month || now.getMonth()
+                    var year = appWindow.locationParameters.datetime.year || now.getFullYear()
+                    var time = new Date(year, month, date, 0, 0, 0)
+                    var type = Formatter.TimeValueTwentyFourHours
+                    dateLabel.value = Qt.formatDate(time)
+                    paramsValid = setRouteParameters({})
+                }
+                }
+
+            ValueButton {
+                id: dateLabel
+                visible: dateToggle.selectedDate
+                label: qsTr("Date")
+                width: parent.width
                 onClicked: {
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                    dateToggle.selectedDate = !dateToggle.selectedDate
+                    dateToggle.toggle()
+                }
+                description: "Click to reset date"
+                    }
+
+            ValueButton {
+                id: timeButton
+                property bool update
+                function openTimeDialog() {
+                    var hour = appWindow.locationParameters.datetime.hour || 0
+                    var minute = appWindow.locationParameters.datetime.minute || 0
+                    var obj = pageStack.animatorPush("Sailfish.Silica.TimePickerDialog", {
+                                                    hourMode: DateTime.TwentyFourHours,
+                                                    hour: hour,
+                                                    minute: minute
+                                                })
+
+                    obj.pageCompleted.connect(function(page) {
+                        page.accepted.connect(function() {
+                            appWindow.locationParameters.datetime.hour = page.hour
+                            appWindow.locationParameters.datetime.minute = page.minute
+                            update = !update
+                        })
+                    })
+                }
+
+                function setTimeNow() {
+                    var now = new Date()
+                    appWindow.locationParameters.datetime.hour = now.getHours()
+                    appWindow.locationParameters.datetime.minute = now.getMinutes()
+                    update = !update
+            }
+
+                label: "Time"
+                width: parent.width
+                onClicked: openTimeDialog()
+                onPressAndHold: setTimeNow()
+                onUpdateChanged: {
+                    var hour = appWindow.locationParameters.datetime.hour || 0
+                    var minute = appWindow.locationParameters.datetime.minute || 0
+                    var time = new Date(0, 0, 0, hour, minute, 0)
+                    var type = Formatter.TimeValueTwentyFourHours
+                    value = Format.formatDate(time, type)
+                    paramsValid = setRouteParameters({})
+            }
+            }
+
+            ValueToggle {
+                id: timeBy
+                label: qsTr("Time by")
+                firstValue: qsTr("Departure")
+                secondValue: qsTr("Arrival")
+                onClicked: {
+                    paramsValid = setRouteParameters({})
                 }
             }
         }
@@ -416,15 +601,12 @@ Page {
                 }
 
                 onClicked:{
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    parameters.from_name = modelFromName
-                    parameters.from = modelFromCoord
-                    parameters.to_name = modelToName
-                    parameters.to = modelToCoord
-                    appWindow.fromName = parameters.from_name
-                    appWindow.toName = parameters.to_name
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                    appWindow.locationParameters.from.name = modelFromName
+                    appWindow.locationParameters.from.coord = modelFromCoord
+                    appWindow.locationParameters.to.name = modelToName
+                    appWindow.locationParameters.to.coord = modelToCoord
+                    paramsValid = setRouteParameters({})
+                    pageStack.navigateForward()
                 }
 
                 onPressAndHold: {
@@ -452,15 +634,12 @@ Page {
                     anchors.right: parent.right
                     icon.source: "image://theme/icon-m-shuffle"
                     onClicked:{
-                        var parameters = {}
-                        setRouteParameters(parameters)
-                        parameters.from_name = modelToName
-                        parameters.from = modelToCoord
-                        parameters.to_name = modelFromName
-                        parameters.to = modelFromCoord
-                        appWindow.fromName = parameters.from_name
-                        appWindow.toName = parameters.to_name
-                        pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                        appWindow.locationParameters.from.name = modelToName
+                        appWindow.locationParameters.from.coord = modelToCoord
+                        appWindow.locationParameters.to.name = modelFromName
+                        appWindow.locationParameters.to.coord = modelFromCoord
+                        paramsValid = setRouteParameters({})
+                        pageStack.navigateForward()
                     }
                 }
                 RemorseItem { id: remorse }

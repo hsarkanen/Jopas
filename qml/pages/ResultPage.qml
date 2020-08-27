@@ -40,8 +40,6 @@ Page {
     property var search_parameters
     property var search_interval
 
-    Component.onCompleted: startSearch()
-
     function startSearch() {
         var settings_search_interval = Storage.getSetting("search_interval");
         search_interval = settings_search_interval === "Unknown" ? "15" : settings_search_interval;
@@ -52,7 +50,7 @@ Page {
 
     function setCoverData() {
         appWindow.coverAlignment = Text.AlignLeft
-        appWindow.coverHeader = search_parameters.from_name
+        appWindow.coverHeader = appWindow.locationParameters.from.name
         appWindow.coverContents = ""
 
         for (var index = 0; index < appWindow.itinerariesModel.count; ++index) {
@@ -126,14 +124,14 @@ Page {
         header: Column {
             width: parent.width
             PageHeader {
-                title: search_parameters.timetype == "departure" ?
+                title: search_parameters ? search_parameters.timetype === "departure" ?
                            qsTr("Departure") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm") :
-                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm")
+                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm") : ""
             }
 
             Label {
                 width: parent.width
-                text: search_parameters.from_name + " - " + search_parameters.to_name + " "
+                text: search_parameters ? search_parameters.from_name + " - " + search_parameters.to_name + " " : ""
                 color: Theme.highlightColor
                 horizontalAlignment: Text.AlignRight
                 wrapMode: Text.WordWrap

@@ -54,20 +54,22 @@ function get_geocode(term, model, region) {
     http_request.open("GET", url);
     http_request.onreadystatechange = function() {
         if (http_request.readyState === XMLHttpRequest.DONE) {
-            var a = JSON.parse(http_request.responseText);
-//            console.debug("js result: " + JSON.stringify(a));
-            // TODO: Find a way to display no results when features array is empty
-            for (var index in a.features) {
-                var parsedCoordinates = a.features[index].geometry.coordinates[0] + "," +
+            try {
+                var a = JSON.parse(http_request.responseText);
+                for (var index in a.features) {
+                    a.features[index].properties.coord = a.features[index].geometry.coordinates[0] + "," +
                         a.features[index].geometry.coordinates[1];
-                model.append({label: a.features[index].properties.label,
-                           coord: parsedCoordinates});
+                    model.append(a.features[index].properties);
+                }
+            } catch (error) {
+                console.log(error)
             }
             model.done = true;
         }
-        else {
-//            console.debug("Error receiving geocode");
-        }
+    }
+    http_request.ontimeout = function () {
+        model.timeout = true;
+        model.done = true;
     }
     http_request.send();
 }
@@ -85,22 +87,25 @@ function get_reverse_geocode(latitude, longitude, model, api_type) {
 //    console.debug(API['digitransitgeocoding'].URL + queryType + '?' + query);
     var http_request = new XMLHttpRequest();
     http_request.open("GET", API['digitransitgeocoding'].URL + queryType + '?' + query);
+    console.log(query)
     http_request.onreadystatechange = function() {
         if (http_request.readyState === XMLHttpRequest.DONE) {
-            var a = JSON.parse(http_request.responseText);
-//            console.debug("js result: " + JSON.stringify(a));
-            // TODO: Find a way to display no results when features array is empty
-            for (var index in a.features) {
-                var parsedCoordinates = a.features[index].geometry.coordinates[0] + "," +
+            try {
+                var a = JSON.parse(http_request.responseText);
+                for (var index in a.features) {
+                    a.features[index].properties.coord = a.features[index].geometry.coordinates[0] + "," +
                         a.features[index].geometry.coordinates[1];
-                model.append({label: a.features[index].properties.label,
-                           coord: parsedCoordinates});
+                    model.append(a.features[index].properties);
+                }
+            } catch (error) {
+                console.log(error)
             }
             model.done = true;
         }
-        else {
-//            console.debug("Error receiving geocode");
-        }
+    }
+    http_request.ontimeout = function () {
+        model.timeout = true;
+        model.done = true;
     }
     http_request.send();
 }
