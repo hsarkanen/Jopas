@@ -601,6 +601,10 @@ Dialog {
                     id: menu
                     property Item currentItem
                     MenuItem {
+                        text: qsTr("Get Return Route")
+                        onClicked: menu.currentItem.search(true)
+                    }
+                    MenuItem {
                         text: qsTr("Add to Cover")
                         onClicked: menu.currentItem.addToCover()
                     }
@@ -638,14 +642,18 @@ Dialog {
                     })
                 }
 
-                onClicked:{
-                    appWindow.locationParameters.from.name = modelFromName
-                    appWindow.locationParameters.from.coord = modelFromCoord
-                    appWindow.locationParameters.to.name = modelToName
-                    appWindow.locationParameters.to.coord = modelToCoord
+                function search(reverse) {
+                    appWindow.locationParameters.from.name = reverse ? modelToName : modelFromName
+                    appWindow.locationParameters.from.coord = reverse ? modelToCoord : modelFromCoord
+                    appWindow.locationParameters.to.name = reverse ? modelFromName : modelToName
+                    appWindow.locationParameters.to.coord = reverse ? modelFromCoord : modelToCoord
+                    from.value = appWindow.locationParameters.from.name
+                    to.value = appWindow.locationParameters.to.name
                     paramsValid = setRouteParameters({})
                     pageStack.navigateForward()
                 }
+
+                onClicked: search()
 
                 onPressAndHold: {
                     if (!favoriteRouteList.contextMenu) {
@@ -660,25 +668,11 @@ Dialog {
                     id: label
                     height: Theme.itemSizeSmall
                     text: modelFromName + " - " + modelToName + " "
-                    width: parent.width - reverseFavoriteRouteButton.width
+                    width: parent.width
                     color: Theme.primaryColor
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     elide: Text.ElideRight
-                }
-
-                IconButton {
-                    id: reverseFavoriteRouteButton
-                    anchors.right: parent.right
-                    icon.source: "image://theme/icon-m-shuffle"
-                    onClicked:{
-                        appWindow.locationParameters.from.name = modelToName
-                        appWindow.locationParameters.from.coord = modelToCoord
-                        appWindow.locationParameters.to.name = modelFromName
-                        appWindow.locationParameters.to.coord = modelFromCoord
-                        paramsValid = setRouteParameters({})
-                        pageStack.navigateForward()
-                    }
                 }
                 RemorseItem { id: remorse }
             }
