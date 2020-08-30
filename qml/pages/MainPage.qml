@@ -265,10 +265,10 @@ Dialog {
                         favoriteRoutesModel
                     )
                     if (res === "OK") {
-                        displayPopupMessage( qsTr("Favorite route added") )
+                        appWindow.useNotification( qsTr("Favorite route added") )
                     }
                     else {
-                        displayPopupMessage( qsTr("Maximum amount of favorite routes is 4!") )
+                        appWindow.useNotification( qsTr("Maximum amount of favorite routes is 4!") )
                     }
                 }
             }
@@ -633,7 +633,7 @@ Dialog {
 
                 function addToCover() {
                     Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
-                    displayPopupMessage( qsTr("Favorite route added to cover action.") )
+                    appWindow.useNotification( qsTr("Favorite route added to cover action.") )
                 }
 
                 function remove() {
@@ -677,14 +677,5 @@ Dialog {
                 RemorseItem { id: remorse }
             }
         }
-    }
-
-    // Added InfoBanner here as a workaround to display it correctly above all other UI elements, fixing the z-order from the one in main.qml isn't trivial
-    InfoBanner {
-        id: infoBanner
-        z: 1
-    }
-    function displayPopupMessage(message) {
-        infoBanner.displayError(message)
     }
 }
