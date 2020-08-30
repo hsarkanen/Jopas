@@ -37,6 +37,7 @@ import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
 import "../js/favorites.js" as Favorites
 import "../js/recentitems.js" as RecentItems
+import "../pages/dialogs"
 
 Column {
     property alias type : label.text
@@ -222,7 +223,7 @@ Column {
         onRejected: {}
     }
 
-    FavoriteRecentItemSelectionDialog {
+    FavoriteRecentItemSelection {
         id: favoriteQuery
         model: favoritesModel
         delegate: FavoritesDelegate {

@@ -91,7 +91,7 @@ function getRecentItems(model) {
          // Return recentitems in reverse order
          for(var i = rs.rows.length - 1; i >= 0; --i) {
              var output = {}
-             output.modelData = rs.rows.item(i).name;
+             output.name = rs.rows.item(i).name;
              output.coord = rs.rows.item(i).coord;
              output.type = "recentitem"
              model.append(output)

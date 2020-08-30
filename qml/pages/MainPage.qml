@@ -112,6 +112,8 @@ Dialog {
     }
 
     Component.onCompleted: {
+        RecentItems.initialize()
+        Favorites.initialize()
         timeButton.setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
         refreshFavoriteRoutes()
@@ -138,10 +140,17 @@ Dialog {
 
             // Only add to recentitems if the place is not from favorites and
             // user specified start point
-            if (appWindow.locationParameters.from.name && from.selected_favorite < 0) {
+
+            var fromFound = Helper.findModelItem(favoritesModel, function(item) {
+                return item.name === appWindow.locationParameters.from.name
+            })
+            var toFound = Helper.findModelItem(favoritesModel, function(item) {
+                return item.name === appWindow.locationParameters.to.name
+            })
+            if (appWindow.locationParameters.from.name && !fromFound) {
                 RecentItems.addRecentItem(appWindow.locationParameters.from.name, appWindow.locationParameters.from.coord)
             }
-            if (appWindow.locationParameters.to.name && to.selected_favorite < 0) {
+            if (appWindow.locationParameters.to.name && !toFound) {
                 RecentItems.addRecentItem(appWindow.locationParameters.to.name, appWindow.locationParameters.to.coord)
             }
 
@@ -232,6 +241,12 @@ Dialog {
         anchors.fill: parent
         contentHeight: parent.height
 
+        ListModel {
+            id: favoritesModel
+        }
+        ListModel {
+            id: recentItemsModel
+        }
         PullDownMenu {
             MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
             MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
@@ -243,8 +258,8 @@ Dialog {
                     var res = Favorites.addFavoriteRoute(
                         "normal",
                         appWindow.currentApi,
-                        appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name,
                         appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord,
+                        appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name,
                         appWindow.locationParameters.to.coord,
                         appWindow.locationParameters.to.name,
                         favoriteRoutesModel
@@ -307,7 +322,7 @@ Dialog {
                                 }
                             )
                             dialog.accepted.connect(function() {
-                                appWindow.locationParameters.from = dialog.resultObject
+                                appWindow.locationParameters.from = JSON.parse(JSON.stringify(dialog.resultObject))
                                 from.value = appWindow.locationParameters.from.name
                                 paramsValid = setRouteParameters({})
                             })
@@ -316,8 +331,19 @@ Dialog {
                     MenuItem {
                         text: "Favorite"
                         onClicked: function() {
-                            var dialog = pageStack.push(Qt.resolvedUrl("./FavoritesPage.qml"))
+                            favoritesModel.clear()
+                            Favorites.getFavorites(favoritesModel)
+                            favoritesModel.insert(0, {name: qsTr("Current location"),coord:"0,0"})
+                            recentItemsModel.clear()
+                            RecentItems.getRecentItems(recentItemsModel)
+                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/FavoriteRecentItemSelection.qml"),
+                                {
+                                    model: favoritesModel,
+                                    model2: recentItemsModel,
+                                }
+                            )
                             dialog.accepted.connect(function() {
+                                appWindow.locationParameters.from = JSON.parse(JSON.stringify(dialog.resultObject))
                                 from.value = appWindow.locationParameters.from.name
                                 paramsValid = setRouteParameters({})
                             })
@@ -369,7 +395,7 @@ Dialog {
                                 }
                             )
                             dialog.accepted.connect(function() {
-                                appWindow.locationParameters.to = dialog.resultObject
+                                appWindow.locationParameters.to = JSON.parse(JSON.stringify(dialog.resultObject))
                                 to.value = appWindow.locationParameters.to.name
                                 paramsValid = setRouteParameters({})
                             })
@@ -378,8 +404,20 @@ Dialog {
                     MenuItem {
                         text: "Favorite"
                         onClicked: function() {
-                            var dialog = pageStack.push(Qt.resolvedUrl("./FavoritesPage.qml"))
+                            favoritesModel.clear()
+                            Favorites.getFavorites(favoritesModel)
+                            favoritesModel.insert(0, {name: qsTr("Current location"),coord:"0,0"})
+                            recentItemsModel.clear()
+                            RecentItems.getRecentItems(recentItemsModel)
+                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/FavoriteRecentItemSelection.qml"),
+                            {
+                                departure: false,
+                                model: favoritesModel,
+                                model2: recentItemsModel,
+                            })
                             dialog.accepted.connect(function() {
+                                console.log(JSON.parse(JSON.stringify(dialog.resultObject)))
+                                appWindow.locationParameters.to = JSON.parse(JSON.stringify(dialog.resultObject))
                                 to.value = appWindow.locationParameters.to.name
                                 paramsValid = setRouteParameters({})
                             })
