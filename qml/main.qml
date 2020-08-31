@@ -186,10 +186,6 @@ ApplicationWindow {
         onClicked : notification.close()
     }
 
-    InfoBanner {
-        id: infoBanner
-    }
-
     allowedOrientations: Orientation.All
 
     Component.onCompleted: {

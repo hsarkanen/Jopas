@@ -38,6 +38,7 @@ import "../js/helper.js" as Helper
 import "../js/favorites.js" as Favorites
 import "../js/recentitems.js" as RecentItems
 import "../components"
+import "./components"
 
 Dialog {
     id: mainPage
@@ -49,18 +50,6 @@ Dialog {
     /* ReittiOpas query params */
     property bool paramsValid
     property variant searchParameters
-
-    onParamsValidChanged: {
-        /* if we receive coordinates we are waiting for, start route search */
-        if(state == "waiting_route" && paramsValid) {
-            var parameters = {}
-            setRouteParameters(parameters)
-            pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-            state = "normal"
-        } else {
-            setRouteParameters({})
-        }
-    }
 
     onAcceptPendingChanged: {
         mainPage.acceptDestinationInstance.search_parameters = searchParameters
@@ -114,7 +103,7 @@ Dialog {
     Component.onCompleted: {
         RecentItems.initialize()
         Favorites.initialize()
-        timeButton.setTimeNow()
+        planner.timeButton.setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
         refreshFavoriteRoutes()
     }
@@ -170,8 +159,8 @@ Dialog {
 
             parameters.jstime = currentDate
 
-            parameters.timetype = timeBy.firstActive ? "departure" : "arrival"
-            parameters.arriveBy = !timeBy.firstActive
+            parameters.timetype = planner.timeBy.firstActive ? "departure" : "arrival"
+            parameters.arriveBy = !planner.timeBy.firstActive
 
             parameters.walk_speed = walking_speed === "Unknown" ? "70" : walking_speed
             parameters.change_margin = change_margin === "Unknown" ? "3" : Math.floor(change_margin)
@@ -179,36 +168,36 @@ Dialog {
             parameters.walk_reluctance = walk_reluctance === "Unknown" ? "2" : Math.floor(walk_reluctance)
             parameters.modes =""
 
-        if (appWindow.currentApi === "helsinki") {
-            if(Storage.getSetting("bus_disabled") === "false") {
-                parameters.modes += "BUS,";
+            if (appWindow.currentApi === "helsinki") {
+                if(Storage.getSetting("bus_disabled") === "false") {
+                    parameters.modes += "BUS,";
+                }
+                if(Storage.getSetting("tram_disabled") === "false") {
+                    parameters.modes += "TRAM,";
+                }
+                if(Storage.getSetting("metro_disabled") === "false") {
+                    parameters.modes += "SUBWAY,"
+                }
+                if(Storage.getSetting("train_disabled") === "false") {
+                    parameters.modes += "RAIL,";
+                }
+                if(Storage.getSetting("ferry_disabled") === "false") {
+                    parameters.modes += "FERRY,";
+                }
             }
-            if(Storage.getSetting("tram_disabled") === "false") {
-                parameters.modes += "TRAM,";
+            else {
+                parameters.modes += "BUS,"
             }
-            if(Storage.getSetting("metro_disabled") === "false") {
-                parameters.modes += "SUBWAY,"
-            }
-            if(Storage.getSetting("train_disabled") === "false") {
-                parameters.modes += "RAIL,";
-            }
-            if(Storage.getSetting("ferry_disabled") === "false") {
-                parameters.modes += "FERRY,";
-            }
-        }
-        else {
-            parameters.modes += "BUS,"
-        }
-        parameters.modes += "WALK"
+            parameters.modes += "WALK"
         } catch (err) {
-            console.log("setRouteParameters", JSON.stringify(err))
-            return false
-    }
+            console.log("setRouteParameters", err)
+        }
         if(!!parameters.from_name || !!parameters.from || !!parameters.to_name || !!parameters.to) {
             searchParameters = parameters
-            return true
+            paramsValid = true
+            return
         }
-        return  false
+        paramsValid = false
     }
 
     Rectangle {
@@ -279,295 +268,25 @@ Dialog {
                     var toObj = JSON.parse(JSON.stringify(appWindow.locationParameters.to))
                     appWindow.locationParameters.from = toObj
                     appWindow.locationParameters.to = fromObj
-                    from.value = appWindow.locationParameters.from.name || "Choose Location"
-                    to.value = appWindow.locationParameters.to.name || "Choose Location"
-                    paramsValid = setRouteParameters({})
+                    planner.updateValues(appWindow.locationParameters.from.name || "Choose Location", appWindow.locationParameters.to.name || "Choose Location")
+                    setRouteParameters({})
                 }
             }
         }
         PageHeader { id: header ; title: qsTr("Search")}
-        Column {
-            id: content_column
-            width: parent.width
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: header.bottom
-
-            ComboBox {
-                id: from
-                width: parent.width
-                label: "Departure"
-                description: "Select journeys starting point"
-                value: appWindow.locationParameters.from.name || "Choose location"
-                menu: ContextMenu {
-                    MenuItem {
-                        text: "Search"
-                        onClicked: function() {
-                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/SearchAddress.qml"))
-                            dialog.accepted.connect(function() {
-                                from.value = appWindow.locationParameters.from.name
-                                paramsValid = setRouteParameters({})
-                            })
-                        }
-                    }
-                    MenuItem {
-                        text: "Map"
-                        onClicked: function() {
-                            var dialog = pageStack.push(
-                                Qt.resolvedUrl("./dialogs/Map.qml"),
-                                {
-                                    inputCoord: appWindow.locationParameters.from.coord || '',
-                                    resultName: appWindow.locationParameters.from.name || ''
-                                }
-                            )
-                            dialog.accepted.connect(function() {
-                                appWindow.locationParameters.from = JSON.parse(JSON.stringify(dialog.resultObject))
-                                from.value = appWindow.locationParameters.from.name
-                                paramsValid = setRouteParameters({})
-                            })
-                        }
-                    }
-                    MenuItem {
-                        text: "Favorite"
-                        onClicked: function() {
-                            favoritesModel.clear()
-                            Favorites.getFavorites(favoritesModel)
-                            favoritesModel.insert(0, {name: qsTr("Current location"),coord:"0,0"})
-                            recentItemsModel.clear()
-                            RecentItems.getRecentItems(recentItemsModel)
-                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/FavoriteRecentItemSelection.qml"),
-                                {
-                                    model: favoritesModel,
-                                    model2: recentItemsModel,
-                                }
-                            )
-                            dialog.accepted.connect(function() {
-                                appWindow.locationParameters.from = JSON.parse(JSON.stringify(dialog.resultObject))
-                                from.value = appWindow.locationParameters.from.name
-                                paramsValid = setRouteParameters({})
-                            })
-                        }
-                    }
-                }
-                onPressAndHold: function(){
-                    from.value = "Using GPS"
-                    fromGPS.timer.running = true
-                }
-                LocationSource {
-                    id: fromGPS
-                    onLocationFound: function() {
-                        appWindow.locationParameters.from = appWindow.locationParameters.gps
-                        from.value = appWindow.locationParameters.from.name
-                        paramsValid = setRouteParameters({})
-                    }
-                    onNoLocationSource: function(){
-                        appWindow.useNotification( qsTr("Location service unavailable") )
-                        from.value = appWindow.locationParameters.from.name || "Choose location"
-                    }
-                }
-            }
-            ComboBox {
-                id: to
-                width: parent.width
-                label: "Destination"
-                description: "Select where journey ends"
-                value: appWindow.locationParameters.to.name || "Choose location"
-                menu: ContextMenu {
-                    MenuItem {
-                        text: "Search"
-                        onClicked: function() {
-                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/SearchAddress.qml"), { departure: false })
-                            dialog.accepted.connect(function() {
-                                to.value = appWindow.locationParameters.to.name
-                                paramsValid = setRouteParameters({})
-                            })
-                        }
-                    }
-                    MenuItem {
-                        text: "Map"
-                        onClicked: function() {
-                            var dialog = pageStack.push(
-                                Qt.resolvedUrl("./dialogs/Map.qml"),
-                                {
-                                    inputCoord: appWindow.locationParameters.to.coord || '',
-                                    resultName: appWindow.locationParameters.to.name || ''
-                                }
-                            )
-                            dialog.accepted.connect(function() {
-                                appWindow.locationParameters.to = JSON.parse(JSON.stringify(dialog.resultObject))
-                                to.value = appWindow.locationParameters.to.name
-                                paramsValid = setRouteParameters({})
-                            })
-                        }
-                    }
-                    MenuItem {
-                        text: "Favorite"
-                        onClicked: function() {
-                            favoritesModel.clear()
-                            Favorites.getFavorites(favoritesModel)
-                            favoritesModel.insert(0, {name: qsTr("Current location"),coord:"0,0"})
-                            recentItemsModel.clear()
-                            RecentItems.getRecentItems(recentItemsModel)
-                            var dialog = pageStack.push(Qt.resolvedUrl("./dialogs/FavoriteRecentItemSelection.qml"),
-                            {
-                                departure: false,
-                                model: favoritesModel,
-                                model2: recentItemsModel,
-                            })
-                            dialog.accepted.connect(function() {
-                                console.log(JSON.parse(JSON.stringify(dialog.resultObject)))
-                                appWindow.locationParameters.to = JSON.parse(JSON.stringify(dialog.resultObject))
-                                to.value = appWindow.locationParameters.to.name
-                                paramsValid = setRouteParameters({})
-                            })
-                        }
-                    }
-                }
-                onPressAndHold: function(){
-                    to.value = "Using GPS"
-                    toGPS.timer.running = true
-                }
-                LocationSource {
-                    id: toGPS
-                    onLocationFound: function() {
-                        appWindow.locationParameters.to = appWindow.locationParameters.gps
-                        to.value = appWindow.locationParameters.to.name
-                        paramsValid = setRouteParameters({})
-                    }
-                    onNoLocationSource: function(){
-                        appWindow.useNotification( qsTr("Location service unavailable") )
-                        to.value = appWindow.locationParameters.to.name || "Choose location"
-                    }
-                    }
-                }
-            ValueToggle {
-                id: dateToggle
-                label: qsTr("Date")
-                visible: !dateToggle.selectedDate
-                property bool selectedDate
-
-                function openDateDialog() {
-                    var now = new Date()
-                    var date = appWindow.locationParameters.datetime.date || now.getDate()
-                    var month = appWindow.locationParameters.datetime.month || now.getMonth()
-                    var year = appWindow.locationParameters.datetime.year || now.getFullYear()
-                    var obj = pageStack.animatorPush("Sailfish.Silica.DatePickerDialog",
-                                                     { date: new Date(year, month, date, 0, 0, 0) })
-
-                    obj.pageCompleted.connect(function(page) {
-                        page.accepted.connect(function() {
-                            appWindow.locationParameters.datetime.date = page.date.getDate()
-                            appWindow.locationParameters.datetime.month = page.date.getMonth()
-                            appWindow.locationParameters.datetime.year = page.date.getFullYear()
-                            selectedDate = true
-                            paramsValid = setRouteParameters({})
-                        })
-                    })
-                }
-
-                function toggle() {
-                    var d = new Date()
-                    if (!dateToggle.firstActive) {
-                        d.setDate(d.getDate() + 1)
-                    }
-                    appWindow.locationParameters.datetime.date = d.getDate()
-                    appWindow.locationParameters.datetime.month = d.getMonth()
-                    appWindow.locationParameters.datetime.year = d.getFullYear()
-                    paramsValid = setRouteParameters({})
-                }
-                firstValue: "Today"
-                secondValue: "Tomorrow"
-                onPressAndHold: openDateDialog()
-                onClicked: toggle()
-                description: "Press and hold to select a custom date"
-                onSelectedDateChanged: function() {
-                    var now = new Date()
-                    var date = appWindow.locationParameters.datetime.date || now.getDate()
-                    var month = appWindow.locationParameters.datetime.month || now.getMonth()
-                    var year = appWindow.locationParameters.datetime.year || now.getFullYear()
-                    var time = new Date(year, month, date, 0, 0, 0)
-                    var type = Formatter.TimeValueTwentyFourHours
-                    dateLabel.value = Qt.formatDate(time)
-                    paramsValid = setRouteParameters({})
-                }
-                }
-
-            ValueButton {
-                id: dateLabel
-                visible: dateToggle.selectedDate
-                label: qsTr("Date")
-                width: parent.width
-                onClicked: {
-                    dateToggle.selectedDate = !dateToggle.selectedDate
-                    dateToggle.toggle()
-                }
-                description: "Click to reset date"
-                    }
-
-            ValueButton {
-                id: timeButton
-                property bool update
-                function openTimeDialog() {
-                    var hour = appWindow.locationParameters.datetime.hour || 0
-                    var minute = appWindow.locationParameters.datetime.minute || 0
-                    var obj = pageStack.animatorPush("Sailfish.Silica.TimePickerDialog", {
-                                                    hourMode: DateTime.TwentyFourHours,
-                                                    hour: hour,
-                                                    minute: minute
-                                                })
-
-                    obj.pageCompleted.connect(function(page) {
-                        page.accepted.connect(function() {
-                            appWindow.locationParameters.datetime.hour = page.hour
-                            appWindow.locationParameters.datetime.minute = page.minute
-                            update = !update
-                        })
-                    })
-                }
-
-                function setTimeNow() {
-                    var now = new Date()
-                    appWindow.locationParameters.datetime.hour = now.getHours()
-                    appWindow.locationParameters.datetime.minute = now.getMinutes()
-                    update = !update
-            }
-
-                label: "Time"
-                width: parent.width
-                onClicked: openTimeDialog()
-                onPressAndHold: setTimeNow()
-                onUpdateChanged: {
-                    var hour = appWindow.locationParameters.datetime.hour || 0
-                    var minute = appWindow.locationParameters.datetime.minute || 0
-                    var time = new Date(0, 0, 0, hour, minute, 0)
-                    var type = Formatter.TimeValueTwentyFourHours
-                    value = Format.formatDate(time, type)
-                    paramsValid = setRouteParameters({})
-            }
-            }
-
-            ValueToggle {
-                id: timeBy
-                label: qsTr("Time by")
-                firstValue: qsTr("Departure")
-                secondValue: qsTr("Arrival")
-                onClicked: {
-                    paramsValid = setRouteParameters({})
-                }
-            }
+        RoutePlanner {
+            id: planner
+            favoritesModel: favoritesModel
+            recentItemsModel: recentItemsModel
+            onParamsChanged: setRouteParameters(params)
         }
-
-        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 5 * Theme.pixelRatio }
-
-
         Item {
             id: headeritem
             width: parent.width
             anchors.left: parent.left
             anchors.leftMargin: Theme.paddingSmall
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: favorites_spacing.bottom
+            anchors.top: planner.bottom
             height: (favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN) * Theme.pixelRatio
             Text {
                 id: favoriteRouteHeader
@@ -647,9 +366,8 @@ Dialog {
                     appWindow.locationParameters.from.coord = reverse ? modelToCoord : modelFromCoord
                     appWindow.locationParameters.to.name = reverse ? modelFromName : modelToName
                     appWindow.locationParameters.to.coord = reverse ? modelFromCoord : modelToCoord
-                    from.value = appWindow.locationParameters.from.name
-                    to.value = appWindow.locationParameters.to.name
-                    paramsValid = setRouteParameters({})
+                    planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
+                    setRouteParameters({})
                     pageStack.navigateForward()
                 }
 
