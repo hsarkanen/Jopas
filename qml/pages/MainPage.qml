@@ -91,9 +91,8 @@ Dialog {
 
         /* use current location if available - otherwise wait for it */
         if(appWindow.locationParameters.gps.coord) {
-            var parameters = {}
-            setRouteParameters(parameters)
-            pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+            setRouteParameters({})
+            if(paramsValid) pageStack.navigateForward()
         }
         else {
             state = "waiting_route"
@@ -225,82 +224,83 @@ Dialog {
         anchors.centerIn: parent
         size: BusyIndicatorSize.Large
     }
-
-    SilicaFlickable {
+    ExpandingBottomDrawer {
+        id: drawer
         anchors.fill: parent
-        contentHeight: parent.height
+        SilicaFlickable {
+            id: form
+            anchors.fill: parent
+            contentHeight: parent.height
 
-        ListModel {
-            id: favoritesModel
-        }
-        ListModel {
-            id: recentItemsModel
-        }
-        PullDownMenu {
-            MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
-            MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
-            MenuItem { text: qsTr("Manage favorite places"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
-            MenuItem {
-                enabled: paramsValid
-                text: qsTr("Add as favorite route");
-                onClicked: {
-                    var res = Favorites.addFavoriteRoute(
-                        "normal",
-                        appWindow.currentApi,
-                        appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord,
-                        appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name,
-                        appWindow.locationParameters.to.coord,
-                        appWindow.locationParameters.to.name,
-                        favoriteRoutesModel
-                    )
-                    if (res === "OK") {
-                        appWindow.useNotification( qsTr("Favorite route added") )
+            ListModel {
+                id: favoritesModel
+            }
+            ListModel {
+                id: recentItemsModel
+            }
+            PullDownMenu {
+                enabled: !drawer.open
+                MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
+                MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
+                MenuItem { text: qsTr("Manage favorite places"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
+                MenuItem {
+                    enabled: paramsValid
+                    text: qsTr("Add as favorite route");
+                    onClicked: {
+                        var res = Favorites.addFavoriteRoute(
+                            "normal",
+                            appWindow.currentApi,
+                            appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord,
+                            appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name,
+                            appWindow.locationParameters.to.coord,
+                            appWindow.locationParameters.to.name,
+                            favoriteRoutesModel
+                        )
+                        if (res === "OK") {
+                            appWindow.useNotification( qsTr("Favorite route added") )
+                        }
+                        else {
+                            appWindow.useNotification( qsTr("Maximum amount of favorite routes is 4!") )
+                        }
                     }
-                    else {
-                        appWindow.useNotification( qsTr("Maximum amount of favorite routes is 4!") )
+                }
+                MenuItem {
+                    text: qsTr("Get Return Route");
+                    onClicked: {
+                        var fromObj = JSON.parse(JSON.stringify(appWindow.locationParameters.from))
+                        var toObj = JSON.parse(JSON.stringify(appWindow.locationParameters.to))
+                        appWindow.locationParameters.from = toObj
+                        appWindow.locationParameters.to = fromObj
+                        planner.updateValues(appWindow.locationParameters.from.name || "Choose Location", appWindow.locationParameters.to.name || "Choose Location")
+                        setRouteParameters({})
                     }
                 }
             }
-            MenuItem {
-                text: qsTr("Get Return Route");
-                onClicked: {
-                    var fromObj = JSON.parse(JSON.stringify(appWindow.locationParameters.from))
-                    var toObj = JSON.parse(JSON.stringify(appWindow.locationParameters.to))
-                    appWindow.locationParameters.from = toObj
-                    appWindow.locationParameters.to = fromObj
-                    planner.updateValues(appWindow.locationParameters.from.name || "Choose Location", appWindow.locationParameters.to.name || "Choose Location")
-                    setRouteParameters({})
-                }
+            MouseArea {
+                enabled: drawer.open
+                anchors.fill: parent
+                onClicked: drawer.open = false
             }
-        }
-        PageHeader { id: header ; title: qsTr("Search")}
-        RoutePlanner {
-            id: planner
-            favoritesModel: favoritesModel
-            recentItemsModel: recentItemsModel
-            onParamsChanged: setRouteParameters(params)
-        }
-        Item {
-            id: headeritem
-            width: parent.width
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: planner.bottom
-            height: (favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN) * Theme.pixelRatio
-            Text {
-                id: favoriteRouteHeader
-                color: Theme.highlightColor
-                font.pixelSize: 36 * Theme.pixelRatio
+            PageHeader { id: header ; title: qsTr("Search")}
+            RoutePlanner {
+                id: planner
+                enabled: !drawer.open
+                favoritesModel: favoritesModel
+                recentItemsModel: recentItemsModel
+                onParamsChanged: setRouteParameters(params)
+            }
+            SectionHeader {
+                id: headeritem
                 text: qsTr("Favorite routes")
+                anchors.top: planner.bottom
+                onYChanged: {
+                    drawer.startPoint = Screen.height - headeritem.y - headeritem.height
+                }
             }
         }
-
-        SilicaListView {
+        background: SilicaListView {
             id: favoriteRouteList
-            anchors.top: headeritem.bottom
-            anchors.bottom: parent.bottom
-            spacing: 5 * Theme.pixelRatio
+            anchors.fill: parent
             width: parent.width
             model: favoriteRoutesModel
             delegate: favoriteRouteManageDelegate
@@ -312,7 +312,20 @@ Dialog {
                 verticalOffset: (favoriteRouteList.height - mainPage.height) * 0.5
                 text: qsTr("No saved favorite routes")
             }
-
+            Label {
+                text: qsTr("Press to expand")
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Theme.fontSizeMedium
+                color: Theme.secondaryHighlightColor
+                visible: !drawer.open
+            }
+            MouseArea {
+                enabled: !drawer.open
+                anchors.fill: favoriteRouteList
+                onClicked: drawer.open = favoriteRouteList.count == 0 ? false : true
+            }
+            VerticalScrollDecorator {}
             Component {
                 id: contextMenuComponent
 
@@ -334,65 +347,65 @@ Dialog {
                     }
                 }
             }
-        }
 
-        ListModel {
-            id: favoriteRoutesModel
-        }
+            ListModel {
+                id: favoriteRoutesModel
+            }
 
-        Component {
-            id: favoriteRouteManageDelegate
+            Component {
+                id: favoriteRouteManageDelegate
 
-            BackgroundItem {
-                id: rootItem
-                width: ListView.view.width
-                height: menuOpen ? Theme.itemSizeSmall + favoriteRouteList.contextMenu.height : Theme.itemSizeSmall
+                BackgroundItem {
+                    id: rootItem
+                    width: ListView.view.width
+                    height: menuOpen ? Theme.itemSizeSmall + favoriteRouteList.contextMenu.height : Theme.itemSizeSmall
 
-                property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
+                    property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
 
-                function addToCover() {
-                    Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
-                    appWindow.useNotification( qsTr("Favorite route added to cover action.") )
-                }
-
-                function remove() {
-                    remorse.execute(rootItem, qsTr("Deleting"), function() {
-                        Favorites.deleteFavoriteRoute(modelRouteIndex, appWindow.currentApi, favoriteRoutesModel)
-                    })
-                }
-
-                function search(reverse) {
-                    appWindow.locationParameters.from.name = reverse ? modelToName : modelFromName
-                    appWindow.locationParameters.from.coord = reverse ? modelToCoord : modelFromCoord
-                    appWindow.locationParameters.to.name = reverse ? modelFromName : modelToName
-                    appWindow.locationParameters.to.coord = reverse ? modelFromCoord : modelToCoord
-                    planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
-                    setRouteParameters({})
-                    pageStack.navigateForward()
-                }
-
-                onClicked: search()
-
-                onPressAndHold: {
-                    if (!favoriteRouteList.contextMenu) {
-                        favoriteRouteList.contextMenu = contextMenuComponent.createObject(favoriteRouteList)
+                    function addToCover() {
+                        Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
+                        appWindow.useNotification( qsTr("Favorite route added to cover action.") )
                     }
 
-                    favoriteRouteList.contextMenu.currentItem = rootItem
-                    favoriteRouteList.contextMenu.open(rootItem)
-                }
+                    function remove() {
+                        remorse.execute(rootItem, qsTr("Deleting"), function() {
+                            Favorites.deleteFavoriteRoute(modelRouteIndex, appWindow.currentApi, favoriteRoutesModel)
+                        })
+                    }
 
-                Label {
-                    id: label
-                    height: Theme.itemSizeSmall
-                    text: modelFromName + " - " + modelToName + " "
-                    width: parent.width
-                    color: Theme.primaryColor
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    elide: Text.ElideRight
+                    function search(reverse) {
+                        appWindow.locationParameters.from.name = reverse ? modelToName : modelFromName
+                        appWindow.locationParameters.from.coord = reverse ? modelToCoord : modelFromCoord
+                        appWindow.locationParameters.to.name = reverse ? modelFromName : modelToName
+                        appWindow.locationParameters.to.coord = reverse ? modelFromCoord : modelToCoord
+                        planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
+                        setRouteParameters({})
+                        pageStack.navigateForward()
+                    }
+
+                    onClicked: search()
+
+                    onPressAndHold: {
+                        if (!favoriteRouteList.contextMenu) {
+                            favoriteRouteList.contextMenu = contextMenuComponent.createObject(favoriteRouteList)
+                        }
+
+                        favoriteRouteList.contextMenu.currentItem = rootItem
+                        favoriteRouteList.contextMenu.open(rootItem)
+                    }
+
+                    Label {
+                        id: label
+                        height: Theme.itemSizeSmall
+                        text: modelFromName + " - " + modelToName + " "
+                        width: parent.width
+                        color: drawer.open ? Theme.primaryColor : Theme.secondaryColor
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                    }
+                    RemorseItem { id: remorse }
                 }
-                RemorseItem { id: remorse }
             }
         }
     }

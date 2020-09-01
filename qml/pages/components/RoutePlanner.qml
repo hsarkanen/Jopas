@@ -10,7 +10,6 @@ import "../../js/recentitems.js" as RecentItems
 import "../../components"
 
 Column {
-    id: content_column
     width: parent.width
     anchors.left: parent.left
     anchors.leftMargin: Theme.paddingSmall
