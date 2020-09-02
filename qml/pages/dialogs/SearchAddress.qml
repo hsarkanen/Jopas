@@ -137,6 +137,7 @@ Dialog {
         id: view
         model:suggestionModel
         delegate: SuggestionDelegate {
+            model:suggestionModel
             onClicked: {
                 selectName = name
                 selectObject = suggestionModel.get(index)

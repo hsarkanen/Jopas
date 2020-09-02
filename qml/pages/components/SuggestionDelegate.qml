@@ -37,7 +37,7 @@ ListItem {
     id: suggestionDelegate
     width: ListView.view.width
     contentHeight: Theme.itemSizeMedium
-
+    property variant model
     ListView.onAdd: AddAnimation {
         target: suggestionDelegate
     }
@@ -57,7 +57,7 @@ ListItem {
         font.pixelSize: Theme.fontSizeMedium
     }
     Label {
-        text: Helper.capitalize_string(suggestionModel.get(index).layer)
+        text: Helper.capitalize_string(model.get(index).layer)
         anchors.bottom: parent.bottom
         font.italic: true
         font.pixelSize: Theme.fontSizeExtraSmall
