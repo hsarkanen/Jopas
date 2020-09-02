@@ -111,6 +111,7 @@ Dialog {
         }
         onSelectedCoordChanged: {
             if(selectedCoord !== QtPositioning.coordinate())
+                suggestionModel.clear()
                 Reittiopas.get_reverse_geocode(selectedCoord.latitude, selectedCoord.longitude,
                                                suggestionModel,
                                                Storage.getSetting('api'))
