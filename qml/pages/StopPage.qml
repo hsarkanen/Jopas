@@ -64,20 +64,25 @@ Page {
             "shortCode" : legdata.from.shortCode,
             "latitude" : legdata.from.latitude,
             "longitude" : legdata.from.longitude,
-            "arrTime" : 0,
-            "depTime" : 0,
-            "time_diff": 0
+            "arrTime" : legdata.from.arrTime,
+            "depTime" : legdata.from.depTime,
+            "time_diff": legdata.from.arrTime - legdata.from.depTime
         }
         model.append(stop)
         var countOfLocations = legdata.locs.count;
+        var lastLegDep
         for (var locindex = 0; locindex < countOfLocations; ++locindex) {
             var locdata =  legdata.locs.get(locindex)
+            lastLegDep = locdata.depTime
             model.append(locdata)
         }
         stop.name = legdata.to.name
         stop.shortCode = legdata.to.shortCode
         stop.latitude = legdata.to.latitude
         stop.longitude = legdata.to.longitude
+        stop.arrTime = legdata.to.arrTime
+        stop.depTime = legdata.to.depTime
+        stop.time_diff = lastLegDep ? (legdata.to.arrTime|| 0) - lastLegDep : NaN
         model.append(stop)
 
         model.done = true

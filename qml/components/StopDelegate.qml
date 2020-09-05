@@ -32,6 +32,7 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 import QtPositioning 5.3
+import "../js/helper.js" as Helper
 
 ListItem {
     id: stop_item
@@ -81,18 +82,15 @@ ListItem {
         }
     ]
 
-    // TODO: Investigate if it's easily possible to retrieve stop times
-    // from digitransit graphql API, for now just hide these fields
     Label {
         id: diff
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.leftMargin: Theme.paddingSmall
         horizontalAlignment: Qt.AlignLeft
-        text: "+" + time_diff + " min"
+        text: time_diff >= 0 ? "+" + Helper.prettyTimeFromSeconds(time_diff).slice(0,-3) + " min" : ""
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.secondaryColor
-        visible: false
     }
 
     Label {
@@ -101,10 +99,25 @@ ListItem {
         anchors.left: parent.left
         anchors.leftMargin: Theme.paddingSmall
         horizontalAlignment: Qt.AlignLeft
-        text: (index === 0)? Qt.formatTime(depTime, "hh:mm") : Qt.formatTime(arrTime, "hh:mm")
+        text: {
+            if(index === 0) {
+                try {
+                    return Helper.prettyTimeFromSeconds(depTime).slice(0,-3)
+                }
+                catch(depTimeErr) {
+                    return ""
+                }
+            } else {
+                try {
+                    return Helper.prettyTimeFromSeconds(arrTime).slice(0,-3)
+                }
+                catch(arrTimeErr) {
+                    return ""
+                }
+            }
+        }
         font.pixelSize: Theme.fontSizeMedium
         color: stop_item.highlight ? Theme.highlightColor : Theme.primaryColor
-        visible: false
     }
 
     Label {

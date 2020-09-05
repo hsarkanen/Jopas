@@ -87,7 +87,7 @@ function get_reverse_geocode(latitude, longitude, model, api_type) {
 //    console.debug(API['digitransitgeocoding'].URL + queryType + '?' + query);
     var http_request = new XMLHttpRequest();
     http_request.open("GET", API['digitransitgeocoding'].URL + queryType + '?' + query);
-    console.log(query)
+    // console.log(query)
     http_request.onreadystatechange = function() {
         if (http_request.readyState === XMLHttpRequest.DONE) {
             try {
@@ -144,9 +144,14 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
     if (region.identifier !== "finland") {
         query = query + ',modes:"' + parameters.modes + '"';
     }
-    query = query + graphqlArriveBy + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode route{shortName gtfsId} duration startTime endTime from{lat lon name stop{code name}},intermediateStops{lat lon code name},to{lat lon name stop{code name}},distance, legGeometry{points}}}}}';
 
-//    console.debug(query);
+    // Get Arrival and Departure times for stops
+    query = query + graphqlArriveBy + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode,route{shortName,gtfsId},trip{gtfsId},duration,startTime,endTime,from{lat,lon,name,stop{code,name,stoptimesForServiceDate(date:"';
+    query = query + Qt.formatDate(parameters.jstime, "yyyyMMdd") + '"){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}},to{lat,lon,name,stop{code,name,stoptimesForServiceDate(date:"';
+    query = query + Qt.formatDate(parameters.jstime, "yyyyMMdd") + '"){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}},distance,legGeometry{points},intermediateStops{lat,lon,code,name,stoptimesForServiceDate(date:"';
+    query = query + Qt.formatDate(parameters.jstime, "yyyyMMdd") + '"){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}}}}}';
+
+    console.debug(query);
     var http_request = new XMLHttpRequest();
     http_request.open("POST", API['digitransitgeocoding'].URL + queryType);
     http_request.setRequestHeader("Content-Type", "application/graphql");
@@ -154,7 +159,7 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
     http_request.onreadystatechange = function() {
         if (http_request.readyState === XMLHttpRequest.DONE) {
             itineraries_json = JSON.parse(http_request.responseText);
-//            console.debug("Query json result: " + JSON.stringify(itineraries_json));
+            // console.debug("Query json result: " + JSON.stringify(itineraries_json));
             for (var index in itineraries_json.data.plan.itineraries) {
                 var output = {}
                 var route = itineraries_json.data.plan.itineraries[index]
@@ -186,23 +191,53 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                     output.legs[leg].from.shortCode = legdata.from.stop ? legdata.from.stop.code : ""
                     output.legs[leg].from.latitude = legdata.from.lat
                     output.legs[leg].from.longitude = legdata.from.lon
+                    if (legdata.from.stop
+                            && legdata.from.stop.stoptimesForServiceDate
+                            && legdata.trip
+                            && legdata.route
+                            && legdata.trip.gtfsId
+                            && legdata.route.gtfsId) {
+                        var fromTime = processStoptimes(legdata.from.stop.stoptimesForServiceDate, legdata.trip.gtfsId, legdata.route.gtfsId)
+                        console.log(legdata.from.name, JSON.stringify(fromTime))
+                        output.legs[leg].from.arrTime = fromTime && fromTime.scheduledArrival ? fromTime.scheduledArrival : 0
+                        output.legs[leg].from.depTime = fromTime && fromTime.scheduledDeparture ? fromTime.scheduledDeparture : 0
+                    }
                     output.legs[leg].to.name = legdata.to.name ? legdata.to.name : ""
                     output.legs[leg].to.time = new Date(legdata.endTime)
                     output.legs[leg].to.shortCode = legdata.to.stop ? legdata.to.stop.code : ""
                     output.legs[leg].to.latitude = legdata.to.lat
                     output.legs[leg].to.longitude = legdata.to.lon
+                    if (legdata.to.stop
+                            && legdata.to.stop.stoptimesForServiceDate
+                            && legdata.trip
+                            && legdata.route
+                            && legdata.trip.gtfsId
+                            && legdata.route.gtfsId) {
+                        var toTime = processStoptimes(legdata.to.stop.stoptimesForServiceDate, legdata.trip.gtfsId, legdata.route.gtfsId)
+                        console.log(legdata.to.name, JSON.stringify(toTime))
+                        output.legs[leg].to.arrTime = toTime && toTime.scheduledArrival ? toTime.scheduledArrival : 0
+                        output.legs[leg].to.depTime = toTime && toTime.scheduledDeparture ? toTime.scheduledDeparture : 0
+                    }
                     for (var stopindex in legdata.intermediateStops) {
                         var locdata = legdata.intermediateStops[stopindex]
-                        // TODO: Investigate if it's easily possible to retrieve stop times
-                        // from digitransit graphql API
+                        var stoptime
+                        var timediff
+                        if (locdata.stoptimesForServiceDate && legdata.trip.gtfsId && legdata.route.gtfsId) {
+                            stoptime = processStoptimes(locdata.stoptimesForServiceDate, legdata.trip.gtfsId, legdata.route.gtfsId)
+                            if (stopindex - 1 >= 0) {
+                                timediff =stoptime.scheduledArrival - output.legs[leg].locs[stopindex-1].depTime
+                            } else {
+                                timediff = stoptime.scheduledArrival - output.legs[leg].from.depTime
+                            }
+                        }
                         output.legs[leg].locs[stopindex] = {
                             "name" : locdata.name,
                             "shortCode" : locdata.code,
                             "latitude" : locdata.lat,
                             "longitude" : locdata.lon,
-                            "arrTime" : 0,
-                            "depTime" : 0,
-                            "time_diff": 0
+                            "arrTime" : stoptime && stoptime.scheduledArrival ? stoptime.scheduledArrival : 0,
+                            "depTime" : stoptime && stoptime.scheduledDeparture ? stoptime.scheduledDeparture : 0,
+                            "time_diff": timediff || 0
                         }
                     }
                     /* update the first and last time using any other transportation than walking */
@@ -222,4 +257,17 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
         }
     }
     http_request.send(query);
+}
+function processStoptimes(stoptimesPatterns, tripGtfsId, routeGtdsId) {
+    for (var idx in stoptimesPatterns) {
+        var stoptimePattern = stoptimesPatterns[idx]
+        if (stoptimePattern.pattern && stoptimePattern.pattern.route && stoptimePattern.pattern.route.gtfsId === routeGtdsId) {
+            for (var stIdx in stoptimePattern.stoptimes) {
+                var stopTime = stoptimePattern.stoptimes[stIdx]
+                if (stopTime.trip && stopTime.trip.gtfsId === tripGtfsId) {
+                    return stopTime
+                }
+            }
+        }
+    }
 }
