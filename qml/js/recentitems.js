@@ -32,75 +32,79 @@
 // Adapted from:http://www.developer.nokia.com/Community/Wiki/How-to_create_a_persistent_settings_database_in_Qt_Quick_%28QML%29
 
 .import QtQuick.LocalStorage 2.0 as Sql
-
-// First, let's create a short helper function to get the database connection
-function getDatabase() {
-     return Sql.LocalStorage.openDatabaseSync("JollaOpas", "1.0", "StorageDatabase", 100000);
-}
+.import "storage.js" as Storage
 
 // At the start of the application, we can initialize the tables we need if they haven't been created yet
 function initialize() {
-    var db = getDatabase();
-
-    db.transaction(
-        function(tx) {
-            // Create the settings table if it doesn't already exist
-            // If the table exists, this is skipped
-            // Type is just preparation for possibly different recentitem types in the future
-            tx.executeSql('CREATE TABLE IF NOT EXISTS recentitems(coord TEXT UNIQUE, type TEXT NOT NULL, api TEXT NOT NULL, name TEXT NOT NULL);');
-          });
+    var db = Storage.getDatabase();
+    var status = Storage.checkSchema(db, "recentitems")
+    console.log("favorites init success: ", status)
 }
 
-function addRecentItem(name, coord) {
-    var db = getDatabase();
+function addRecentItem(object) {
+    var db = Storage.getDatabase();
     var res = "";
-    db.transaction(function(tx) {
+    db.transaction(function (tx) {
         // If the place was already in recentitems remove it temporarily for increasing it's index to bring it first
         // on the list again
         var rs = tx.executeSql('SELECT coord,name FROM recentitems WHERE coord = ?', coord);
         if (rs.rows.length > 0) {
             rs = tx.executeSql('DELETE FROM recentitems WHERE coord = ?;', coord)
         }
-        rs = tx.executeSql('INSERT INTO recentitems (coord,type,api,name) VALUES (?,?,?,?);', [coord,'normal',appWindow.currentApi,name]);
-        if (rs.rowsAffected > 0) {
-            res = "OK";
-        } else {
-            res = "Error";
+        else {
+            var query = 'INSERT INTO recentitems ('
+            var queryValues = ' VALUES ('
+            var values = []
+            for (var key in object) {
+                // console.log(key, object[key])
+                if (object[key]) {
+                    query += key + ','
+                    queryValues += '?,'
+                    values.push(object[key])
+                }
+            }
+            query += 'type,api)'
+            queryValues += '?,?);'
+            values.push('normal')
+            values.push(appWindow.currentApi)
+            rs = tx.executeSql(query + queryValues, values);
+            if (rs.rowsAffected > 0) {
+                res = "OK";
+            } else {
+                res = "Error";
+            }
         }
-     });
-  return res;
+    });
+    // The function returns “OK” if it was successful, or “Error” if it wasn't
+    return res;
 }
 
 function deleteRecentItems() {
-   var db = getDatabase();
-   db.transaction(function(tx) {
+    var db = Storage.getDatabase();
+    db.transaction(function(tx) {
         tx.executeSql('DROP TABLE recentitems');
         }
-  );
-  // The function returns always “OK”
-  return "OK";
+    );
+    // The function returns always “OK”
+    return "OK";
 }
 
 // This function is used to retrieve a setting from the database
 function getRecentItems(model) {
-   var db = getDatabase();
-   var res="";
-   db.transaction(function(tx) {
-     var rs = tx.executeSql('SELECT coord,name FROM recentitems WHERE api = ?', appWindow.currentApi);
-     if (rs.rows.length > 0) {
-         // Return recentitems in reverse order
-         for(var i = rs.rows.length - 1; i >= 0; --i) {
-             var output = {}
-             output.name = rs.rows.item(i).name;
-             output.coord = rs.rows.item(i).coord;
-             output.type = "recentitem"
-             model.append(output)
-         }
-     } else {
-         res = "Unknown";
-     }
-  })
-  // The function returns “Unknown” if the setting was not found in the database
-  // For more advanced projects, this should probably be handled through error codes
-  return res
+    var db = Storage.getDatabase();
+    var res="";
+    db.transaction(function(tx) {
+        var rs = tx.executeSql('SELECT * FROM recentitems WHERE api = ?', appWindow.currentApi);
+        if (rs.rows.length > 0) {
+            for (var i = 0; i < rs.rows.length; i++) {
+                var output = JSON.parse(JSON.stringify(rs.rows.item(i)))
+                model.append(output)
+            }
+        } else {
+            res = "Unknown";
+        }
+    })
+    // The function returns “Unknown” if the setting was not found in the database
+    // For more advanced projects, this should probably be handled through error codes
+    return res
 }

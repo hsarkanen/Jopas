@@ -31,7 +31,7 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
-import "../../components"
+import "../components"
 
 Dialog {
     property alias model: view.model
@@ -43,14 +43,9 @@ Dialog {
     forwardNavigation: true
     anchors.fill: parent
     PageHeader { id: header ; title: departure ? qsTr("Departure") : qsTr("Destination") }
-    Text {
+    SectionHeader {
             anchors.top: header.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
             id: favoritesheaderitem
-            color: Theme.highlightColor
-            z: 1
-            font.pixelSize: 36 * Theme.pixelRatio
             text: qsTr("Favorites")
     }
 
@@ -61,7 +56,8 @@ Dialog {
         id: view
         anchors.top: favoritesheaderitem.bottom
         anchors.bottom: recentsearchesheaderitem.top
-        delegate: FavoritesDelegate {
+        delegate: SuggestionDelegate {
+            model: view.model
             onClicked: {
                 fav_recent_dialog.resultObject = view.model.get(index)
                 console.log(JSON.stringify(resultObject))
@@ -74,14 +70,9 @@ Dialog {
 
     //Spacing { id: headerTopSpacer; height: 50; anchors.bottom: recentsearchesheaderitem.top }
 
-    Text {
+    SectionHeader {
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
             id: recentsearchesheaderitem
-            color: Theme.highlightColor
-            z: 1
-            font.pixelSize: 36 * Theme.pixelRatio
             text: qsTr("Recent searches")
     }
 
@@ -93,7 +84,8 @@ Dialog {
         width: parent.width
         anchors.top: recentsearchesheaderitem.bottom
         anchors.bottom: parent.bottom
-        delegate: RecentItemDelegate {
+        delegate: SuggestionDelegate {
+            model: view2.model
             onClicked: {
                 fav_recent_dialog.resultObject = view2.model.get(index)
                 console.log(JSON.stringify(resultObject))

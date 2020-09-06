@@ -136,10 +136,10 @@ Dialog {
                 return item.name === appWindow.locationParameters.to.name
             })
             if (appWindow.locationParameters.from.name && !fromFound) {
-                RecentItems.addRecentItem(appWindow.locationParameters.from.name, appWindow.locationParameters.from.coord)
+                RecentItems.addRecentItem(appWindow.locationParameters.from)
             }
             if (appWindow.locationParameters.to.name && !toFound) {
-                RecentItems.addRecentItem(appWindow.locationParameters.to.name, appWindow.locationParameters.to.coord)
+                RecentItems.addRecentItem(appWindow.locationParameters.to)
             }
 
             parameters.from_name = appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name
