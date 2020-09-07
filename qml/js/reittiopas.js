@@ -146,10 +146,10 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
     }
 
     // Get Arrival and Departure times for stops
-    query = query + graphqlArriveBy + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode,route{shortName,gtfsId},trip{gtfsId},duration,startTime,endTime,from{lat,lon,name,stop{code,name,stoptimesForServiceDate(date:"';
-    query = query + Qt.formatDate(parameters.jstime, "yyyyMMdd") + '"){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}},to{lat,lon,name,stop{code,name,stoptimesForServiceDate(date:"';
-    query = query + Qt.formatDate(parameters.jstime, "yyyyMMdd") + '"){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}},distance,legGeometry{points},intermediateStops{lat,lon,code,name,stoptimesForServiceDate(date:"';
-    query = query + Qt.formatDate(parameters.jstime, "yyyyMMdd") + '"){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}}}}}';
+    query = query + graphqlArriveBy + '){itineraries{walkDistance,duration,startTime,endTime,legs{mode,route{shortName,gtfsId},trip{gtfsId},duration,startTime,endTime,from{lat,lon,name,stop{code,name,stoptimesForPatterns(numberOfDepartures:10,startTime:';
+    query = query + Math.floor(parameters.jstime.getTime()/1000) + '){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}},to{lat,lon,name,stop{code,name,stoptimesForPatterns(numberOfDepartures:10,startTime:';
+    query = query + Math.floor(parameters.jstime.getTime()/1000) + '){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}},distance,legGeometry{points},intermediateStops{lat,lon,code,name,stoptimesForPatterns(numberOfDepartures:10,startTime:';
+    query = query + Math.floor(parameters.jstime.getTime()/1000) + '){pattern{route{gtfsId}},stoptimes{scheduledArrival,scheduledDeparture,trip{gtfsId}}}}}}}}';
 
     console.debug(query);
     var http_request = new XMLHttpRequest();
@@ -192,12 +192,12 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                     output.legs[leg].from.latitude = legdata.from.lat
                     output.legs[leg].from.longitude = legdata.from.lon
                     if (legdata.from.stop
-                            && legdata.from.stop.stoptimesForServiceDate
+                            && legdata.from.stop.stoptimesForPatterns
                             && legdata.trip
                             && legdata.route
                             && legdata.trip.gtfsId
                             && legdata.route.gtfsId) {
-                        var fromTime = processStoptimes(legdata.from.stop.stoptimesForServiceDate, legdata.trip.gtfsId, legdata.route.gtfsId)
+                        var fromTime = processStoptimes(legdata.from.stop.stoptimesForPatterns, legdata.trip.gtfsId, legdata.route.gtfsId)
                         console.log(legdata.from.name, JSON.stringify(fromTime))
                         output.legs[leg].from.arrTime = fromTime && fromTime.scheduledArrival ? fromTime.scheduledArrival : 0
                         output.legs[leg].from.depTime = fromTime && fromTime.scheduledDeparture ? fromTime.scheduledDeparture : 0
@@ -208,12 +208,12 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                     output.legs[leg].to.latitude = legdata.to.lat
                     output.legs[leg].to.longitude = legdata.to.lon
                     if (legdata.to.stop
-                            && legdata.to.stop.stoptimesForServiceDate
+                            && legdata.to.stop.stoptimesForPatterns
                             && legdata.trip
                             && legdata.route
                             && legdata.trip.gtfsId
                             && legdata.route.gtfsId) {
-                        var toTime = processStoptimes(legdata.to.stop.stoptimesForServiceDate, legdata.trip.gtfsId, legdata.route.gtfsId)
+                        var toTime = processStoptimes(legdata.to.stop.stoptimesForPatterns, legdata.trip.gtfsId, legdata.route.gtfsId)
                         console.log(legdata.to.name, JSON.stringify(toTime))
                         output.legs[leg].to.arrTime = toTime && toTime.scheduledArrival ? toTime.scheduledArrival : 0
                         output.legs[leg].to.depTime = toTime && toTime.scheduledDeparture ? toTime.scheduledDeparture : 0
@@ -222,11 +222,11 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                         var locdata = legdata.intermediateStops[stopindex]
                         var stoptime
                         var timediff
-                        if (locdata.stoptimesForServiceDate && legdata.trip.gtfsId && legdata.route.gtfsId) {
-                            stoptime = processStoptimes(locdata.stoptimesForServiceDate, legdata.trip.gtfsId, legdata.route.gtfsId)
+                        if (locdata.stoptimesForPatterns && legdata.trip.gtfsId && legdata.route.gtfsId) {
+                            stoptime = processStoptimes(locdata.stoptimesForPatterns, legdata.trip.gtfsId, legdata.route.gtfsId)
                             if (stopindex - 1 >= 0) {
-                                timediff =stoptime.scheduledArrival - output.legs[leg].locs[stopindex-1].depTime
-                            } else {
+                                timediff = stoptime.scheduledArrival - output.legs[leg].locs[stopindex-1].depTime
+                            } else if(stoptime) {
                                 timediff = stoptime.scheduledArrival - output.legs[leg].from.depTime
                             }
                         }

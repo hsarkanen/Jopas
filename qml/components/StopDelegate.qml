@@ -100,16 +100,19 @@ ListItem {
         anchors.leftMargin: Theme.paddingSmall
         horizontalAlignment: Qt.AlignLeft
         text: {
+            var realtime = 0
             if(index === 0) {
                 try {
-                    return Helper.prettyTimeFromSeconds(depTime).slice(0,-3)
+                    if (depTime > 86400) realtime = depTime - 86400
+                    return Helper.prettyTimeFromSeconds(realtime).slice(0,-3)
                 }
                 catch(depTimeErr) {
                     return ""
                 }
             } else {
                 try {
-                    return Helper.prettyTimeFromSeconds(arrTime).slice(0,-3)
+                    if (arrTime > 86400) realtime = arrTime - 86400
+                    return Helper.prettyTimeFromSeconds(realtime).slice(0,-3)
                 }
                 catch(arrTimeErr) {
                     return ""
