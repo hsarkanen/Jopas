@@ -94,7 +94,7 @@ function checkSchema(db, tableName) {
       if (tableInfo.rows.length === 0) {
         query += "CREATE TABLE IF NOT EXISTS " + tableSchema.name + "("
         for (var i in tableSchema.columns) {
-          query += tableSchema.columns[i].name + " "
+          query += i + " "
             + tableSchema.columns[i].type + " "
             + tableSchema.columns[i].unique + " "
             + tableSchema.columns[i].null + " "
@@ -110,9 +110,9 @@ function checkSchema(db, tableName) {
         r = true; //TODO: check column attributes
       } else {
         for (var i in tableSchema.columns) {
-          if (!attributeExists(tableInfo.rows, tableSchema.columns[i].name)) {
+          if (!attributeExists(tableInfo.rows, i)) {
             var oldLength = tableInfo.rows.length
-            query = "ALTER TABLE " + tableSchema.name + " ADD " + tableSchema.columns[i].name + " "
+            query = "ALTER TABLE " + tableSchema.name + " ADD " + i + " "
               + tableSchema.columns[i].type + " "
               + tableSchema.columns[i].unique + " "
               + tableSchema.columns[i].null + " "
@@ -157,47 +157,50 @@ function getSchema(tableName) {
 function favoritesTable() {
   var favoritesTable = {}
   favoritesTable.name = "favorites"
-  favoritesTable.columns = [
-    { name: "coord", type: "TEXT", unique: "UNIQUE", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "type", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "api", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "name", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "id", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "layer", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "source", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "source_id", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "postalcode", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "postalcode_gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "confidence", type: "INTEGER", unique: "", null: "NOT NULL", defaultValue: "DEFAULT(0)" },
-    { name: "accuracy", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "country", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "country_gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "country_a", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "region", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "region_gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "localadmin", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "localadmin_gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "locality", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "locality_gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "neighbourhood", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "neighbourhood_gid", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
-    { name: "label", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" }
-  ]
-  return favoritesTable
+  favoritesTable.columns = {
+        "coord": { type: "TEXT", unique: "UNIQUE", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "type": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "api": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "name": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "housenumber": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "street": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "distance": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "id": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "layer": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "source": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "source_id": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "postalcode": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "postalcode_gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "confidence": { type: "INTEGER", unique: "", null: "NOT NULL", defaultValue: "DEFAULT(0)" },
+        "accuracy": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "country": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "country_gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "country_a": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "region": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "region_gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "localadmin": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "localadmin_gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "locality": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "locality_gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "neighbourhood": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "neighbourhood_gid": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" },
+        "label": { type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "DEFAULT('')" }
+    }
+    return favoritesTable
 }
 
 function favoriteRoutesTable() {
-  var favoriteRoutesTable = {}
-  favoriteRoutesTable.name = "favoriteRoutes"
-  favoriteRoutesTable.columns = [
-    { name: "routeIndex", type: "INTEGER", unique: "PRIMARY KEY AUTOINCREMENT", null: "", defaultValue: "" },
-    { name: "type", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "" },
-    { name: "api", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "" },
-    { name: "fromCoord", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "" },
-    { name: "fromName", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "" },
-    { name: "toCoord", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "" },
-    { name: "toName", type: "TEXT", unique: "", null: "NOT NULL", defaultValue: "" }
-  ]
+    var favoriteRoutesTable = {}
+    favoriteRoutesTable.name = "favoriteRoutes"
+    favoriteRoutesTable.columns = {
+        "routeIndex": { type: "INTEGER", unique: "PRIMARY KEY AUTOINCREMENT",null: "", defaultValue: "" },
+        "type": { type: "TEXT", unique: "",null: "NOT NULL", defaultValue: "" },
+        "api": { type: "TEXT", unique: "",null: "NOT NULL", defaultValue: "" },
+        "fromCoord": { type: "TEXT", unique: "",null: "NOT NULL", defaultValue: "" },
+        "fromName": { type: "TEXT", unique: "",null: "NOT NULL", defaultValue: "" },
+        "toCoord": { type: "TEXT", unique: "",null: "NOT NULL", defaultValue: "" },
+        "toName": { type: "TEXT", unique: "",null: "NOT NULL", defaultValue: "" }
+    }
   return favoriteRoutesTable
 }

@@ -58,6 +58,7 @@ function favoritExists(coord) {
 // This function is used to write a setting into the database
 function addFavorite(object) {
     var db = Storage.getDatabase();
+    var schema = Storage.getSchema("favorites")
     var res = "";
     db.transaction(function(tx) {
         var rs = tx.executeSql('SELECT coord,name FROM favorites WHERE coord = ?', object.coord);
@@ -70,7 +71,7 @@ function addFavorite(object) {
             var values = []
             for(var key in object) {
                 // console.log(key, object[key])
-                if(object[key]) {
+                if(schema.columns[key] && object[key]) {
                     query += key + ','
                     queryValues += '?,'
                     values.push(object[key])

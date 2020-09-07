@@ -38,41 +38,39 @@
 function initialize() {
     var db = Storage.getDatabase();
     var status = Storage.checkSchema(db, "recentitems")
-    console.log("favorites init success: ", status)
+    console.log("recentitems initialization: ", status)
 }
 
 function addRecentItem(object) {
     var db = Storage.getDatabase();
+    var schema = Storage.getSchema("recentitems")
     var res = "";
     db.transaction(function (tx) {
         // If the place was already in recentitems remove it temporarily for increasing it's index to bring it first
         // on the list again
-        var rs = tx.executeSql('SELECT coord,name FROM recentitems WHERE coord = ?', coord);
+        var rs = tx.executeSql('SELECT coord,name FROM recentitems WHERE coord = ?', object.coord);
         if (rs.rows.length > 0) {
-            rs = tx.executeSql('DELETE FROM recentitems WHERE coord = ?;', coord)
+            rs = tx.executeSql('DELETE FROM recentitems WHERE coord = ?;', object.coord)
         }
-        else {
-            var query = 'INSERT INTO recentitems ('
-            var queryValues = ' VALUES ('
-            var values = []
-            for (var key in object) {
-                // console.log(key, object[key])
-                if (object[key]) {
-                    query += key + ','
-                    queryValues += '?,'
-                    values.push(object[key])
-                }
+        var query = 'INSERT INTO recentitems ('
+        var queryValues = ' VALUES ('
+        var values = []
+        for (var key in object) {
+            if (schema.columns[key] && object[key]) {
+                query += key + ','
+                queryValues += '?,'
+                values.push(object[key])
             }
-            query += 'type,api)'
-            queryValues += '?,?);'
-            values.push('normal')
-            values.push(appWindow.currentApi)
-            rs = tx.executeSql(query + queryValues, values);
-            if (rs.rowsAffected > 0) {
-                res = "OK";
-            } else {
-                res = "Error";
-            }
+        }
+        query += 'type,api)'
+        queryValues += '?,?);'
+        values.push('normal')
+        values.push(appWindow.currentApi)
+        rs = tx.executeSql(query + queryValues, values);
+        if (rs.rowsAffected > 0) {
+            res = "OK";
+        } else {
+            res = "Error";
         }
     });
     // The function returns “OK” if it was successful, or “Error” if it wasn't
@@ -96,7 +94,7 @@ function getRecentItems(model) {
     db.transaction(function(tx) {
         var rs = tx.executeSql('SELECT * FROM recentitems WHERE api = ?', appWindow.currentApi);
         if (rs.rows.length > 0) {
-            for (var i = 0; i < rs.rows.length; i++) {
+            for (var i = rs.rows.length - 1; i >= 0; --i) {
                 var output = JSON.parse(JSON.stringify(rs.rows.item(i)))
                 model.append(output)
             }
