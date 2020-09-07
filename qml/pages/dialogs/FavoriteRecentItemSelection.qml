@@ -45,6 +45,7 @@ Dialog {
     PageHeader { id: header ; title: departure ? qsTr("Departure") : qsTr("Destination") }
     SectionHeader {
             anchors.top: header.bottom
+            anchors.topMargin: -Theme.paddingLarge*2
             id: favoritesheaderitem
             text: qsTr("Favorites")
     }
@@ -56,6 +57,7 @@ Dialog {
         id: view
         anchors.top: favoritesheaderitem.bottom
         anchors.bottom: recentsearchesheaderitem.top
+        clip: true
         delegate: SuggestionDelegate {
             model: view.model
             onClicked: {
@@ -84,6 +86,7 @@ Dialog {
         width: parent.width
         anchors.top: recentsearchesheaderitem.bottom
         anchors.bottom: parent.bottom
+        clip: true
         delegate: SuggestionDelegate {
             model: view2.model
             onClicked: {
