@@ -34,9 +34,7 @@ import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
-import "../js/helper.js" as Helper
 import "../js/favorites.js" as Favorites
-import "../js/recentitems.js" as RecentItems
 import "../components"
 import "./components"
 
@@ -52,8 +50,10 @@ Dialog {
     property variant searchParameters
 
     onAcceptPendingChanged: {
-        mainPage.acceptDestinationInstance.search_parameters = searchParameters
-        mainPage.acceptDestinationInstance.startSearch()
+        if(status >= PageStatus.Active) {
+            mainPage.acceptDestinationInstance.search_parameters = searchParameters
+            mainPage.acceptDestinationInstance.startSearch()
+        }
     }
 
     onStatusChanged: {
@@ -72,37 +72,16 @@ Dialog {
             Favorites.getFavoriteRoutes("normal", appWindow.currentApi, favoriteRoutesModel)
     }
 
-    function newRoute(name, coord) {
-        /* clear all other pages from the stack */
-        while(pageStack.depth > 1)
-            pageStack.pop(null, true)
+    function updateValues() {
+        planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
+    }
 
-        /* bring application to front */
-        QmlApplicationViewer.showFullScreen()
-
-        /* Update time */
-        timeSwitch.setTimeNow()
-
-        /* Update new destination to "to" */
-        to.updateLocation(name, 0, coord)
-
-        /* Remove user input location and use gps location */
-        from.clear()
-
-        /* use current location if available - otherwise wait for it */
-        if(appWindow.locationParameters.gps.coord) {
-            setRouteParameters({})
-            if(paramsValid) pageStack.navigateForward()
-        }
-        else {
-            state = "waiting_route"
-        }
+    function setTimeNow(){
+        planner.timeButton.setTimeNow()
     }
 
     Component.onCompleted: {
-        RecentItems.initialize()
-        Favorites.initialize()
-        planner.timeButton.setTimeNow()
+        setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
         refreshFavoriteRoutes()
     }
@@ -118,78 +97,11 @@ Dialog {
 
     state: "normal"
 
-    function setRouteParameters(parameters) {
+    function setSearchParameters(parameters) {
         try {
-            var walking_speed = Storage.getSetting("walking_speed")
-            var change_margin = Storage.getSetting("change_margin")
-            var change_reluctance = Storage.getSetting("change_reluctance")
-            var walk_reluctance = Storage.getSetting("walk_reluctance")
-            var currentDate = new Date()
-
-            // Only add to recentitems if the place is not from favorites and
-            // user specified start point
-
-            var fromFound = Helper.findModelItem(favoritesModel, function(item) {
-                return item.name === appWindow.locationParameters.from.name
-            })
-            var toFound = Helper.findModelItem(favoritesModel, function(item) {
-                return item.name === appWindow.locationParameters.to.name
-            })
-            if (appWindow.locationParameters.from.name && !fromFound) {
-                RecentItems.addRecentItem(appWindow.locationParameters.from)
-            }
-            if (appWindow.locationParameters.to.name && !toFound) {
-                RecentItems.addRecentItem(appWindow.locationParameters.to)
-            }
-
-            parameters.from_name = appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name
-            parameters.from = appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord
-            parameters.to_name = appWindow.locationParameters.to.name
-            parameters.to = appWindow.locationParameters.to.coord
-
-            appWindow.locationParameters.from.name = parameters.from_name
-            appWindow.locationParameters.from.coord = parameters.from
-
-            currentDate.setFullYear(appWindow.locationParameters.datetime.year || currentDate.getFullYear())
-            currentDate.setMonth(appWindow.locationParameters.datetime.month || currentDate.getMonth())
-            currentDate.setDate(appWindow.locationParameters.datetime.date || currentDate.getDate())
-            currentDate.setHours(appWindow.locationParameters.datetime.hour || currentDate.getHours())
-            currentDate.setMinutes(appWindow.locationParameters.datetime.minute || currentDate.getMinutes())
-
-            parameters.jstime = currentDate
-
-            parameters.timetype = planner.timeBy.firstActive ? "departure" : "arrival"
-            parameters.arriveBy = !planner.timeBy.firstActive
-
-            parameters.walk_speed = walking_speed === "Unknown" ? "70" : walking_speed
-            parameters.change_margin = change_margin === "Unknown" ? "3" : Math.floor(change_margin)
-            parameters.change_reluctance = change_reluctance === "Unknown" ? "10" : Math.floor(change_reluctance)
-            parameters.walk_reluctance = walk_reluctance === "Unknown" ? "2" : Math.floor(walk_reluctance)
-            parameters.modes =""
-
-            if (appWindow.currentApi === "helsinki") {
-                if(Storage.getSetting("bus_disabled") === "false") {
-                    parameters.modes += "BUS,";
-                }
-                if(Storage.getSetting("tram_disabled") === "false") {
-                    parameters.modes += "TRAM,";
-                }
-                if(Storage.getSetting("metro_disabled") === "false") {
-                    parameters.modes += "SUBWAY,"
-                }
-                if(Storage.getSetting("train_disabled") === "false") {
-                    parameters.modes += "RAIL,";
-                }
-                if(Storage.getSetting("ferry_disabled") === "false") {
-                    parameters.modes += "FERRY,";
-                }
-            }
-            else {
-                parameters.modes += "BUS,"
-            }
-            parameters.modes += "WALK"
+            appWindow.setSearchParameters(parameters)
         } catch (err) {
-            console.log("setRouteParameters", err)
+            console.log("setSearchParameters", err)
         }
         if(!!parameters.from_name || !!parameters.from || !!parameters.to_name || !!parameters.to) {
             searchParameters = parameters
@@ -231,13 +143,6 @@ Dialog {
             id: form
             anchors.fill: parent
             contentHeight: parent.height
-
-            ListModel {
-                id: favoritesModel
-            }
-            ListModel {
-                id: recentItemsModel
-            }
             PullDownMenu {
                 enabled: !drawer.open
                 MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
@@ -272,7 +177,7 @@ Dialog {
                         appWindow.locationParameters.from = toObj
                         appWindow.locationParameters.to = fromObj
                         planner.updateValues(appWindow.locationParameters.from.name || "Choose Location", appWindow.locationParameters.to.name || "Choose Location")
-                        setRouteParameters({})
+                        setSearchParameters({})
                     }
                 }
             }
@@ -285,9 +190,7 @@ Dialog {
             RoutePlanner {
                 id: planner
                 enabled: !drawer.open
-                favoritesModel: favoritesModel
-                recentItemsModel: recentItemsModel
-                onParamsChanged: setRouteParameters(params)
+                onParamsChanged: setSearchParameters(params)
             }
             SectionHeader {
                 id: headeritem
@@ -348,10 +251,6 @@ Dialog {
                 }
             }
 
-            ListModel {
-                id: favoriteRoutesModel
-            }
-
             Component {
                 id: favoriteRouteManageDelegate
 
@@ -379,7 +278,7 @@ Dialog {
                         appWindow.locationParameters.to.name = reverse ? modelFromName : modelToName
                         appWindow.locationParameters.to.coord = reverse ? modelFromCoord : modelToCoord
                         planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
-                        setRouteParameters({})
+                        setSearchParameters({})
                         pageStack.navigateForward()
                     }
 

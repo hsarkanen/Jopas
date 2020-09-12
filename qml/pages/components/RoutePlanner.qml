@@ -16,8 +16,6 @@ Column {
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: header.bottom
 
-    property variant favoritesModel
-    property variant recentItemsModel
     property alias timeButton: timeButton
     property alias timeBy: timeBy
 
@@ -286,6 +284,7 @@ Column {
         firstValue: qsTr("Departure")
         secondValue: qsTr("Arrival")
         onClicked: {
+            appWindow.locationParameters.datetime.timeBy = firstActive ? "departure" : "arrival"
             paramsChanged({})
         }
     }
