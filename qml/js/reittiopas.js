@@ -186,7 +186,7 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                         "locs": [],
                         "leg_number": leg
                     }
-                    output.legs[leg].from.name = legdata.from.name ? legdata.from.name : ""
+                    output.legs[leg].from.name = (leg == 0) ? parameters.from_name : (legdata.from.name ? legdata.from.name : "")
                     output.legs[leg].from.time = new Date(legdata.startTime)
                     output.legs[leg].from.shortCode = legdata.from.stop ? legdata.from.stop.code : ""
                     output.legs[leg].from.latitude = legdata.from.lat
@@ -198,11 +198,10 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                             && legdata.trip.gtfsId
                             && legdata.route.gtfsId) {
                         var fromTime = processStoptimes(legdata.from.stop.stoptimesForPatterns, legdata.trip.gtfsId, legdata.route.gtfsId)
-                        console.log(legdata.from.name, JSON.stringify(fromTime))
                         output.legs[leg].from.arrTime = fromTime && fromTime.scheduledArrival ? fromTime.scheduledArrival : 0
                         output.legs[leg].from.depTime = fromTime && fromTime.scheduledDeparture ? fromTime.scheduledDeparture : 0
                     }
-                    output.legs[leg].to.name = legdata.to.name ? legdata.to.name : ""
+                    output.legs[leg].to.name = (leg == route.legs.length-1) ? parameters.to_name : (legdata.to.name ? legdata.to.name : "")
                     output.legs[leg].to.time = new Date(legdata.endTime)
                     output.legs[leg].to.shortCode = legdata.to.stop ? legdata.to.stop.code : ""
                     output.legs[leg].to.latitude = legdata.to.lat
@@ -214,7 +213,6 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                             && legdata.trip.gtfsId
                             && legdata.route.gtfsId) {
                         var toTime = processStoptimes(legdata.to.stop.stoptimesForPatterns, legdata.trip.gtfsId, legdata.route.gtfsId)
-                        console.log(legdata.to.name, JSON.stringify(toTime))
                         output.legs[leg].to.arrTime = toTime && toTime.scheduledArrival ? toTime.scheduledArrival : 0
                         output.legs[leg].to.depTime = toTime && toTime.scheduledDeparture ? toTime.scheduledDeparture : 0
                     }
@@ -224,7 +222,7 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                         var timediff
                         if (locdata.stoptimesForPatterns && legdata.trip.gtfsId && legdata.route.gtfsId) {
                             stoptime = processStoptimes(locdata.stoptimesForPatterns, legdata.trip.gtfsId, legdata.route.gtfsId)
-                            if (stopindex - 1 >= 0) {
+                            if (stoptime && stopindex - 1 >= 0) {
                                 timediff = stoptime.scheduledArrival - output.legs[leg].locs[stopindex-1].depTime
                             } else if(stoptime) {
                                 timediff = stoptime.scheduledArrival - output.legs[leg].from.depTime
@@ -251,9 +249,6 @@ function get_route(parameters, itineraries_model, itineraries_json, region) {
                 itineraries_model.append(output);
             }
             itineraries_model.done = true;
-        }
-        else {
-//            console.debug("Error receiving route query");
         }
     }
     http_request.send(query);

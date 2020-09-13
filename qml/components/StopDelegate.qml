@@ -103,7 +103,8 @@ ListItem {
             var realtime = 0
             if(index === 0) {
                 try {
-                    if (depTime > 86400) realtime = depTime - 86400
+                    realtime = depTime
+                    if (depTime > 86400) realtime -= 86400
                     return Helper.prettyTimeFromSeconds(realtime).slice(0,-3)
                 }
                 catch(depTimeErr) {
@@ -111,7 +112,8 @@ ListItem {
                 }
             } else {
                 try {
-                    if (arrTime > 86400) realtime = arrTime - 86400
+                    realtime = arrTime
+                    if (arrTime > 86400) realtime -= 86400
                     return Helper.prettyTimeFromSeconds(realtime).slice(0,-3)
                 }
                 catch(arrTimeErr) {
