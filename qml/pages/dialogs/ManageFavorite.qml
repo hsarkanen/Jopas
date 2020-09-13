@@ -63,157 +63,170 @@ Dialog {
     function validateFavorite() {
         paramsValid = true
     }
+    DialogHeader {
+        id: header
+        acceptText: edit ? qsTr("Edit favorite place") : qsTr("Add favorite place")
+        anchors.top: parent.top
+    }
 
-    Column {
-        anchors.fill: parent
-
-        DialogHeader {
-            acceptText: edit ? qsTr("Edit favorite place") : qsTr("Add favorite place")
-        }
-
-        ComboBox {
-            id: favoritePlace
-            enabled: !edit
-            width: parent.width
-            label: "Location"
-            description: "Select your favorite place"
-            value: add_dialog.favoriteObject.name || "Choose location"
-            menu: ContextMenu {
-                ListItem {
-                    MenuItem {
-                        text: "Search"
-                    }
-                    onClicked: function() {
-                        var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/SearchAddress.qml"))
-                        dialog.accepted.connect(function() {
-                            add_dialog.favoriteObject = JSON.parse(JSON.stringify(dialog.selectObject))
-                            favoritePlace.value = add_dialog.favoriteObject.name
-                            editTextField.text = add_dialog.favoriteObject.name
-                            validateFavorite()
-                        })
-                    }
-                    onPressAndHold: {
-                        favoritePlace.value = "Using GPS"
-                        fromGPS.timer.running = true
-                    }
+    ComboBox {
+        id: favoritePlace
+        enabled: !edit
+        anchors.top: header.bottom
+        width: parent.width
+        label: "Location"
+        description: "Select your favorite place"
+        value: add_dialog.favoriteObject.name || "Choose location"
+        menu: ContextMenu {
+            ListItem {
+                MenuItem {
+                    text: "Search"
                 }
-                ListItem {
-                    MenuItem {
-                        text: "Map"
+                onClicked: function() {
+                    var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/SearchAddress.qml"))
+                    dialog.accepted.connect(function() {
+                        add_dialog.favoriteObject = JSON.parse(JSON.stringify(dialog.selectObject))
+                        favoritePlace.value = add_dialog.favoriteObject.name
+                        editTextField.text = add_dialog.favoriteObject.name
+                        validateFavorite()
+                    })
+                }
+                onPressAndHold: {
+                    favoritePlace.value = "Using GPS"
+                    fromGPS.timer.running = true
+                }
+            }
+            ListItem {
+                MenuItem {
+                    text: "Map"
+                }
+                onClicked: function() {
+                    var coord
+                    var name
+                    if(add_dialog.favoriteObject) {
+                        coord = add_dialog.favoriteObject.coord
+                        name = add_dialog.favoriteObject.name
                     }
-                    onClicked: function() {
-                        var coord
-                        var name
-                        if(add_dialog.favoriteObject) {
-                            coord = add_dialog.favoriteObject.coord
-                            name = add_dialog.favoriteObject.name
+                    var dialog = pageStack.push(
+                        Qt.resolvedUrl("../dialogs/Map.qml"),
+                        {
+                            inputCoord: coord || '',
+                            resultName: name || ''
                         }
-                        var dialog = pageStack.push(
-                            Qt.resolvedUrl("../dialogs/Map.qml"),
-                            {
-                                inputCoord: coord || '',
-                                resultName: name || ''
-                            }
-                        )
-                        dialog.accepted.connect(function() {
-                            add_dialog.favoriteObject = JSON.parse(JSON.stringify(dialog.resultObject))
-                            favoritePlace.value = add_dialog.favoriteObject.name
-                            editTextField.text = add_dialog.favoriteObject.name
-                            validateFavorite()
-                        })
-                    }
-                    onPressAndHold: {
-                        favoritePlace.value = "Using GPS"
-                        fromGPS.timer.running = true
-                    }
+                    )
+                    dialog.accepted.connect(function() {
+                        add_dialog.favoriteObject = JSON.parse(JSON.stringify(dialog.resultObject))
+                        favoritePlace.value = add_dialog.favoriteObject.name
+                        editTextField.text = add_dialog.favoriteObject.name
+                        validateFavorite()
+                    })
                 }
-                ListItem {
-                    MenuItem {
-                        text: "Favorite"
-                    }
-                    onClicked: function() {
-                        favoritesModel.clear()
-                        Favorites.getFavorites(favoritesModel)
-                        favoritesModel.insert(0, {name: qsTr("Current location"),coord:"0,0"})
-                        recentItemsModel.clear()
-                        RecentItems.getRecentItems(recentItemsModel)
-                        var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/FavoriteRecentItemSelection.qml"),
-                            {
-                                model: favoritesModel,
-                                model2: recentItemsModel,
-                            }
-                        )
-                        dialog.accepted.connect(function() {
-                            add_dialog.favoriteObject = JSON.parse(JSON.stringify(dialog.resultObject))
-                            favoritePlace.value = add_dialog.favoriteObject.name
-                            editTextField.text = add_dialog.favoriteObject.name
-                            validateFavorite()
-                        })
-                    }
-                    onPressAndHold: {
-                        if(add_dialog.favoriteObject.name && add_dialog.favoriteObject.coord) {
-                            if(("OK" === Favorites.addFavorite(add_dialog.favoriteObject))) {
-                                favoritesModel.clear()
-                                Favorites.getFavorites(favoritesModel)
-                                appWindow.useNotification( qsTr("Location added to favorite places") )
-                            } else {
-                                appWindow.useNotification(qsTr("Location already in the favorite places"))
-                            }
+                onPressAndHold: {
+                    favoritePlace.value = "Using GPS"
+                    fromGPS.timer.running = true
+                }
+            }
+            ListItem {
+                MenuItem {
+                    text: "Favorite"
+                }
+                onClicked: function() {
+                    favoritesModel.clear()
+                    Favorites.getFavorites(favoritesModel)
+                    favoritesModel.insert(0, {name: qsTr("Current location"),coord:"0,0"})
+                    recentItemsModel.clear()
+                    RecentItems.getRecentItems(recentItemsModel)
+                    var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/FavoriteRecentItemSelection.qml"),
+                        {
+                            model: favoritesModel,
+                            model2: recentItemsModel,
+                        }
+                    )
+                    dialog.accepted.connect(function() {
+                        add_dialog.favoriteObject = JSON.parse(JSON.stringify(dialog.resultObject))
+                        favoritePlace.value = add_dialog.favoriteObject.name
+                        editTextField.text = add_dialog.favoriteObject.name
+                        validateFavorite()
+                    })
+                }
+                onPressAndHold: {
+                    if(add_dialog.favoriteObject.name && add_dialog.favoriteObject.coord) {
+                        if(("OK" === Favorites.addFavorite(add_dialog.favoriteObject))) {
+                            favoritesModel.clear()
+                            Favorites.getFavorites(favoritesModel)
+                            appWindow.useNotification( qsTr("Location added to favorite places") )
                         } else {
-                            console.log(add_dialog.favoriteObject.name, add_dialog.favoriteObject.coord)
-                            appWindow.useNotification(qsTr("No location to put into favorites"))
+                            appWindow.useNotification(qsTr("Location already in the favorite places"))
                         }
+                    } else {
+                        console.log(add_dialog.favoriteObject.name, add_dialog.favoriteObject.coord)
+                        appWindow.useNotification(qsTr("No location to put into favorites"))
                     }
-                }
-            }
-            onPressAndHold: function(){
-                favoritePlace.value = "Using GPS"
-                fromGPS.timer.running = true
-            }
-            LocationSource {
-                id: fromGPS
-                onLocationFound: function() {
-                    add_dialog.favoriteObject = appWindow.locationParameters.gps
-                    favoritePlace.value = add_dialog.favoriteObject.name
-                    editTextField.text = add_dialog.favoriteObject.name
-                    validateFavorite()
-                }
-                onNoLocationSource: function(){
-                    appWindow.useNotification( qsTr("Location service unavailable") )
-                    favoritePlace.value = add_dialog.favoriteObject.name || "Choose location"
                 }
             }
         }
+        onPressAndHold: function(){
+            favoritePlace.value = "Using GPS"
+            fromGPS.timer.running = true
+        }
+        LocationSource {
+            id: fromGPS
+            onLocationFound: function() {
+                add_dialog.favoriteObject = appWindow.locationParameters.gps
+                favoritePlace.value = add_dialog.favoriteObject.name
+                editTextField.text = add_dialog.favoriteObject.name
+                validateFavorite()
+            }
+            onNoLocationSource: function(){
+                appWindow.useNotification( qsTr("Location service unavailable") )
+                favoritePlace.value = add_dialog.favoriteObject.name || "Choose location"
+            }
+        }
+    }
 
-        TextField {
-            id: editTextField
-            width: parent.width
-            text: {
-                if(favoriteObject) {
-                    return favoriteObject.name
+    TextField {
+        id: editTextField
+        anchors.top: favoritePlace.bottom
+        width: parent.width
+        text: {
+            if(favoriteObject) {
+                return favoriteObject.name
+            }
+            return qsTr("Name")
+        }
+        label: qsTr("Enter name for the favorite place")
+        placeholderText: qsTr("Enter name for the favorite place")
+        focusOutBehavior: FocusBehavior.ClearPageFocus
+        onFocusChanged: if (focus) cursorPosition = text.length
+
+        Item {
+            parent: editTextField
+            anchors.fill: parent
+
+            IconButton {
+                id: clearButton
+                anchors {
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
                 }
-                return qsTr("Name")
-            }
-            label: qsTr("Enter name for the favorite place")
-            labelVisible: true
-            Image {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                source: "image://theme/icon-m-clear"
-                visible: (editTextField.activeFocus)
+                width: icon.width
+                height: parent.height
+                icon.source: (editTextField.text.length > 0 ? "image://theme/icon-m-clear" : "")
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        editTextField.text = ''
-                    }
+                enabled: editTextField.enabled
+
+                opacity: icon.status === Image.Ready ? 1 : 0
+                Behavior on opacity {
+                    FadeAnimation {}
                 }
-            }
 
-            Keys.onReturnPressed: {
-                editTextField.focus = false
-                parent.focus = true
+                onClicked: editTextField.text = ""
             }
+        }
+
+        Keys.onReturnPressed: {
+            editTextField.focus = false
+            parent.focus = true
         }
     }
 }

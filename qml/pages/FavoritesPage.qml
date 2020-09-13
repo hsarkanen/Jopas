@@ -60,7 +60,7 @@ Page {
             height: menuOpen ? rootItem.contentHeight + list.contextMenu.height : rootItem.contentHeigh
             property bool menuOpen: list.contextMenu != null && list.contextMenu.parent === rootItem
             function edit() {
-                pageStack.push(Qt.resolvedUrl("./dialogs/AddFavorite.qml"), {favoritesModel: favoritesModel, favoriteObject: favoritesModel.get(list.currentIndex), edit: true})
+                pageStack.push(Qt.resolvedUrl("./dialogs/ManageFavorite.qml"), {favoritesModel: favoritesModel, favoriteObject: favoritesModel.get(list.currentIndex), edit: true})
             }
 
             function remove() {
@@ -88,7 +88,7 @@ Page {
         }
 
         PullDownMenu {
-            MenuItem { text: qsTr("Add favorite place"); onClicked: pageStack.push(Qt.resolvedUrl("./dialogs/AddFavorite.qml"), {favoritesModel: favoritesModel}) }
+            MenuItem { text: qsTr("Add favorite place"); onClicked: pageStack.push(Qt.resolvedUrl("./dialogs/ManageFavorite.qml"), {favoritesModel: favoritesModel}) }
         }
 
         ViewPlaceholder {
