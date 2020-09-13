@@ -100,7 +100,7 @@ Page {
             height: menuOpen ? Theme.itemSizeSmall + list.contextMenu.height : Theme.itemSizeSmall
             property bool menuOpen: list.contextMenu != null && list.contextMenu.parent === rootItem
             function edit() {
-                pageStack.push(Qt.resolvedUrl("EditFavoriteDialog.qml"), {favoritesModel: favoritesModel, name: modelData, old_name: modelData, coord: coord})
+                pageStack.push(Qt.resolvedUrl("EditFavoriteDialog.qml"), {favoritesModel: favoritesModel, name: name, old_name: name, coord: coord})
             }
 
             function remove() {
@@ -122,7 +122,7 @@ Page {
             Label {
                 id: label
                 height: Theme.itemSizeSmall
-                text: modelData
+                text: name
                 anchors.left: parent.left
                 width: parent.width
                 color: Theme.primaryColor
