@@ -34,13 +34,12 @@ import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/favorites.js" as Favorites
-import "../components"
+import "./components"
 
 Page {
     id: favorites_page
 
     Component.onCompleted: {
-        Favorites.initialize()
         Favorites.getFavorites(favoritesModel)
     }
 
@@ -55,7 +54,32 @@ Page {
         anchors.rightMargin: Theme.paddingSmall
         property Item contextMenu
         model: favoritesModel
-        delegate: favoritesManageDelegate
+        delegate: SuggestionDelegate {
+            id: rootItem
+            model: list.model
+            height: menuOpen ? rootItem.contentHeight + list.contextMenu.height : rootItem.contentHeigh
+            property bool menuOpen: list.contextMenu != null && list.contextMenu.parent === rootItem
+            function edit() {
+                pageStack.push(Qt.resolvedUrl("./dialogs/AddFavorite.qml"), {favoritesModel: favoritesModel, favoriteObject: favoritesModel.get(list.currentIndex), edit: true})
+            }
+
+            function remove() {
+                remorse.execute(rootItem, qsTr("Deleting"), function() {
+                        Favorites.deleteFavorite(coord, favoritesModel)
+                })
+
+            }
+
+            onPressAndHold: {
+                if (!list.contextMenu) {
+                    list.contextMenu = contextMenuComponent.createObject(list)
+                }
+                list.currentIndex = index
+                list.contextMenu.currentItem = rootItem
+                list.contextMenu.open(rootItem)
+            }
+            RemorseItem { id: remorse }
+        }
 
         VerticalScrollDecorator {}
 
@@ -64,7 +88,7 @@ Page {
         }
 
         PullDownMenu {
-            MenuItem { text: qsTr("Add favorite place"); onClicked: pageStack.push(Qt.resolvedUrl("AddFavoriteDialog.qml"), {favoritesModel: favoritesModel}) }
+            MenuItem { text: qsTr("Add favorite place"); onClicked: pageStack.push(Qt.resolvedUrl("./dialogs/AddFavorite.qml"), {favoritesModel: favoritesModel}) }
         }
 
         ViewPlaceholder {
@@ -88,48 +112,6 @@ Page {
                     onClicked: menu.currentItem.remove()
                 }
             }
-        }
-    }
-
-    Component {
-        id: favoritesManageDelegate
-
-        BackgroundItem {
-            id: rootItem
-            width: parent.width
-            height: menuOpen ? Theme.itemSizeSmall + list.contextMenu.height : Theme.itemSizeSmall
-            property bool menuOpen: list.contextMenu != null && list.contextMenu.parent === rootItem
-            function edit() {
-                pageStack.push(Qt.resolvedUrl("EditFavoriteDialog.qml"), {favoritesModel: favoritesModel, name: name, old_name: name, coord: coord})
-            }
-
-            function remove() {
-                remorse.execute(rootItem, qsTr("Deleting"), function() {
-                        Favorites.deleteFavorite(coord, favoritesModel)
-                })
-
-            }
-
-            onPressAndHold: {
-                if (!list.contextMenu) {
-                    list.contextMenu = contextMenuComponent.createObject(list)
-                }
-
-                list.contextMenu.currentItem = rootItem
-                list.contextMenu.open(rootItem)
-            }
-
-            Label {
-                id: label
-                height: Theme.itemSizeSmall
-                text: name
-                anchors.left: parent.left
-                width: parent.width
-                color: Theme.primaryColor
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            RemorseItem { id: remorse }
         }
     }
 }

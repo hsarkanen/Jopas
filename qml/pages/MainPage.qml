@@ -159,9 +159,6 @@ Dialog {
                         if (res === "OK") {
                             appWindow.useNotification( qsTr("Favorite route added") )
                         }
-                        else {
-                            appWindow.useNotification( qsTr("Maximum amount of favorite routes is 4!") )
-                        }
                     }
                 }
                 MenuItem {
@@ -206,8 +203,7 @@ Dialog {
 
             ViewPlaceholder {
                 enabled: favoriteRouteList.count == 0
-                // Not perfect, but shows the text on Jolla Phone, Jolla Tablet and Fairphone2 (was -300)
-                verticalOffset: (favoriteRouteList.height - mainPage.height) * 0.5
+                verticalOffset: - drawer.startPoint * 0.5
                 text: qsTr("No saved favorite routes")
             }
             Label {
@@ -216,7 +212,7 @@ Dialog {
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.secondaryHighlightColor
-                visible: !drawer.open
+                visible: !drawer.open && favoriteRouteList.count > 0
             }
             MouseArea {
                 enabled: !drawer.open
@@ -233,10 +229,6 @@ Dialog {
                     MenuItem {
                         text: qsTr("Get Return Route")
                         onClicked: menu.currentItem.search(true)
-                    }
-                    MenuItem {
-                        text: qsTr("Add to Cover")
-                        onClicked: menu.currentItem.addToCover()
                     }
 
                     MenuItem {

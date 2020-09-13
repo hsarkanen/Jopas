@@ -142,7 +142,6 @@ CoverBackground {
     Row {
         id: routeIndicator
         anchors.horizontalCenter: parent.horizontalCenter
-        //width: parent.width
         visible: false
         enabled: false
         Rectangle {
@@ -308,6 +307,5 @@ CoverBackground {
         searchView.currentIndex = 0
         itinerariesView.currentIndex = 0
         routeView.currentIndex = 0
-
     }
 }

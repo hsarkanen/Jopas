@@ -201,7 +201,7 @@ ApplicationWindow {
         var apiValue = Storage.getSetting("api")
         if (apiValue === "Unknown") {
             mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"), {}, true)
-            var dialog = pageStack.push(Qt.resolvedUrl("pages/StartupDialog.qml"), {}, true)
+            var dialog = pageStack.push(Qt.resolvedUrl("pages/dialogs/Startup.qml"), {}, true)
         }
         else {
             mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"))

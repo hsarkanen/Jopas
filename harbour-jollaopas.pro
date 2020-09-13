@@ -40,7 +40,7 @@ lupdate_only{
 SOURCES += \
     qml/pages/*.qml \
     qml/components/*.qml \
-    qml/pages/AboutDialog.qml.in \
+    qml/pages/dialogs/About.qml.in\
     qml/main.qml
 
 TRANSLATIONS += \
@@ -103,6 +103,6 @@ INCLUDEPATH += \
 
 include(version.pri)
 include(common.pri)
-configure($${PWD}/qml/pages/AboutDialog.qml.in)
+configure($${PWD}/qml/pages/dialogs/About.qml.in)
 
 desktop.files = harbour-jollaopas.desktop
