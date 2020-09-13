@@ -58,12 +58,7 @@ Dialog {
 
     onStatusChanged: {
         if (status == PageStatus.Activating) {
-            appWindow.coverAlignment = Text.AlignHCenter
-            appWindow.coverHeader = "JollaOpas"
-            appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
-
-            // Prevent the keyboard to popup instantly when swithcing back to mainPage
-            mainPage.forceActiveFocus()
+            appWindow.cover.state = "initial"
         }
     }
 

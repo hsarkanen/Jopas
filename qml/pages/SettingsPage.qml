@@ -130,7 +130,6 @@ Page {
                     function set_value(text, value) {
                         Storage.setSetting("api", value)
                         appWindow.currentApi = value
-                        appWindow.coverContents = text
                         appWindow.mainPage.refreshFavoriteRoutes()
                     }
 

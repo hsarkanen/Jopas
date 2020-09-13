@@ -49,6 +49,8 @@ Page {
     }
 
     function dumpLegs(index, model) {
+        var coverModel = appWindow.routeModel
+        coverModel.clear()
         // save used route index for dumping stops
         appWindow.itinerariesIndex = index
         var countOfLegs = appWindow.itinerariesModel.get(route_index).legs.count
@@ -74,6 +76,7 @@ Page {
                 routeDetails += (" " + legdata.code + ", " + legdata.duration + " " + qsTr("min") + "\n")
             }
             model.append(station)
+            coverModel.append(legdata)
             model.append(legdata)
         }
         var last_location = appWindow.itinerariesModel.get(route_index).legs.get(countOfLegs  - 1)
@@ -83,9 +86,8 @@ Page {
                             "leg_number" : ""}
 
         model.append(last_station)
-        appWindow.coverAlignment = Text.AlignLeft
-        appWindow.coverHeader = start_time.slice(11,16) + " - " + finish_time.slice(11,16)
-        appWindow.coverContents = routeDetails
+        appWindow.cover.state = "route"
+        appWindow.coverPage.resetIndex()
         model.done = true
     }
 

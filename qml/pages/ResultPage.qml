@@ -49,29 +49,15 @@ Page {
     }
 
     function setCoverData() {
-        appWindow.coverAlignment = Text.AlignLeft
-        appWindow.coverHeader = appWindow.locationParameters.from.name
-        appWindow.coverContents = ""
-
-        for (var index = 0; index < appWindow.itinerariesModel.count; ++index) {
-            var startTime = Qt.formatTime(appWindow.itinerariesModel.get(index).start, "hh:mm")
-            var finishTime = Qt.formatTime(appWindow.itinerariesModel.get(index).finish, "hh:mm")
-            var code = ""
-            if (appWindow.itinerariesModel.get(index).legs.get(0) && appWindow.itinerariesModel.get(index).legs.get(0).type !== "walk" ) {
-                code = " | L: " + appWindow.itinerariesModel.get(index).legs.get(0).code;
-            }
-            else if (appWindow.itinerariesModel.get(index).legs.get(1) && appWindow.itinerariesModel.get(index).legs.get(1).type !== "walk" ) {
-                code = " | L: " + appWindow.itinerariesModel.get(index).legs.get(1).code;
-            }
-            appWindow.coverContents += startTime + "-" + finishTime + code + "\n";
-        }
+        appWindow.coverPage.resetIndex()
+        appWindow.cover.state = "result"
     }
 
     Connections {
         target: appWindow.itinerariesModel
         // Update cover when performing the search for the first time
         onDoneChanged: {
-            if (appWindow.itinerariesModel.done) {
+            if (appWindow.itinerariesModel.done && (status == PageStatus.Activating || status == PageStatus.Active)) {
                 setCoverData()
             }
         }

@@ -36,13 +36,16 @@ import "js/storage.js" as Storage
 import "js/favorites.js" as Favorites
 import "js/helper.js" as Helper
 import "js/recentitems.js" as RecentItems
+import "pages/"
 import "components"
 
 ApplicationWindow {
     id: appWindow
 
-    cover: Qt.resolvedUrl("pages/CoverPage.qml")
-
+    property alias coverPage: coverPage
+    cover: CoverPage {
+        id: coverPage
+    }
     ListModel {
         id: regions
 
@@ -217,10 +220,6 @@ ApplicationWindow {
     property ListModel favoritesModel: favoritesModel
     property ListModel recentItemsModel: recentItemsModel
 
-    // Pages sets the cover data to these properties and cover is instantiated every time based on these
-    property string coverHeader: ''
-    property string coverContents: ''
-    property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
     property var mainPage
     property ListModel itinerariesModel: itinerariesModel
