@@ -32,8 +32,10 @@ Column {
         description: "Select journeys starting point"
         value: appWindow.locationParameters.from.name || "Choose location"
         menu: ContextMenu {
-            MenuItem {
-                text: "Search"
+            ListItem {
+                MenuItem {
+                    text: "Search"
+                }
                 onClicked: function() {
                     var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/SearchAddress.qml"))
                     dialog.accepted.connect(function() {
@@ -41,9 +43,15 @@ Column {
                         paramsChanged({})
                     })
                 }
+                onPressAndHold: {
+                    from.value = "Using GPS"
+                    fromGPS.timer.running = true
+                }
             }
-            MenuItem {
-                text: "Map"
+            ListItem {
+                MenuItem {
+                    text: "Map"
+                }
                 onClicked: function() {
                     var dialog = pageStack.push(
                         Qt.resolvedUrl("../dialogs/Map.qml"),
@@ -58,9 +66,15 @@ Column {
                         paramsChanged({})
                     })
                 }
+                onPressAndHold: {
+                    from.value = "Using GPS"
+                    fromGPS.timer.running = true
+                }
             }
-            MenuItem {
-                text: "Favorite"
+            ListItem {
+                MenuItem {
+                    text: "Favorite"
+                }
                 onClicked: function() {
                     favoritesModel.clear()
                     Favorites.getFavorites(favoritesModel)
@@ -78,6 +92,19 @@ Column {
                         from.value = appWindow.locationParameters.from.name
                         paramsChanged({})
                     })
+                }
+                onPressAndHold: {
+                    if(appWindow.locationParameters.from.name && appWindow.locationParameters.from.coord) {
+                        if(("OK" === Favorites.addFavorite(appWindow.locationParameters.from))) {
+                            favoritesModel.clear()
+                            Favorites.getFavorites(favoritesModel)
+                            appWindow.useNotification( qsTr("Location added to favorite places") )
+                        } else {
+                            appWindow.useNotification(qsTr("Location already in the favorite places"))
+                        }
+                    } else {
+                        appWindow.useNotification(qsTr("No location to put into favorites"))
+                    }
                 }
             }
         }
@@ -105,8 +132,10 @@ Column {
         description: "Select where journey ends"
         value: appWindow.locationParameters.to.name || "Choose location"
         menu: ContextMenu {
-            MenuItem {
-                text: "Search"
+            ListItem {
+                MenuItem {
+                    text: "Search"
+                }
                 onClicked: function() {
                     var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/SearchAddress.qml"), { departure: false })
                     dialog.accepted.connect(function() {
@@ -114,9 +143,15 @@ Column {
                         paramsChanged({})
                     })
                 }
+                onPressAndHold: {
+                    to.value = "Using GPS"
+                    toGPS.timer.running = true
+                }
             }
-            MenuItem {
-                text: "Map"
+            ListItem {
+                MenuItem {
+                    text: "Map"
+                }
                 onClicked: function() {
                     var dialog = pageStack.push(
                         Qt.resolvedUrl("../dialogs/Map.qml"),
@@ -131,9 +166,15 @@ Column {
                         paramsChanged({})
                     })
                 }
+                onPressAndHold: {
+                    to.value = "Using GPS"
+                    toGPS.timer.running = true
+                }
             }
-            MenuItem {
-                text: "Favorite"
+            ListItem {
+                MenuItem {
+                    text: "Favorite"
+                }
                 onClicked: function() {
                     favoritesModel.clear()
                     Favorites.getFavorites(favoritesModel)
@@ -147,11 +188,23 @@ Column {
                         model2: recentItemsModel,
                     })
                     dialog.accepted.connect(function() {
-                        console.log(JSON.parse(JSON.stringify(dialog.resultObject)))
                         appWindow.locationParameters.to = JSON.parse(JSON.stringify(dialog.resultObject))
                         to.value = appWindow.locationParameters.to.name
                         paramsChanged({})
                     })
+                }
+                onPressAndHold: {
+                    if(appWindow.locationParameters.to.name && appWindow.locationParameters.to.coord) {
+                        if(("OK" === Favorites.addFavorite(appWindow.locationParameters.to))) {
+                            favoritesModel.clear()
+                            Favorites.getFavorites(favoritesModel)
+                            appWindow.useNotification( qsTr("Location added to favorite places") )
+                        } else {
+                            appWindow.useNotification(qsTr("Location already in the favorite places"))
+                        }
+                    } else {
+                        appWindow.useNotification(qsTr("No location to put into favorites"))
+                    }
                 }
             }
         }
@@ -170,8 +223,8 @@ Column {
                 appWindow.useNotification( qsTr("Location service unavailable") )
                 to.value = appWindow.locationParameters.to.name || "Choose location"
             }
-            }
         }
+    }
     ValueToggle {
         id: dateToggle
         label: qsTr("Date")
