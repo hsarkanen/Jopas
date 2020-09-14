@@ -134,6 +134,7 @@ Dialog {
     ExpandingBottomDrawer {
         id: drawer
         anchors.fill: parent
+        startPoint: 0
         SilicaFlickable {
             id: form
             anchors.fill: parent
@@ -172,6 +173,13 @@ Dialog {
                         setSearchParameters({})
                     }
                 }
+                onActiveChanged: {
+                    if (active) {
+                        drawer.startPoint = 0
+                    } else {
+                        drawer.startPoint = Screen.height - headeritem.y - headeritem.height
+                    }
+                }
             }
             MouseArea {
                 enabled: drawer.open
@@ -189,7 +197,8 @@ Dialog {
                 text: qsTr("Favorite routes")
                 anchors.top: planner.bottom
                 onYChanged: {
-                    drawer.startPoint = Screen.height - headeritem.y - headeritem.height
+                    var start = Screen.height - headeritem.y - headeritem.height
+                    if(start < Screen.height/2) drawer.startPoint = Screen.height - headeritem.y - headeritem.height
                 }
             }
         }
