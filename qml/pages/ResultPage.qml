@@ -39,41 +39,27 @@ Page {
     id: resultPage
     property var search_parameters
     property var search_interval
-
-    Component.onCompleted: startSearch()
+    property Column listHeaderItem: null
 
     function startSearch() {
         var settings_search_interval = Storage.getSetting("search_interval");
         search_interval = settings_search_interval === "Unknown" ? "15" : settings_search_interval;
+        listHeaderItem.setPageHeader()
         appWindow.itinerariesModel.clear()
         Reittiopas.get_route(search_parameters, appWindow.itinerariesModel,
                              appWindow.itinerariesJson, regions.getRegion());
     }
 
     function setCoverData() {
-        appWindow.coverAlignment = Text.AlignLeft
-        appWindow.coverHeader = search_parameters.from_name
-        appWindow.coverContents = ""
-
-        for (var index = 0; index < appWindow.itinerariesModel.count; ++index) {
-            var startTime = Qt.formatTime(appWindow.itinerariesModel.get(index).start, "hh:mm")
-            var finishTime = Qt.formatTime(appWindow.itinerariesModel.get(index).finish, "hh:mm")
-            var code = ""
-            if (appWindow.itinerariesModel.get(index).legs.get(0) && appWindow.itinerariesModel.get(index).legs.get(0).type !== "walk" ) {
-                code = " | L: " + appWindow.itinerariesModel.get(index).legs.get(0).code;
-            }
-            else if (appWindow.itinerariesModel.get(index).legs.get(1) && appWindow.itinerariesModel.get(index).legs.get(1).type !== "walk" ) {
-                code = " | L: " + appWindow.itinerariesModel.get(index).legs.get(1).code;
-            }
-            appWindow.coverContents += startTime + "-" + finishTime + code + "\n";
-        }
+        appWindow.coverPage.resetIndex()
+        appWindow.cover.state = "result"
     }
 
     Connections {
         target: appWindow.itinerariesModel
         // Update cover when performing the search for the first time
         onDoneChanged: {
-            if (appWindow.itinerariesModel.done) {
+            if (appWindow.itinerariesModel.done && (status == PageStatus.Activating || status == PageStatus.Active)) {
                 setCoverData()
             }
         }
@@ -94,12 +80,8 @@ Page {
             visible: !busyIndicator.running
 
             onClicked: {
-                /* workaround to modify qml array is to make a copy of it,
-                   modify the copy and assign the copy back to the original */
-                var new_parameters = search_parameters
-                new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() + parseInt(resultPage.search_interval))
-                new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
-                search_parameters = new_parameters
+                search_parameters.jstime.setMinutes(search_parameters.jstime.getMinutes() + parseInt(resultPage.search_interval))
+                search_parameters.time = Qt.formatTime(search_parameters.jstime.getMinutes(), "hhmm")
 
                 startSearch()
             }
@@ -124,16 +106,24 @@ Page {
         spacing: 10 * Theme.pixelRatio
         interactive: !busyIndicator.running
         header: Column {
+            id: headerItem
             width: parent.width
+            Component.onCompleted: resultPage.listHeaderItem = headerItem
+
+            function setPageHeader() {
+                titleLabel.title = search_parameters ? search_parameters.timetype === "departure" ?
+                                           qsTr("Departure") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm") :
+                                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm") : ""
+
+            }
+
             PageHeader {
-                title: search_parameters.timetype == "departure" ?
-                           qsTr("Departure") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm") :
-                           qsTr("Arrival") + " " + Qt.formatDateTime(search_parameters.jstime,"dd.MM hh:mm")
+                id: titleLabel
             }
 
             Label {
                 width: parent.width
-                text: search_parameters.from_name + " - " + search_parameters.to_name + " "
+                text: search_parameters ? search_parameters.from_name + " - " + search_parameters.to_name + " " : ""
                 color: Theme.highlightColor
                 horizontalAlignment: Text.AlignRight
                 wrapMode: Text.WordWrap
@@ -144,12 +134,8 @@ Page {
                 visible: !busyIndicator.running
 
                 onClicked: {
-                    /* workaround to modify qml array is to make a copy of it,
-                       modify the copy and assign the copy back to the original */
-                    var new_parameters = search_parameters
-                    new_parameters.jstime.setMinutes(new_parameters.jstime.getMinutes() - parseInt(resultPage.search_interval))
-                    new_parameters.time = Qt.formatTime(new_parameters.jstime.getMinutes(), "hhmm")
-                    search_parameters = new_parameters
+                    search_parameters.jstime.setMinutes(search_parameters.jstime.getMinutes() - parseInt(resultPage.search_interval))
+                    search_parameters.time = Qt.formatTime(search_parameters.jstime.getMinutes(), "hhmm")
 
                     startSearch()
                 }

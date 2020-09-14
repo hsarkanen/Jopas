@@ -31,28 +31,50 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import "../../js/helper.js" as Helper
 
 ListItem {
-    id: delegateItem
+    id: suggestionDelegate
     width: ListView.view.width
     contentHeight: Theme.itemSizeMedium
-
-    Image {
-        id: icon
-        source: "image://theme/icon-m-location"
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        height: 40 * Theme.pixelRatio
-        width: height
+    property variant model
+    ListView.onAdd: AddAnimation {
+        target: suggestionDelegate
+    }
+    ListView.onRemove: RemoveAnimation {
+        target: suggestionDelegate
     }
 
     Label {
         id: locName
+        elide: Text.ElideRight
         color: Theme.primaryColor
         anchors.verticalCenter: parent.verticalCenter
-        anchors.left: icon.right
-        anchors.right: parent.right
-        text: modelData
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.horizontalPageMargin
+        anchors.right: locType.left
+        text: name
         font.pixelSize: Theme.fontSizeMedium
+    }
+    Label {
+        text: Helper.capitalize_string(model.get(index).layer)
+        anchors.bottom: parent.bottom
+        font.italic: true
+        font.pixelSize: Theme.fontSizeExtraSmall
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.horizontalPageMargin
+        color: suggestionDelegate.highlighted ? Theme.highlightColor : Theme.secondaryColor
+    }
+
+    Label {
+        id: locType
+        elide: Text.ElideRight
+        color: Theme.secondaryColor
+        horizontalAlignment: Text.AlignRight
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.horizontalPageMargin
+        text: localadmin
+        font.pixelSize: Theme.fontSizeSmall
     }
 }

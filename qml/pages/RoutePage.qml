@@ -32,12 +32,11 @@
 import QtQuick 2.1
 import Sailfish.Silica 1.0
 import "../js/reittiopas.js" as Reittiopas
+import "../js/helper.js" as Helper
 import "../components"
 
 Page {
     property int route_index
-    property string from_name
-    property string to_name
     property string header
     property string duration
     property string walking
@@ -50,6 +49,8 @@ Page {
     }
 
     function dumpLegs(index, model) {
+        var coverModel = appWindow.routeModel
+        coverModel.clear()
         // save used route index for dumping stops
         appWindow.itinerariesIndex = index
         var countOfLegs = appWindow.itinerariesModel.get(route_index).legs.count
@@ -60,66 +61,39 @@ Page {
             station.name = legdata.from.name ? legdata.from.name : ''
             station.time = legdata.from.time
             station.code = ""
-            if (legindex === 0) {
-                station.name = appWindow.fromName
-            }
-            else {
+            if (legindex !== 0) {
                 station.shortCode = legdata.from.shortCode
             }
             station.length = legdata.distance
             station.duration = 0
             station.leg_number = ""
+            var shortCodeText = typeof(station.shortCode) === "undefined" ? "" : "(" + station.shortCode + ")"
+            routeDetails += (Qt.formatTime(station.time, "hh:mm") + " " + station.name + shortCodeText + "\n")
+            if (legdata.type === "walk") {
+                routeDetails += (qsTr("Walking") + ", " + Math.floor(legdata.length/100)/10 + " " + qsTr("km") + "\n")
+            } else {
+                routeDetails += qsTr(Helper.capitalize_string(legdata.type))
+                routeDetails += (" " + legdata.code + ", " + legdata.duration + " " + qsTr("min") + "\n")
+            }
             model.append(station)
+            coverModel.append(legdata)
             model.append(legdata)
         }
+        var last_location = appWindow.itinerariesModel.get(route_index).legs.get(countOfLegs  - 1)
         var last_station = {"type" : "station",
-                            "name" : appWindow.toName,
-                            "time" : appWindow.itinerariesModel.get(route_index).legs.get(countOfLegs  - 1).to.time,
+                            "name" : last_location.to.name,
+                            "time" : last_location.to.time,
                             "leg_number" : ""}
 
         model.append(last_station)
+        appWindow.cover.state = "route"
+        appWindow.coverPage.resetIndex()
         model.done = true
     }
 
     ListModel {
         id: routeModel
         property bool done: false
-
-        // Parse routeDetails for cover and clipboard usage,
-        // could possibly be done in reittiopas.js when parsing json data
-        onDoneChanged: {
-            if (done) {
-                for (var i = 0; i < routeModel.count; ++i) {
-                    var leg = routeModel.get(i)
-                    var type = leg.type
-                    if (type === 'station') {
-                        var shortCodeText = typeof(leg.shortCode) === "undefined" ? "" : "(" + leg.shortCode + ")"
-                        routeDetails += (Qt.formatTime(leg.time, "hh:mm") + " " + leg.name + shortCodeText + "\n")
-                    }
-                    else if (type === 'walk') {
-                        routeDetails += (qsTr("Walking") + ", " + Math.floor(leg.length/100)/10 + " " + qsTr("km") + "\n")
-                    }
-                    else {
-                        if (type === 'bus')
-                            routeDetails += qsTr("Bus")
-                        else if (type === 'train')
-                            routeDetails += qsTr("Train")
-                        else if (type === 'metro')
-                            routeDetails += qsTr("Metro")
-                        else if (type === 'ferry')
-                            routeDetails += qsTr("Ferry")
-                        else if (type === 'tram')
-                            routeDetails += qsTr("Tram")
-                        else
-                            routeDetails += ""
-                        routeDetails += (" " + leg.code + ", " + leg.duration + " " + qsTr("min") + "\n")
-                    }
-                }
-                appWindow.coverAlignment = Text.AlignLeft
-                appWindow.coverHeader = start_time.slice(11,16) + " - " + finish_time.slice(11,16)
-                appWindow.coverContents = routeDetails
-            }
-        }
     }
 
     Component {
@@ -176,7 +150,7 @@ Page {
                 text: qsTr("Copy details to Clipboard")
                 onClicked: {
                     Clipboard.text = routeDetails
-                    displayPopupMessage( qsTr("Route details copied to Clipboard") )
+                    appWindow.useNotification( qsTr("Route details copied to Clipboard") )
                 }
             }
             MenuItem {
@@ -192,14 +166,5 @@ Page {
         running: true
         size: BusyIndicatorSize.Large
         anchors.centerIn: parent
-    }
-
-    // Added InfoBanner here as a workaround to display it correctly above all other UI elements, fixing the z-order from the one in main.qml isn't trivial
-    InfoBanner {
-        id: infoBanner
-        z: 1
-    }
-    function displayPopupMessage(message) {
-        infoBanner.displayError(message)
     }
 }

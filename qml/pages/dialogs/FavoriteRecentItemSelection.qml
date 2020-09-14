@@ -31,62 +31,71 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import "../components"
 
 Dialog {
     property alias model: view.model
-    property alias delegate: view.delegate
     property alias model2: view2.model
-    property alias delegate2: view2.delegate
-
+    property bool departure: true
+    property variant resultObject
+    id: fav_recent_dialog
+    canNavigateForward: false
+    forwardNavigation: true
     anchors.fill: parent
-
-    Text {
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
+    PageHeader { id: header ; title: departure ? qsTr("Departure") : qsTr("Destination") }
+    SectionHeader {
+            anchors.top: header.bottom
+            anchors.topMargin: -Theme.paddingLarge*2
             id: favoritesheaderitem
-            color: Theme.highlightColor
-            z: 1
-            font.pixelSize: 36 * Theme.pixelRatio
             text: qsTr("Favorites")
     }
 
-    Spacing { id: favoritesHeaderBottomSpacer; height: 30; anchors.top: favoritesheaderitem.bottom }
+    //Spacing { id: favoritesHeaderBottomSpacer; height: 30; anchors.top: favoritesheaderitem.bottom }
 
     SilicaListView {
         width: parent.width
         id: view
-        anchors.top: favoritesHeaderBottomSpacer.bottom
-        anchors.bottom: headerTopSpacer.top
-
+        anchors.top: favoritesheaderitem.bottom
+        anchors.bottom: recentsearchesheaderitem.top
+        clip: true
+        delegate: SuggestionDelegate {
+            model: view.model
+            onClicked: {
+                fav_recent_dialog.resultObject = view.model.get(index)
+                console.log(JSON.stringify(resultObject))
+                fav_recent_dialog.canNavigateForward = true
+                fav_recent_dialog.accept()
+            }
+        }
         VerticalScrollDecorator {}
     }
 
-    Spacing { id: headerTopSpacer; height: 50; anchors.bottom: recentsearchesheaderitem.top }
+    //Spacing { id: headerTopSpacer; height: 50; anchors.bottom: recentsearchesheaderitem.top }
 
-    Text {
+    SectionHeader {
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
             id: recentsearchesheaderitem
-            color: Theme.highlightColor
-            z: 1
-            font.pixelSize: 36 * Theme.pixelRatio
             text: qsTr("Recent searches")
     }
 
 
-    Spacing { id: recentItemsHeaderBottomSpacer; height: 30; anchors.top: recentsearchesheaderitem.bottom }
+    //Spacing { id: recentItemsHeaderBottomSpacer; height: 30; anchors.top: recentsearchesheaderitem.bottom }
 
     SilicaListView {
         id: view2
         width: parent.width
-        anchors.top: recentItemsHeaderBottomSpacer.bottom
+        anchors.top: recentsearchesheaderitem.bottom
         anchors.bottom: parent.bottom
-
+        clip: true
+        delegate: SuggestionDelegate {
+            model: view2.model
+            onClicked: {
+                fav_recent_dialog.resultObject = view2.model.get(index)
+                console.log(JSON.stringify(resultObject))
+                fav_recent_dialog.canNavigateForward = true
+                fav_recent_dialog.accept()
+            }
+        }
         VerticalScrollDecorator {}
     }
-
-    property int selectedFavoriteIndex
-    property int selectedRecentItemIndex
 }

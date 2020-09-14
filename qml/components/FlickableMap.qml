@@ -100,6 +100,10 @@ Map {
         map.center = QtPositioning.coordinate(latitude, longitude)
     }
 
+    function screenToCoordinate(x,y) {
+        return map.toCoordinate(Qt.point(x,y))
+    }
+
     MapQuickItem {
         width: 70 // width of MapButton
         anchors.left: parent.left

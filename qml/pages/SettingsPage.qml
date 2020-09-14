@@ -97,7 +97,7 @@ Page {
                     settingsContent.reset_all_defaults();
                 }
             }
-            MenuItem { text: qsTr("About"); onClicked: pageStack.push(Qt.resolvedUrl("AboutDialog.qml")) }
+            MenuItem { text: qsTr("About"); onClicked: pageStack.push(Qt.resolvedUrl("./dialogs/About.qml")) }
         }
 
         Column {
@@ -130,7 +130,6 @@ Page {
                     function set_value(text, value) {
                         Storage.setSetting("api", value)
                         appWindow.currentApi = value
-                        appWindow.coverContents = text
                         appWindow.mainPage.refreshFavoriteRoutes()
                     }
 
@@ -398,27 +397,6 @@ Page {
 
             SectionHeader {
                 text: qsTr("UI tweaks")
-            }
-            TextSwitch {
-                id: searchButtonSwitch
-                function updateDescription() {
-                    if (searchButtonSwitch.checked)
-                        searchButtonSwitch.description = qsTr("Search button is located below parameters")
-                    else
-                        searchButtonSwitch.description = qsTr("Search button is located in the PullDown menu")
-                }
-
-                function set_value(value) {
-                    var val = !(value === "true")
-                    searchButtonSwitch.checked = val
-                    searchButtonSwitch.updateDescription()
-                }
-                text: qsTr("Search button")
-                description: ""
-                onCheckedChanged: {
-                    Storage.setSetting("search_button_disabled", (!checked).toString())
-                    searchButtonSwitch.updateDescription()
-                }
             }
 
             SectionHeader {

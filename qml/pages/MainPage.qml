@@ -34,88 +34,49 @@ import Sailfish.Silica 1.0
 import "../js/UIConstants.js" as UIConstants
 import "../js/reittiopas.js" as Reittiopas
 import "../js/storage.js" as Storage
-import "../js/helper.js" as Helper
 import "../js/favorites.js" as Favorites
-import "../js/recentitems.js" as RecentItems
 import "../components"
+import "./components"
 
-Page {
+Dialog {
     id: mainPage
+    forwardNavigation: true
+    canNavigateForward: paramsValid
+    canAccept: paramsValid
+    acceptDestination: Qt.resolvedUrl("ResultPage.qml")
 
-    /* Current location acquired with GPS */
-    property string currentCoord: ''
-    property string currentName: ''
+    /* ReittiOpas query params */
+    property bool paramsValid
+    property variant searchParameters
 
-    /* Values entered in "To" field */
-    property string toCoord: ''
-    property string toName: ''
-
-    /* Values entered in "From" field */
-    property string fromCoord: ''
-    property string fromName: ''
-
-    property bool searchButtonDisabled: false
-
-    property bool endpointsValid: (toCoord.length > 0 && (fromCoord.length > 0 || currentCoord.length > 0))
-
-    onEndpointsValidChanged: {
-        /* if we receive coordinates we are waiting for, start route search */
-        if(state == "waiting_route" && endpointsValid) {
-            var parameters = {}
-            setRouteParameters(parameters)
-            pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-            state = "normal"
+    onAcceptPendingChanged: {
+        if(status >= PageStatus.Active) {
+            mainPage.acceptDestinationInstance.search_parameters = searchParameters
+            mainPage.acceptDestinationInstance.startSearch()
         }
     }
 
     onStatusChanged: {
         if (status == PageStatus.Activating) {
-            appWindow.coverAlignment = Text.AlignHCenter
-            appWindow.coverHeader = 'JollaOpas'
-            appWindow.coverContents = appWindow.currentApi.charAt(0).toUpperCase() + appWindow.currentApi.slice(1)
-
-            searchButtonDisabled = Storage.getSetting("search_button_disabled") == "true" ? true : false
-
-            // Prevent the keyboard to popup instantly when swithcing back to mainPage
-            mainPage.forceActiveFocus()
+            appWindow.cover.state = "initial"
         }
     }
 
     function refreshFavoriteRoutes() {
             favoriteRoutesModel.clear()
-            Favorites.getFavoriteRoutes('normal', appWindow.currentApi, favoriteRoutesModel)
+            Favorites.getFavoriteRoutes("normal", appWindow.currentApi, favoriteRoutesModel)
     }
 
-    function newRoute(name, coord) {
-        /* clear all other pages from the stack */
-        while(pageStack.depth > 1)
-            pageStack.pop(null, true)
+    function updateValues() {
+        planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
+    }
 
-        /* bring application to front */
-        QmlApplicationViewer.showFullScreen()
-
-        /* Update time */
-        timeSwitch.setTimeNow()
-
-        /* Update new destination to "to" */
-        to.updateLocation(name, 0, coord)
-
-        /* Remove user input location and use gps location */
-        from.clear()
-
-        /* use current location if available - otherwise wait for it */
-        if(currentCoord != "") {
-            var parameters = {}
-            setRouteParameters(parameters)
-            pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-        }
-        else {
-            state = "waiting_route"
-        }
+    function setTimeNow(){
+        planner.timeButton.setTimeNow()
     }
 
     Component.onCompleted: {
-        timeSwitch.setTimeNow()
+        setTimeNow()
         appWindow.currentApi = Storage.getSetting("api")
         refreshFavoriteRoutes()
     }
@@ -131,72 +92,18 @@ Page {
 
     state: "normal"
 
-    function setRouteParameters(parameters) {
-        var walking_speed = Storage.getSetting("walking_speed")
-        var change_margin = Storage.getSetting("change_margin")
-        var change_reluctance = Storage.getSetting("change_reluctance")
-        var walk_reluctance = Storage.getSetting("walk_reluctance")
-        var currentDate = new Date()
-
-        // Only add to recentitems if the place is not from favorites and
-        // user specified start point
-        if (fromName && from.selected_favorite < 0) {
-            RecentItems.addRecentItem(fromName, fromCoord)
+    function setSearchParameters(parameters) {
+        try {
+            appWindow.setSearchParameters(parameters)
+        } catch (err) {
+            console.log("setSearchParameters", err)
         }
-        if (toName && to.selected_favorite < 0) {
-            RecentItems.addRecentItem(toName, toCoord)
+        if(!!parameters.from_name || !!parameters.from || !!parameters.to_name || !!parameters.to) {
+            searchParameters = parameters
+            paramsValid = true
+            return
         }
-
-        parameters.from_name = fromName ? fromName : currentName
-        parameters.from = fromCoord ? fromCoord : currentCoord
-        parameters.to_name = toName
-        appWindow.fromName = parameters.from_name
-        appWindow.toName = parameters.to_name
-        parameters.to = toCoord
-
-        if (timeSwitch.timeNow) {
-            parameters.jstime = currentDate
-        }
-        else if (timeSwitch.dateToday) {
-            currentDate.setHours(timeSwitch.myTime.getHours())
-            currentDate.setMinutes(timeSwitch.myTime.getMinutes())
-            parameters.jstime = currentDate
-        }
-        else {
-            parameters.jstime = timeSwitch.myTime
-        }
-        parameters.timetype = "departure"
-        if (!timeTypeSwitch.departure) {
-            parameters.arriveBy = true
-            parameters.timetype = "arrival"
-        }
-        parameters.walk_speed = walking_speed == "Unknown"?"70":walking_speed
-        parameters.change_margin = change_margin == "Unknown"?"3":Math.floor(change_margin)
-        parameters.change_reluctance = change_reluctance == "Unknown"?"10":Math.floor(change_reluctance)
-        parameters.walk_reluctance = walk_reluctance == "Unknown"?"2":Math.floor(walk_reluctance)
-        parameters.modes =""
-
-        if (appWindow.currentApi === "helsinki") {
-            if(Storage.getSetting("bus_disabled") === "false") {
-                parameters.modes += "BUS,";
-            }
-            if(Storage.getSetting("tram_disabled") === "false") {
-                parameters.modes += "TRAM,";
-            }
-            if(Storage.getSetting("metro_disabled") === "false") {
-                parameters.modes += "SUBWAY,"
-            }
-            if(Storage.getSetting("train_disabled") === "false") {
-                parameters.modes += "RAIL,";
-            }
-            if(Storage.getSetting("ferry_disabled") === "false") {
-                parameters.modes += "FERRY,";
-            }
-        }
-        else {
-            parameters.modes += "BUS,"
-        }
-        parameters.modes += "WALK"
+        paramsValid = false
     }
 
     Rectangle {
@@ -224,141 +131,80 @@ Page {
         anchors.centerIn: parent
         size: BusyIndicatorSize.Large
     }
-
-    SilicaFlickable {
+    ExpandingBottomDrawer {
+        id: drawer
         anchors.fill: parent
-        contentHeight: parent.height
-
-        PullDownMenu {
-            MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
-            MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
-            MenuItem { text: qsTr("Manage favorite places"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
-            MenuItem {
-                enabled: endpointsValid
-                text: qsTr("Add as favorite route");
-                onClicked: {
-                    var fromNameToAdd = fromName ? fromName : currentName
-                    var fromCoordToAdd = fromCoord ? fromCoord : currentCoord
-                    var res = Favorites.addFavoriteRoute('normal', appWindow.currentApi, fromCoordToAdd, fromNameToAdd, toCoord, toName, favoriteRoutesModel)
-                    if (res === "OK") {
-                        displayPopupMessage( qsTr("Favorite route added") )
+        startPoint: 0
+        SilicaFlickable {
+            id: form
+            anchors.fill: parent
+            contentHeight: parent.height
+            PullDownMenu {
+                enabled: !drawer.open
+                MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
+                MenuItem { text: qsTr("Exception info"); visible: appWindow.currentApi === "helsinki"; onClicked: pageStack.push(Qt.resolvedUrl("ExceptionsPage.qml")) }
+                MenuItem { text: qsTr("Manage favorite places"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
+                MenuItem {
+                    enabled: paramsValid
+                    text: qsTr("Add as favorite route");
+                    onClicked: {
+                        var res = Favorites.addFavoriteRoute(
+                            "normal",
+                            appWindow.currentApi,
+                            appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord,
+                            appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name,
+                            appWindow.locationParameters.to.coord,
+                            appWindow.locationParameters.to.name,
+                            favoriteRoutesModel
+                        )
+                        if (res === "OK") {
+                            appWindow.useNotification( qsTr("Favorite route added") )
+                        }
                     }
-                    else {
-                        displayPopupMessage( qsTr("Maximum amount of favorite routes is 4!") )
+                }
+                MenuItem {
+                    text: qsTr("Get Return Route");
+                    onClicked: {
+                        var fromObj = JSON.parse(JSON.stringify(appWindow.locationParameters.from))
+                        var toObj = JSON.parse(JSON.stringify(appWindow.locationParameters.to))
+                        appWindow.locationParameters.from = toObj
+                        appWindow.locationParameters.to = fromObj
+                        planner.updateValues(appWindow.locationParameters.from.name || "Choose Location", appWindow.locationParameters.to.name || "Choose Location")
+                        setSearchParameters({})
+                    }
+                }
+                onActiveChanged: {
+                    if (active) {
+                        drawer.startPoint = 0
+                    } else {
+                        drawer.startPoint = Screen.height - headeritem.y - headeritem.height
                     }
                 }
             }
-            MenuItem {
-                visible: searchButtonDisabled
-                enabled: endpointsValid
-                text: qsTr("Search");
-                onClicked: {
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-                }
+            MouseArea {
+                enabled: drawer.open
+                anchors.fill: parent
+                onClicked: drawer.open = false
             }
-        }
-
-        Spacing { id: topSpacing; anchors.top: parent.top; height: Theme.paddingMedium }
-
-        Column {
-            id: content_column
-            width: parent.width
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: topSpacing.bottom
-
-            Item {
-                width: parent.width
-                height: from.height + to.height
-
-                LocationEntry {
-                    id: from
-                    type: qsTr("From")
-                    isFrom: true
-                    onLocationDone: {
-                        fromName = name
-                        fromCoord = coord
-                    }
-                    onCurrentLocationDone: {
-                        currentName = name
-                        currentCoord = coord
-                    }
-                    onLocationError: {
-                        /* error in getting current position, cancel the wait */
-                        mainPage.state = "normal"
-                    }
-                }
-
-                Spacing { id: location_spacing; anchors.top: from.bottom; height: 5 }
-
-                SwitchLocation {
-                    anchors.top: from.top
-                    anchors.topMargin: from.height - location_spacing.height - UIConstants.DEFAULT_MARGIN // Hack to place switch between `from` and `to` LocationEntries
-                    z: 1
-                    from: from
-                    to: to
-                }
-
-                LocationEntry {
-                    id: to
-                    type: qsTr("To")
-                    onLocationDone: {
-                        toName = name
-                        toCoord = coord
-                    }
-                    anchors.top: location_spacing.bottom
-                }
+            PageHeader { id: header ; title: qsTr("Search")}
+            RoutePlanner {
+                id: planner
+                enabled: !drawer.open
+                onParamsChanged: setSearchParameters(params)
             }
-
-            TimeTypeSwitch {
-                id: timeTypeSwitch
-            }
-            Spacing { height: 5 * Theme.pixelRatio }
-            TimeSwitch {
-                id: timeSwitch
-            }
-            Spacing { height: 5 * Theme.pixelRatio }
-
-            Button {
-                visible: !searchButtonDisabled
-                anchors.horizontalCenter: parent.horizontalCenter
-                enabled: endpointsValid
-                text: qsTr("Search")
-                onClicked: {
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-                }
-            }
-        }
-
-        Spacing { id: favorites_spacing; anchors.top: content_column.bottom; height: 5 * Theme.pixelRatio }
-
-
-        Item {
-            id: headeritem
-            width: parent.width
-            anchors.left: parent.left
-            anchors.leftMargin: Theme.paddingSmall
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: favorites_spacing.bottom
-            height: (favoriteRouteHeader.height + UIConstants.DEFAULT_MARGIN) * Theme.pixelRatio
-            Text {
-                id: favoriteRouteHeader
-                color: Theme.highlightColor
-                font.pixelSize: 36 * Theme.pixelRatio
+            SectionHeader {
+                id: headeritem
                 text: qsTr("Favorite routes")
+                anchors.top: planner.bottom
+                onYChanged: {
+                    var start = Screen.height - headeritem.y - headeritem.height
+                    if(start < Screen.height/2) drawer.startPoint = Screen.height - headeritem.y - headeritem.height
+                }
             }
         }
-
-        SilicaListView {
+        background: SilicaListView {
             id: favoriteRouteList
-            anchors.top: headeritem.bottom
-            anchors.bottom: parent.bottom
-            spacing: 5 * Theme.pixelRatio
+            anchors.fill: parent
             width: parent.width
             model: favoriteRoutesModel
             delegate: favoriteRouteManageDelegate
@@ -366,11 +212,23 @@ Page {
 
             ViewPlaceholder {
                 enabled: favoriteRouteList.count == 0
-                // Not perfect, but shows the text on Jolla Phone, Jolla Tablet and Fairphone2 (was -300)
-                verticalOffset: (favoriteRouteList.height - mainPage.height) * 0.5
+                verticalOffset: - drawer.startPoint * 0.5
                 text: qsTr("No saved favorite routes")
             }
-
+            Label {
+                text: qsTr("Press to expand")
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Theme.fontSizeMedium
+                color: Theme.secondaryHighlightColor
+                visible: !drawer.open && favoriteRouteList.count > 0
+            }
+            MouseArea {
+                enabled: !drawer.open
+                anchors.fill: favoriteRouteList
+                onClicked: drawer.open = favoriteRouteList.count == 0 ? false : true
+            }
+            VerticalScrollDecorator {}
             Component {
                 id: contextMenuComponent
 
@@ -378,8 +236,8 @@ Page {
                     id: menu
                     property Item currentItem
                     MenuItem {
-                        text: qsTr("Add to Cover")
-                        onClicked: menu.currentItem.addToCover()
+                        text: qsTr("Get Return Route")
+                        onClicked: menu.currentItem.search(true)
                     }
 
                     MenuItem {
@@ -388,92 +246,62 @@ Page {
                     }
                 }
             }
-        }
 
-        ListModel {
-            id: favoriteRoutesModel
-        }
+            Component {
+                id: favoriteRouteManageDelegate
 
-        Component {
-            id: favoriteRouteManageDelegate
+                BackgroundItem {
+                    id: rootItem
+                    width: ListView.view.width
+                    height: menuOpen ? Theme.itemSizeSmall + favoriteRouteList.contextMenu.height : Theme.itemSizeSmall
 
-            BackgroundItem {
-                id: rootItem
-                width: ListView.view.width
-                height: menuOpen ? Theme.itemSizeSmall + favoriteRouteList.contextMenu.height : Theme.itemSizeSmall
+                    property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
 
-                property bool menuOpen: favoriteRouteList.contextMenu != null && favoriteRouteList.contextMenu.parent === rootItem
-
-                function addToCover() {
-                    Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
-                    displayPopupMessage( qsTr("Favorite route added to cover action.") )
-                }
-
-                function remove() {
-                    remorse.execute(rootItem, qsTr("Deleting"), function() {
-                        Favorites.deleteFavoriteRoute(modelRouteIndex, appWindow.currentApi, favoriteRoutesModel)
-                    })
-                }
-
-                onClicked:{
-                    var parameters = {}
-                    setRouteParameters(parameters)
-                    parameters.from_name = modelFromName
-                    parameters.from = modelFromCoord
-                    parameters.to_name = modelToName
-                    parameters.to = modelToCoord
-                    appWindow.fromName = parameters.from_name
-                    appWindow.toName = parameters.to_name
-                    pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
-                }
-
-                onPressAndHold: {
-                    if (!favoriteRouteList.contextMenu) {
-                        favoriteRouteList.contextMenu = contextMenuComponent.createObject(favoriteRouteList)
+                    function addToCover() {
+                        Favorites.addFavoriteRoute('cover', appWindow.currentApi, modelFromCoord, modelFromName, modelToCoord, modelToName)
+                        appWindow.useNotification( qsTr("Favorite route added to cover action.") )
                     }
 
-                    favoriteRouteList.contextMenu.currentItem = rootItem
-                    favoriteRouteList.contextMenu.open(rootItem)
-                }
-
-                Label {
-                    id: label
-                    height: Theme.itemSizeSmall
-                    text: modelFromName + " - " + modelToName + " "
-                    width: parent.width - reverseFavoriteRouteButton.width
-                    color: Theme.primaryColor
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    elide: Text.ElideRight
-                }
-
-                IconButton {
-                    id: reverseFavoriteRouteButton
-                    anchors.right: parent.right
-                    icon.source: "image://theme/icon-m-shuffle"
-                    onClicked:{
-                        var parameters = {}
-                        setRouteParameters(parameters)
-                        parameters.from_name = modelToName
-                        parameters.from = modelToCoord
-                        parameters.to_name = modelFromName
-                        parameters.to = modelFromCoord
-                        appWindow.fromName = parameters.from_name
-                        appWindow.toName = parameters.to_name
-                        pageStack.push(Qt.resolvedUrl("ResultPage.qml"), { search_parameters: parameters })
+                    function remove() {
+                        remorse.execute(rootItem, qsTr("Deleting"), function() {
+                            Favorites.deleteFavoriteRoute(modelRouteIndex, appWindow.currentApi, favoriteRoutesModel)
+                        })
                     }
+
+                    function search(reverse) {
+                        appWindow.locationParameters.from.name = reverse ? modelToName : modelFromName
+                        appWindow.locationParameters.from.coord = reverse ? modelToCoord : modelFromCoord
+                        appWindow.locationParameters.to.name = reverse ? modelFromName : modelToName
+                        appWindow.locationParameters.to.coord = reverse ? modelFromCoord : modelToCoord
+                        planner.updateValues(appWindow.locationParameters.from.name, appWindow.locationParameters.to.name)
+                        setSearchParameters({})
+                        pageStack.navigateForward()
+                    }
+
+                    onClicked: search()
+
+                    onPressAndHold: {
+                        if (!favoriteRouteList.contextMenu) {
+                            favoriteRouteList.contextMenu = contextMenuComponent.createObject(favoriteRouteList)
+                        }
+
+                        favoriteRouteList.contextMenu.currentItem = rootItem
+                        favoriteRouteList.contextMenu.open(rootItem)
+                    }
+
+                    Label {
+                        id: label
+                        height: Theme.itemSizeSmall
+                        text: modelFromName + " - " + modelToName + " "
+                        width: parent.width
+                        color: drawer.open ? Theme.primaryColor : Theme.secondaryColor
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                    }
+                    RemorseItem { id: remorse }
                 }
-                RemorseItem { id: remorse }
             }
         }
-    }
-
-    // Added InfoBanner here as a workaround to display it correctly above all other UI elements, fixing the z-order from the one in main.qml isn't trivial
-    InfoBanner {
-        id: infoBanner
-        z: 1
-    }
-    function displayPopupMessage(message) {
-        infoBanner.displayError(message)
     }
 }

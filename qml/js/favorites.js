@@ -32,52 +32,70 @@
 // Adapted from:http://www.developer.nokia.com/Community/Wiki/How-to_create_a_persistent_settings_database_in_Qt_Quick_%28QML%29
 
 .import QtQuick.LocalStorage 2.0 as Sql
-
+.import "storage.js" as Storage
 // First, let's create a short helper function to get the database connection
-function getDatabase() {
-     return Sql.LocalStorage.openDatabaseSync("JollaOpas", "1.0", "StorageDatabase", 100000);
-}
 
 // At the start of the application, we can initialize the tables we need if they haven't been created yet
 function initialize() {
-    var db = getDatabase();
+    var db = Storage.getDatabase();
+    var statusfav = Storage.checkSchema(db,"favorites")
+    console.log("favorites initialization: ", statusfav)
+    var statusfavrout = Storage.checkSchema(db, "favoriteRoutes")
+    console.log("favoriteRoutes initialization: ", statusfavrout)
+}
 
-    db.transaction(
-        function(tx) {
-            // Create the settings table if it doesn't already exist
-            // If the table exists, this is skipped
-            // Type is just preparation for possibly different favorite types in the future
-            tx.executeSql('CREATE TABLE IF NOT EXISTS favorites(coord TEXT UNIQUE, type TEXT NOT NULL, api TEXT NOT NULL, name TEXT NOT NULL);');
-            // Favourite routes, fixed amount of 4 per City, in different table
-            tx.executeSql('CREATE TABLE IF NOT EXISTS favoriteRoutes(routeIndex INTEGER PRIMARY KEY AUTOINCREMENT, type TEXT NOT NULL, api TEXT NOT NULL, fromCoord TEXT NOT NULL, fromName TEXT NOT NULL, toCoord TEXT NOT NULL, toName TEXT NOT NULL);');
-          });
+// This function checks if the favorite already exists
+function favoritExists(coord) {
+    var db = Storage.getDatabase();
+    var res = null;
+    db.transaction(function (tx) {
+        var rs = tx.executeSql('SELECT 1 FROM favorites WHERE coord = ?', coord);
+        res = rs.rows.length > 0 ? true : false
+    });
+    return res;
 }
 
 // This function is used to write a setting into the database
-function addFavorite(name, coord) {
-    var db = getDatabase();
+function addFavorite(object) {
+    var db = Storage.getDatabase();
+    var schema = Storage.getSchema("favorites")
     var res = "";
     db.transaction(function(tx) {
-                       var rs = tx.executeSql('SELECT coord,name FROM favorites WHERE coord = ?', coord);
-                       if (rs.rows.length > 0) {
-                           res = "Not exist"
-                       }
-                       else {
-                           rs = tx.executeSql('INSERT INTO favorites (coord,type,api,name) VALUES (?,?,?,?);', [coord,'normal',appWindow.currentApi,name]);
-                           if (rs.rowsAffected > 0) {
-                               res = "OK";
-                           } else {
-                               res = "Error";
-                           }
-                       }
-                   });
+        var rs = tx.executeSql('SELECT coord,name FROM favorites WHERE coord = ?', object.coord);
+        if (rs.rows.length > 0) {
+            res = "Not exist"
+        }
+        else {
+            var query = 'INSERT INTO favorites ('
+            var queryValues = ' VALUES ('
+            var values = []
+            for(var key in object) {
+                // console.log(key, object[key])
+                if(schema.columns[key] && object[key]) {
+                    query += key + ','
+                    queryValues += '?,'
+                    values.push(object[key])
+                }
+            }
+            query += 'type,api)'
+            queryValues += '?,?);'
+            values.push('normal')
+            values.push(appWindow.currentApi)
+            rs = tx.executeSql(query + queryValues, values);
+            if (rs.rowsAffected > 0) {
+                res = "OK";
+            } else {
+                res = "Error";
+            }
+        }
+    });
   // The function returns “OK” if it was successful, or “Error” if it wasn't
   return res;
 }
 
 // This function is used to write a setting into the database
 function addFavoriteRoute(type, api, fromCoord, fromName, toCoord, toName, updatemodel) {
-    var db = getDatabase();
+    var db = Storage.getDatabase();
     var res = "";
     var rs = {};
     db.transaction(function(tx) {
@@ -93,20 +111,13 @@ function addFavoriteRoute(type, api, fromCoord, fromName, toCoord, toName, updat
             }
         }
         else {
-            rs = tx.executeSql('SELECT routeIndex FROM favoriteRoutes WHERE type = ? AND api = ?', [type,api]);
-            // Check that there is still place for favoriteRoute (limited up to 4 per City)
-            if (rs.rows.length >= 4) {
-                res = "Error"
-            }
-            else {
-                rs = tx.executeSql('INSERT INTO favoriteRoutes (type,api,fromCoord,fromName,toCoord,toName) VALUES (?,?,?,?,?,?);', [type,api,fromCoord,fromName,toCoord,toName]);
-                if (rs.rowsAffected === 1) {
-                    updatemodel.clear()
-                    getFavoriteRoutes('normal',api,updatemodel)
-                    res = "OK";
-                } else {
-                    res = "Error";
-                }
+            rs = tx.executeSql('INSERT INTO favoriteRoutes (type,api,fromCoord,fromName,toCoord,toName) VALUES (?,?,?,?,?,?);', [type, api, fromCoord, fromName, toCoord, toName]);
+            if (rs.rowsAffected === 1) {
+                updatemodel.clear()
+                getFavoriteRoutes('normal', api, updatemodel)
+                res = "OK";
+            } else {
+                res = "Error";
             }
         }
     }
@@ -117,10 +128,10 @@ function addFavoriteRoute(type, api, fromCoord, fromName, toCoord, toName, updat
 
 // This function is used to write a setting into the database
 function updateFavorite(name, coord, updatemodel) {
-    var db = getDatabase();
+    var db = Storage.getDatabase();
     var res = "";
     db.transaction(function(tx) {
-                       var rs = tx.executeSql('SELECT coord,name FROM favorites WHERE coord = ?', coord);
+                       var rs = tx.executeSql('SELECT * FROM favorites WHERE coord = ?', coord);
                        if (rs.rows.length != 1) {
                            res = "Not exist"
                        }
@@ -143,7 +154,7 @@ function updateFavorite(name, coord, updatemodel) {
 function deleteFavorite(coord, updatemodel) {
    // setting: string representing the setting name (eg: “username”)
    // value: string representing the value of the setting (eg: “myUsername”)
-   var db = getDatabase();
+   var db = Storage.getDatabase();
    var res = "";
    db.transaction(function(tx) {
         var rs = tx.executeSql('DELETE FROM favorites WHERE coord = ?;', coord);
@@ -164,7 +175,7 @@ function deleteFavorite(coord, updatemodel) {
 function deleteFavoriteRoute(routeIndex, api, updatemodel) {
    // setting: string representing the setting name (eg: “username”)
    // value: string representing the value of the setting (eg: “myUsername”)
-   var db = getDatabase();
+   var db = Storage.getDatabase();
    var res = "";
    db.transaction(function(tx) {
         var rs = tx.executeSql('DELETE FROM favoriteRoutes WHERE routeIndex = ? AND api = ?;', [routeIndex,api]);
@@ -183,16 +194,13 @@ function deleteFavoriteRoute(routeIndex, api, updatemodel) {
 
 // This function is used to retrieve a setting from the database
 function getFavorites(model) {
-   var db = getDatabase();
+   var db = Storage.getDatabase();
    var res="";
    db.transaction(function(tx) {
-     var rs = tx.executeSql('SELECT coord,name FROM favorites WHERE api = ?', appWindow.currentApi);
+     var rs = tx.executeSql('SELECT * FROM favorites WHERE api = ?', appWindow.currentApi);
      if (rs.rows.length > 0) {
          for(var i = 0; i < rs.rows.length; i++) {
-             var output = {}
-             output.modelData = rs.rows.item(i).name;
-             output.coord = rs.rows.item(i).coord;
-             output.type = "favorite"
+             var output = JSON.parse(JSON.stringify(rs.rows.item(i)))
              model.append(output)
          }
      } else {
@@ -206,7 +214,7 @@ function getFavorites(model) {
 
 // This function is used to retrieve a setting from the database
 function getFavoriteRoutes(type, api, model) {
-    var db = getDatabase();
+    var db = Storage.getDatabase();
     var res = "";
     var rs = {};
     db.transaction(function(tx) {

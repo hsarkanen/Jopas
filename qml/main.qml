@@ -31,15 +31,21 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import org.nemomobile.notifications 1.0
 import "js/storage.js" as Storage
 import "js/favorites.js" as Favorites
+import "js/helper.js" as Helper
+import "js/recentitems.js" as RecentItems
+import "pages/"
 import "components"
 
 ApplicationWindow {
     id: appWindow
 
-    cover: Qt.resolvedUrl("pages/CoverPage.qml")
-
+    property alias coverPage: coverPage
+    cover: CoverPage {
+        id: coverPage
+    }
     ListModel {
         id: regions
 
@@ -178,9 +184,11 @@ ApplicationWindow {
             }
         }
     }
-
-    InfoBanner {
-        id: infoBanner
+    Notification {
+        id: notification
+        previewBody : ""
+        previewSummary : ""
+        onClicked : notification.close()
     }
 
     allowedOrientations: Orientation.All
@@ -188,11 +196,12 @@ ApplicationWindow {
     Component.onCompleted: {
         Storage.initialize()
         Favorites.initialize()
+        RecentItems.initialize()
 
         var apiValue = Storage.getSetting("api")
         if (apiValue === "Unknown") {
             mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"), {}, true)
-            var dialog = pageStack.push(Qt.resolvedUrl("pages/StartupDialog.qml"), {}, true)
+            var dialog = pageStack.push(Qt.resolvedUrl("pages/dialogs/Startup.qml"), {}, true)
         }
         else {
             mainPage = pageStack.push(Qt.resolvedUrl("pages/MainPage.qml"))
@@ -206,18 +215,108 @@ ApplicationWindow {
     property bool followMode : false
     property bool mapVisible : false
     property string colorscheme : "default"
+    property ListModel routeModel: routeModel
+    property ListModel favoriteRoutesModel: favoriteRoutesModel
+    property ListModel favoritesModel: favoritesModel
+    property ListModel recentItemsModel: recentItemsModel
 
-    // Pages sets the cover data to these properties and cover is instantiated every time based on these
-    property string coverHeader: ''
-    property string coverContents: ''
-    property int coverAlignment: Text.AlignHCenter
     property string currentApi: ''
     property var mainPage
     property ListModel itinerariesModel: itinerariesModel
     property string itinerariesJson: ""
     property int itinerariesIndex: -1
-    property string fromName: ""
-    property string toName: ""
+    property var locationParameters: {
+        /* Current location acquired with GPS */
+        "gps": {},
+
+        /* Values entered in "To" field */
+        "to": {},
+
+        /* Values entered in "From" field */
+        "from": {},
+
+        /* Values entered in "Date" and "Time" fields */
+        "datetime": {
+            "timeBy": "departure"
+        }
+    }
+    
+    function useNotification(text){
+        notification.close()
+        notification.previewSummary = text
+        notification.publish()
+    }
+
+    function setSearchParameters(parameters) {
+        var walking_speed = Storage.getSetting("walking_speed")
+        var change_margin = Storage.getSetting("change_margin")
+        var change_reluctance = Storage.getSetting("change_reluctance")
+        var walk_reluctance = Storage.getSetting("walk_reluctance")
+        var currentDate = new Date()
+
+        // Only add to recentitems if the place is not from favorites and
+        // user specified start point
+
+        var fromFound = Helper.findModelItem(favoritesModel, function(item) {
+            return item.name === appWindow.locationParameters.from.name
+        })
+        var toFound = Helper.findModelItem(favoritesModel, function(item) {
+            return item.name === appWindow.locationParameters.to.name
+        })
+        if (appWindow.locationParameters.from.name && !fromFound) {
+            RecentItems.addRecentItem(appWindow.locationParameters.from)
+        }
+        if (appWindow.locationParameters.to.name && !toFound) {
+            RecentItems.addRecentItem(appWindow.locationParameters.to)
+        }
+
+        parameters.from_name = appWindow.locationParameters.from.name ? appWindow.locationParameters.from.name : appWindow.locationParameters.gps.name
+        parameters.from = appWindow.locationParameters.from.coord ? appWindow.locationParameters.from.coord : appWindow.locationParameters.gps.coord
+        parameters.to_name = appWindow.locationParameters.to.name
+        parameters.to = appWindow.locationParameters.to.coord
+
+        appWindow.locationParameters.from.name = parameters.from_name
+        appWindow.locationParameters.from.coord = parameters.from
+
+        currentDate.setFullYear(appWindow.locationParameters.datetime.year || currentDate.getFullYear())
+        currentDate.setMonth(appWindow.locationParameters.datetime.month || currentDate.getMonth())
+        currentDate.setDate(appWindow.locationParameters.datetime.date || currentDate.getDate())
+        currentDate.setHours(appWindow.locationParameters.datetime.hour || currentDate.getHours())
+        currentDate.setMinutes(appWindow.locationParameters.datetime.minute || currentDate.getMinutes())
+
+        parameters.jstime = currentDate
+
+        parameters.timetype = appWindow.locationParameters.datetime.timeBy
+        parameters.arriveBy = appWindow.locationParameters.datetime.timeBy === "arrival"
+
+        parameters.walk_speed = walking_speed === "Unknown" ? "70" : walking_speed
+        parameters.change_margin = change_margin === "Unknown" ? "3" : Math.floor(change_margin)
+        parameters.change_reluctance = change_reluctance === "Unknown" ? "10" : Math.floor(change_reluctance)
+        parameters.walk_reluctance = walk_reluctance === "Unknown" ? "2" : Math.floor(walk_reluctance)
+        parameters.modes =""
+
+        if (appWindow.currentApi === "helsinki") {
+            if(Storage.getSetting("bus_disabled") === "false") {
+                parameters.modes += "BUS,";
+            }
+            if(Storage.getSetting("tram_disabled") === "false") {
+                parameters.modes += "TRAM,";
+            }
+            if(Storage.getSetting("metro_disabled") === "false") {
+                parameters.modes += "SUBWAY,"
+            }
+            if(Storage.getSetting("train_disabled") === "false") {
+                parameters.modes += "RAIL,";
+            }
+            if(Storage.getSetting("ferry_disabled") === "false") {
+                parameters.modes += "FERRY,";
+            }
+        }
+        else {
+            parameters.modes += "BUS,"
+        }
+        parameters.modes += "WALK"
+    }
 
     onFollowModeChanged: {
         if(followMode)
@@ -229,7 +328,24 @@ ApplicationWindow {
     }
 
     ListModel {
+        id: favoriteRoutesModel
+        property bool done: false
+    }
+
+    ListModel {
         id: itinerariesModel
         property bool done: false
     }
+
+    ListModel{
+        id:routeModel
+    }
+
+    ListModel {
+        id: favoritesModel
+    }
+    ListModel {
+        id: recentItemsModel
+    }
+
 }
